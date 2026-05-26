@@ -184,6 +184,27 @@ describe("guardrails", () => {
 });
 
 describe("payment, execution, and reputation", () => {
+  it("requires complete live x402 proof fields before enabling live order creation", async () => {
+    const capability = listCapabilities().find((item) => item.id === "pitchhawk");
+    expect(capability).toBeDefined();
+    const quote = createExecutionQuote({ capability: capability! });
+    const partialLiveAdapter = createPaymentAdapter({
+      GOATX402_API_URL: "https://example.x402.test",
+      GOATX402_API_KEY: "key",
+      GOATX402_API_SECRET: "secret",
+      GOATX402_MERCHANT_ID: "merchant-id",
+      GOAT_RECEIVING_WALLET: "0x0000000000000000000000000000000000000001",
+      // Intentionally omit GOATX402_MERCHANT_NAME and GOATX402_ACCOUNT_EMAIL
+      ENABLE_MOCK_X402: "false"
+    });
+
+    const partialRequirement = await partialLiveAdapter.createPaymentRequirement(quote, capability!);
+    expect(partialRequirement.transaction.status).toBe("payment_required");
+    expect(partialRequirement.message).toContain("Configure real x402 credentials");
+    expect(partialRequirement.paymentRequiredHeader).toContain("\"protocol\":\"x402\"");
+    expect(partialRequirement.transaction.paymentRequiredHeader).toContain("\"protocol\":\"x402\"");
+  });
+
   it("enables local mock settlement only through the mock x402 adapter", async () => {
     const capability = listCapabilities().find((item) => item.id === "pitchhawk");
     expect(capability).toBeDefined();
@@ -301,6 +322,7 @@ describe("external proof status", () => {
   it("does not treat public identifiers as final submission proof", () => {
     const proof = getExternalProofStatus({
       CLAWUP_AGENT_ID: "clawcompass-broker",
+      CLAWUP_AGENT_NAME: "ClawCompass",
       TELEGRAM_BOT_USERNAME: "goat_4_ai_bot",
       GOATX402_MERCHANT_ID: "ClawCompass",
       ERC8004_AGENT_ID: "123",
@@ -309,21 +331,29 @@ describe("external proof status", () => {
 
     expect(proof.status).toBe("blocked_external_actions_required");
     expect(proof.requiredProof.clawUp.status).toBe("ready");
-    expect(proof.requiredProof.telegram.status).toBe("blocked");
-    expect(proof.requiredProof.x402.status).toBe("blocked");
-    expect(proof.requiredProof.erc8004.status).toBe("blocked");
+    expect(proof.requiredProof.telegram.status).toBe("partial");
+    expect(proof.requiredProof.x402.status).toBe("partial");
+    expect(proof.requiredProof.erc8004.status).toBe("partial");
   });
 
   it("marks external proof ready only when verification evidence is present", () => {
     const proof = getExternalProofStatus({
       CLAWUP_AGENT_ID: "clawcompass-broker",
+      CLAWUP_AGENT_NAME: "ClawCompass",
       TELEGRAM_BOT_USERNAME: "goat_4_ai_bot",
       TELEGRAM_PAIRING_VERIFIED: "true",
+      GOATX402_API_URL: "https://x402.goat.network",
+      GOATX402_API_KEY: "ak_123",
+      GOATX402_API_SECRET: "as_123",
+      GOATX402_MERCHANT_NAME: "ClawCompass Merchant",
+      GOATX402_ACCOUNT_EMAIL: "ops@clawcompass.example",
       GOATX402_MERCHANT_ID: "ClawCompass",
       GOATX402_PAYMENT_PROOF_ID: "pay_123",
       GOATX402_SETTLEMENT_TX: "0xabc123",
+      GOAT_RECEIVING_WALLET: "0x1234",
       ERC8004_AGENT_ID: "123",
       ERC8004_REGISTRATION_TX: "0xdef456",
+      ERC8004_AGENT_URI: "https://8004.example/agent/123",
       ERC8004_SCAN_URL: "https://8004scan.io/agents/123?chain=2345"
     });
 
