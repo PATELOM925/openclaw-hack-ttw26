@@ -30,6 +30,21 @@ export function getSecurityPolicy(): SecurityPolicy {
   };
 }
 
+export function getSecurityText(policy: SecurityPolicy = getSecurityPolicy()): string {
+  return `ClawCompass Guardrails
+
+Autonomous spending cap: ${policy.autonomousSpendCapUsd.toFixed(2)} USDC
+Hard spending stop: ${policy.hardSpendStopUsd.toFixed(2)} USDC
+Max paid executions per session: ${policy.maxPaidExecutionsPerSession}
+Write actions: approval required
+Wallet actions: approval required
+External messages: approval required
+Unverified tools: approval required
+Secret handling: automatic redaction
+Payment rule: no verified x402 payment, no paid execution
+Abort route: /cancel [transaction_id]`;
+}
+
 export function evaluateGuardrails(input: {
   capability: CapabilityListing;
   policy: SecurityPolicy;

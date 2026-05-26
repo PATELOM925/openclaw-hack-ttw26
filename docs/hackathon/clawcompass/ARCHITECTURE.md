@@ -24,16 +24,21 @@ Requesting agent or human
 - `capabilityRanker`: scores capabilities by fit, trust, success, safety, price, and simplicity.
 - `guardrails`: decides whether approval is required.
 - `paymentGate`: creates transactions and blocks unpaid paid executions.
+- `paymentAdapter`: wraps `goatx402-sdk-server` for real x402 order creation and exposes local mock settlement only when enabled.
+- `commandHandler`: formats ClawUp/Telegram commands into chat-friendly responses.
 - `executor`: executes `PitchHawk` and free low-risk tools with sanitized input.
 - `reputationLogger`: records local outcome events.
 
 ## API
 
+- `GET /health`
 - `POST /api/ask`
 - `GET /api/marketplace`
 - `GET /api/tool/:id`
 - `POST /api/use/:id`
+- `POST /api/approve/:transactionId`
 - `POST /api/execute/:id`
+- `POST /api/command`
 - `POST /api/cancel/:transactionId`
 - `POST /api/retry/:transactionId`
 - `GET /api/security`
@@ -43,11 +48,11 @@ Requesting agent or human
 
 ## External Boundaries
 
-The local API can simulate payment settlement only through the explicit `/api/demo-settle/:transactionId` development route. Real ClawUp, wallet, merchant, x402, and ERC-8004 actions stay blocked until the user explicitly approves them.
+The local API can simulate payment settlement only through the explicit `/api/demo-settle/:transactionId` development route when `ENABLE_MOCK_X402=true`. Real ClawUp, wallet, merchant, x402, and ERC-8004 actions stay blocked until the user explicitly approves them.
 
 ## Local Payment Truth
 
-`/api/demo-settle/:transactionId` is a local demo adapter. It marks a transaction as settled for development and tests, but it is not presented as real x402 proof. The live demo must replace this with GOAT x402 Merchant Portal evidence once merchant credentials and funds exist.
+`/api/demo-settle/:transactionId` is a local mock adapter. It marks a transaction as settled for development and tests only when mock x402 is enabled, but it is not presented as real x402 proof. The live demo must replace this with GOAT x402 Merchant Portal evidence once merchant credentials and funds exist.
 
 ## Related Docs
 

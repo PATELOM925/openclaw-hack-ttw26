@@ -17,6 +17,7 @@ export type TaskType =
   | "code_review"
   | "repo_write"
   | "data_extraction"
+  | "summarization"
   | "agent_safety"
   | "unknown";
 

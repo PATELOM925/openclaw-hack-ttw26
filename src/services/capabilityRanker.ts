@@ -6,9 +6,11 @@ export function rankCapabilities(
   secureContext: SecureContextPackage,
   capabilities: CapabilityListing[]
 ): RankedCapability[] {
-  return capabilities
+  const scored = capabilities
     .map((capability) => scoreCapability(analysis, secureContext, capability))
     .sort((left, right) => right.score - left.score);
+  const affordable = scored.filter((item) => item.capability.priceUsd <= analysis.budgetUsd);
+  return affordable.length > 0 ? affordable : scored;
 }
 
 function scoreCapability(
@@ -32,6 +34,7 @@ function taskFit(analysis: TaskAnalysis, capability: CapabilityListing): number 
   if (analysis.requiredCapabilities.some((required) => supported.includes(required))) return 100;
   if (supported.includes(analysis.taskType)) return 92;
   if (analysis.taskType === "copywriting" && supported.includes("positioning")) return 88;
+  if (analysis.taskType === "summarization" && supported.includes("summarization")) return 100;
   return 35;
 }
 

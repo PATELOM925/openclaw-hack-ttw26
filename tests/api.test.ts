@@ -3,6 +3,14 @@ import { describe, expect, it } from "vitest";
 import { createApp } from "../src/app.js";
 
 describe("ClawCompass API", () => {
+  it("returns health status for infrastructure checks", async () => {
+    const app = createApp();
+
+    const response = await request(app).get("/health").expect(200);
+
+    expect(response.body).toEqual({ ok: true, service: "clawcompass-api" });
+  });
+
   it("returns self-disclosure and command instructions", async () => {
     const app = createApp();
 
@@ -10,6 +18,9 @@ describe("ClawCompass API", () => {
 
     expect(response.body.name).toBe("ClawCompass");
     expect(response.body.description).toContain("capability broker");
+    expect(response.body.text).toContain("I am ClawCompass.");
+    expect(response.body.text).toContain("Trigger x402 payment when required");
+    expect(response.body.limits).toContain("No verified x402 payment, no paid execution.");
     expect(response.body.commands).toEqual(
       expect.arrayContaining(["/ask [task]", "/use [name]", "/security"])
     );
@@ -45,7 +56,7 @@ describe("ClawCompass API", () => {
     );
   });
 
-  it("quotes a paid capability and blocks unpaid execution", async () => {
+  it("quotes, approves, and blocks unpaid paid capability execution", async () => {
     const app = createApp();
 
     const quote = await request(app)
@@ -61,6 +72,14 @@ describe("ClawCompass API", () => {
     expect(quote.body.secureContext.allowedContext).not.toContain("FAKE_OPENAI_KEY");
     expect(quote.body.secureContext.blockedContext).toContain("api_key");
 
+    const approved = await request(app)
+      .post(`/api/approve/${quote.body.transaction.id}`)
+      .send()
+      .expect(200);
+
+    expect(approved.body.transaction.status).toBe("payment_required");
+    expect(approved.body.paymentRequiredHeader).toContain("\"protocol\":\"x402\"");
+
     const blocked = await request(app)
       .post("/api/execute/pitchhawk")
       .send({
@@ -73,8 +92,24 @@ describe("ClawCompass API", () => {
     expect(blocked.body.canExecute).toBe(false);
   });
 
-  it("executes PitchHawk after demo payment settlement and updates reputation", async () => {
+  it("keeps demo settlement disabled unless mock x402 is enabled", async () => {
     const app = createApp();
+
+    const quote = await request(app)
+      .post("/api/use/pitchhawk")
+      .send({ requesterAgentId: "agent-demo" })
+      .expect(202);
+
+    const blocked = await request(app)
+      .post(`/api/demo-settle/${quote.body.transaction.id}`)
+      .send({ paymentId: "demo-payment", txHash: "0xabc123" })
+      .expect(403);
+
+    expect(blocked.body.error).toBe("mock_x402_disabled");
+  });
+
+  it("executes PitchHawk after local mock payment settlement and updates reputation", async () => {
+    const app = createApp({ enableMockX402: true });
 
     const quote = await request(app)
       .post("/api/use/pitchhawk")
@@ -103,7 +138,7 @@ describe("ClawCompass API", () => {
   });
 
   it("returns a clean failure for unsupported paid capability execution", async () => {
-    const app = createApp();
+    const app = createApp({ enableMockX402: true });
 
     const quote = await request(app)
       .post("/api/use/codewolf")
@@ -129,11 +164,68 @@ describe("ClawCompass API", () => {
     expect(failed.text).not.toContain("Error:");
   });
 
+  it("adapts ClawUp and Telegram commands into chat-friendly responses", async () => {
+    const app = createApp({ enableMockX402: true });
+
+    const help = await request(app).post("/api/command").send({ text: "/help" }).expect(200);
+    expect(help.body.text).toContain("I am ClawCompass.");
+
+    const ask = await request(app)
+      .post("/api/command")
+      .send({
+        sessionId: "demo-session",
+        text:
+          "/ask I need a tool that can rewrite my repo and push changes to GitHub."
+      })
+      .expect(200);
+
+    expect(ask.body.text).toContain("High-risk action detected.");
+    expect(ask.body.text).toContain("Reply APPROVE_WRITE or CANCEL.");
+
+    const blockedReputation = await request(app).get("/api/reputation/githubhelper").expect(200);
+    expect(blockedReputation.body.profile.blockedRiskEvents).toBe(1);
+
+    const reputationCommand = await request(app)
+      .post("/api/command")
+      .send({ sessionId: "demo-session", text: "/reputation GitHubHelper" })
+      .expect(200);
+    expect(reputationCommand.body.text).toContain("blocked risk events: 1");
+
+    const use = await request(app)
+      .post("/api/command")
+      .send({
+        sessionId: "demo-session",
+        text: "/use PitchHawk",
+        context: "Project summary: ClawCompass"
+      })
+      .expect(200);
+
+    expect(use.body.text).toContain("PitchHawk costs 0.10 USDC");
+    expect(use.body.text).toContain("Reply APPROVE or CANCEL.");
+
+    const approve = await request(app)
+      .post("/api/command")
+      .send({ sessionId: "demo-session", text: "APPROVE" })
+      .expect(200);
+
+    expect(approve.body.text).toContain("Payment required.");
+    expect(approve.body.text).toContain("Rail: x402");
+
+    const cancel = await request(app)
+      .post("/api/command")
+      .send({ sessionId: "demo-session", text: "CANCEL" })
+      .expect(200);
+
+    expect(cancel.body.text).toContain("Cancelled");
+  });
+
   it("exposes security policy and records cancel flow", async () => {
     const app = createApp();
     const security = await request(app).get("/api/security").expect(200);
 
     expect(security.body.policy.writeActionsRequireApproval).toBe(true);
+    expect(security.body.text).toContain("ClawCompass Guardrails");
+    expect(security.body.text).toContain("Abort route: /cancel [transaction_id]");
 
     const quote = await request(app)
       .post("/api/use/pitchhawk")

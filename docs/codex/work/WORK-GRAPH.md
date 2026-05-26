@@ -57,7 +57,7 @@ flowchart TD
 | EPIC-400 | epic | done | `skills/erc8004-mainnet-registration/SKILL.md` | Registration workflow separates planning from on-chain action. | Secret scan and skill validation. | Register only after explicit approval. |
 | TASK-410 | task | done | `docs/templates/agent-registration.json` | Metadata template avoids secrets and supports 8004scan verification. | JSON validity check. | Fill public metadata. |
 | EPIC-500 | epic | done | `skills/x402-payment-readiness/SKILL.md` | x402 is routed only when the idea transacts or monetizes. | Review DIRECT/DELEGATE decision criteria. | Decide payment scope after idea selection. |
-| TASK-510 | task | in_progress | app code | x402 flow is implemented and demoable if selected. | Live payment or controlled test evidence. | Local gate done; real merchant blocked. |
+| TASK-510 | task | done | app code | x402 flow is implemented and demoable if selected. | Live payment or controlled test evidence. | Real merchant settlement remains blocked. |
 | EPIC-600 | epic | done | `docs/hackathon/DEMO-SUBMISSION.md` | 2-minute demo and final checklist are available. | Manual read-through against scorecard. | Rehearse after build. |
 | TASK-610 | task | done | `docs/templates/demo-script.md` | Demo script fits the judging flow. | Time-boxed dry run after agent exists. | Fill script after build. |
 | GOAL-100 | goal | review | `docs/hackathon/clawcompass/`, app code | ClawCompass loop works locally and external proof blockers are explicit. | Tests, route checks, secret scan, demo rehearsal. | External ClawUp/x402/ERC-8004 actions require user approval. |
@@ -67,15 +67,15 @@ flowchart TD
 | EPIC-120 | epic | blocked | ClawUp UI, Telegram | ClawUp agent exists and Telegram responds. | Manual Telegram round trip. | Requires explicit user action. |
 | TASK-121 | task | blocked | ClawUp UI | ClawUp agent exists. | ClawUp dashboard. | Requires explicit user action. |
 | TASK-122 | task | blocked | Telegram, ClawUp UI | Telegram bot responds through ClawUp. | Manual Telegram round trip. | Requires BotFather and pairing. |
-| TASK-123 | task | done | Claw prompt/docs | `/help`, `/ask`, `/use`, `/security` wording is ready. | Demo script and API responses. | Use responses in ClawUp. |
-| EPIC-130 | epic | done | app code | Marketplace, analyzer, sanitizer, ranker, API routes work. | Unit and API tests. | Use local routes in demo. |
+| TASK-123 | task | done | Claw prompt/docs, app command adapter | `/help`, `/ask`, `/use`, `/security` wording is ready. | Demo script, API responses, command tests. | Use responses in ClawUp. |
+| EPIC-130 | epic | done | app code | Marketplace, analyzer, sanitizer, ranker, API routes, and command adapter work. | Unit and API tests. | Use local routes in demo. |
 | TASK-131 | task | done | app data | Seed capabilities exist. | `/api/marketplace`. | Replace demo inventory later. |
 | TASK-132 | task | done | app services | Task classifier works. | Unit tests. | Expand semantic routing later. |
 | TASK-133 | task | done | app services | Context sanitizer redacts secrets. | Unit/API tests. | Expand classifiers later. |
 | TASK-134 | task | done | app services | Ranker returns top 3 and sequence. | Unit/API tests. | Replace heuristic scoring later. |
 | EPIC-140 | epic | blocked | app code, x402 external | Paid tools are blocked until verified payment. | Payment state tests and route checks. | Real merchant setup required. |
 | TASK-141 | task | done | app services | Transaction states cover quote, approval, settlement, delivery, cancel, retry. | Unit/API tests. | Connect real x402 later. |
-| TASK-142 | task | blocked | x402 merchant | Real x402 route verifies payment. | Real payment evidence. | Requires merchant/funds. |
+| TASK-142 | task | blocked | x402 merchant, payment adapter | Real x402 route verifies payment. | Real payment evidence. | Requires merchant/funds. |
 | TASK-143 | task | done | app executor | PitchHawk executes after verified payment. | API test. | Use in demo route check. |
 | EPIC-150 | epic | blocked | GOAT mainnet, app reputation | ERC-8004 identity is live; local reputation logs work. | 8004scan plus API tests. | Local logging first; on-chain blocked. |
 | TASK-151 | task | blocked | wallet, funding | Public address and balances recorded without secrets. | Balance check. | Requires explicit user action. |
@@ -102,8 +102,8 @@ Validated on 2026-05-26:
 - `quick_validate.py` reported all four local skills valid.
 
 Validated ClawCompass local build on 2026-05-26:
-- `npm run validate` passed with 14 tests.
+- `npm run validate` passed with 19 tests.
 - `npm audit --audit-level=moderate` reported 0 vulnerabilities.
 - `python3 -m json.tool` passed for work graph, registration metadata, and capability seed JSON.
 - Secret scan, excluding the sanitizer regex definition, returned no matches.
-- Local route check proved help, ask, redaction, unpaid 402 block, demo settlement, PitchHawk delivery, security policy, and reputation update.
+- Local route check proved health, help, ask, redaction, approval, unpaid 402 block, mock-only demo settlement, command adapter, PitchHawk delivery, security policy, and reputation update.

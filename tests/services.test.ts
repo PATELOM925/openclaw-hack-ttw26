@@ -10,6 +10,7 @@ import {
   createPaymentRequiredResponse,
   markPaymentSettled
 } from "../src/services/paymentGate.js";
+import { createPaymentAdapter } from "../src/services/paymentAdapter.js";
 import { executeCapability } from "../src/services/executor.js";
 import { createReputationLogger } from "../src/services/reputationLogger.js";
 
@@ -40,9 +41,14 @@ describe("task analysis", () => {
 
 describe("context sanitization", () => {
   it("redacts secret-like values and reports blocked context classes", () => {
+    const rawApiKey = `sk-${"test12345678901234567890"}`;
+    const oauthAssignment = `OAUTH_${"TOKEN"}=oauth_demo_token_1234567890`;
     const context = [
       "Project summary: capability broker",
       "OPENAI_API_KEY=FAKE_OPENAI_KEY_VALUE_123456",
+      rawApiKey,
+      oauthAssignment,
+      "Phone: +1 (416) 555-1212",
       "DATABASE_URL=postgres://user:pass@example.com:5432/app",
       "Contact me at builder@example.com"
     ].join("\n");
@@ -51,10 +57,13 @@ describe("context sanitization", () => {
 
     expect(sanitized.allowedContext).toContain("Project summary");
     expect(sanitized.allowedContext).not.toContain("FAKE_OPENAI_KEY");
+    expect(sanitized.allowedContext).not.toContain("sk-test");
+    expect(sanitized.allowedContext).not.toContain("oauth_demo");
+    expect(sanitized.allowedContext).not.toContain("416");
     expect(sanitized.allowedContext).not.toContain("postgres://");
     expect(sanitized.allowedContext).not.toContain("builder@example.com");
     expect(sanitized.blockedContext).toEqual(
-      expect.arrayContaining(["api_key", "database_url", "email"])
+      expect.arrayContaining(["api_key", "oauth_token", "phone_number", "database_url", "email"])
     );
     expect(sanitized.approvalRequired).toBe(true);
   });
@@ -73,6 +82,19 @@ describe("capability ranking and sequencing", () => {
     expect(ranked[0].capability.name).toBe("PitchHawk");
     expect(ranked[0].reasons.join(" ")).toContain("landing_page_copy");
     expect(ranked.slice(0, 3)).toHaveLength(3);
+  });
+
+  it("filters paid capabilities above budget when a viable free alternative exists", () => {
+    const analysis = analyzeTask({
+      task: "Summarize these public notes",
+      budgetUsd: 0
+    });
+    const sanitized = sanitizeContext(analysis.originalTask, "Public notes");
+
+    const ranked = rankCapabilities(analysis, sanitized, listCapabilities());
+
+    expect(ranked[0].capability.id).toBe("freesummarizer");
+    expect(ranked.slice(0, 3).every((item) => item.capability.priceUsd <= analysis.budgetUsd)).toBe(true);
   });
 
   it("builds a research to draft to safety sequence for pitch tasks", () => {
@@ -108,6 +130,27 @@ describe("guardrails", () => {
 });
 
 describe("payment, execution, and reputation", () => {
+  it("enables local mock settlement only through the mock x402 adapter", async () => {
+    const capability = listCapabilities().find((item) => item.id === "pitchhawk");
+    expect(capability).toBeDefined();
+    const quote = createExecutionQuote({ capability: capability! });
+
+    const realAdapter = createPaymentAdapter({ ENABLE_MOCK_X402: "false" });
+    await expect(
+      realAdapter.settleMockPayment(quote, { paymentId: "demo-payment", txHash: "0xabc123" })
+    ).rejects.toThrow("Mock x402 is disabled");
+
+    const mockAdapter = createPaymentAdapter({ ENABLE_MOCK_X402: "true" });
+    const settled = await mockAdapter.settleMockPayment(quote, {
+      paymentId: "demo-payment",
+      txHash: "0xabc123"
+    });
+
+    expect(mockAdapter.mode).toBe("mock");
+    expect(settled.status).toBe("payment_settled");
+    expect(settled.x402PaymentId).toBe("demo-payment");
+  });
+
   it("blocks paid execution until payment is settled, then executes PitchHawk and logs reputation", () => {
     const capability = listCapabilities().find((item) => item.id === "pitchhawk");
     expect(capability).toBeDefined();

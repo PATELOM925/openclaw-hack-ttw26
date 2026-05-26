@@ -25,7 +25,7 @@ A requesting agent describes its task, goal, constraints, budget, and safe conte
 ## Status
 
 - Idea brief: accepted.
-- Local backend: in progress.
+- Local backend: implemented and validated.
 - ClawUp agent, wallet, merchant, funding, and mainnet registration: blocked until explicit user action.
 - On-chain reputation: not claimed until implemented and verified.
 
@@ -35,6 +35,8 @@ A requesting agent describes its task, goal, constraints, budget, and safe conte
 - [Research](RESEARCH.md)
 - [Architecture](ARCHITECTURE.md)
 - [Build plan](BUILD-PLAN.md)
+- [Brief-driven implementation plan](CODEX_IMPLEMENTATION_PLAN_CLAWCOMPASS.md)
+- [Source of truth snapshot](SOURCE-OF-TRUTH.md)
 - [Demo script](DEMO-SCRIPT.md)
 - [Work graph](../../codex/work/WORK-GRAPH.md)
 - [Build runbook](../BUILD-RUNBOOK.md)

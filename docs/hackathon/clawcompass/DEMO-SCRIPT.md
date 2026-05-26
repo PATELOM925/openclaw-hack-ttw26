@@ -16,7 +16,7 @@ Expected response: ClawCompass explains that it analyzes tasks, redacts sensitiv
 2. ClawCompass classifies the task as copywriting, redacts secrets, and recommends `PitchHawk`.
 3. User sends: `/use PitchHawk`.
 4. ClawCompass shows the context preview and payment requirement.
-5. User approves and completes x402 payment.
+5. User approves and completes x402 payment. Local development can use mock settlement only with `ENABLE_MOCK_X402=true`.
 6. ClawCompass executes PitchHawk and returns headline, subheadline, CTA, bullets, and confidence.
 7. Reputation updates locally.
 

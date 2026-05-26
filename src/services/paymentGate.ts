@@ -31,9 +31,16 @@ export function createPaymentRequiredResponse(
     httpStatus: 402,
     canExecute: false,
     message: "Payment required before paid capability execution.",
-    transaction: { ...transaction, status: "payment_required", paymentRequiredHeader: header },
+    transaction: markPaymentRequired(transaction, header),
     paymentRequiredHeader: header
   };
+}
+
+export function markPaymentRequired(
+  transaction: CapabilityTransaction,
+  paymentRequiredHeader = buildFallbackPaymentHeader(transaction)
+): CapabilityTransaction {
+  return { ...transaction, status: "payment_required", paymentRequiredHeader };
 }
 
 export function markPaymentSettled(
@@ -74,6 +81,19 @@ function buildPaymentRequiredHeader(
     mode: "DIRECT",
     merchantId,
     capabilityId: capability.id,
+    amount: transaction.amount,
+    token: transaction.token,
+    network: "goat-mainnet",
+    chainId: 2345
+  });
+}
+
+function buildFallbackPaymentHeader(transaction: CapabilityTransaction): string {
+  return JSON.stringify({
+    protocol: "x402",
+    mode: "DIRECT",
+    merchantId,
+    capabilityId: transaction.capabilityId,
     amount: transaction.amount,
     token: transaction.token,
     network: "goat-mainnet",

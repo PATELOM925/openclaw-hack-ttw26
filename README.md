@@ -36,15 +36,22 @@ npm run dev
 
 The API listens on `http://localhost:3000` by default. Useful demo endpoints:
 
+- `GET /health`
 - `GET /api/help`
 - `POST /api/ask`
 - `GET /api/marketplace`
 - `GET /api/tool/pitchhawk`
 - `POST /api/use/pitchhawk`
+- `POST /api/approve/:transactionId`
 - `POST /api/execute/pitchhawk`
+- `POST /api/command`
 - `GET /api/security`
 - `GET /api/transactions`
 - `GET /api/reputation/pitchhawk`
+
+Local development can use `ENABLE_MOCK_X402=true` to unlock `/api/demo-settle/:transactionId`.
+Keep it disabled for final demo evidence. Real paid execution uses the `goatx402-sdk-server`
+adapter when merchant credentials and a payer wallet are available in untracked `.env`.
 
 Validation:
 
@@ -54,6 +61,12 @@ npm audit --audit-level=moderate
 ```
 
 Real ClawUp, wallet, x402 merchant, and ERC-8004 actions remain external gated steps. Put real credentials only in untracked `.env`, never in repo docs.
+
+## Brief And Plan
+
+- Source-of-truth brief: `/Users/shreyapatel/Projects/zzz project docs/GOAT Hack/CODEX_IMPLEMENTATION_BRIEF_CLAWCOMPASS.md`
+- Saved implementation plan: [`docs/hackathon/clawcompass/CODEX_IMPLEMENTATION_PLAN_CLAWCOMPASS.md`](docs/hackathon/clawcompass/CODEX_IMPLEMENTATION_PLAN_CLAWCOMPASS.md)
+- Source snapshot: [`docs/hackathon/clawcompass/SOURCE-OF-TRUTH.md`](docs/hackathon/clawcompass/SOURCE-OF-TRUTH.md)
 
 ## Action Items
 - [ ] Review OpenClaw's required frameworks and documentation
@@ -71,7 +84,8 @@ Real ClawUp, wallet, x402 merchant, and ERC-8004 actions remain external gated s
 ## Status
 - [ ] Confirm attendance
 - [x] Finalize project idea using the idea intake workflow
-- [ ] Build MVP
+- [x] Build local MVP
+- [ ] Complete external ClawUp, x402, wallet, and ERC-8004 proof
 - [ ] Demo
 
 ## Next Steps

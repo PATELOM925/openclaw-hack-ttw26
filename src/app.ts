@@ -5,33 +5,50 @@ import { sanitizeContext } from "./services/contextSanitizer.js";
 import { listCapabilities, findCapability } from "./services/marketplace.js";
 import { rankCapabilities } from "./services/capabilityRanker.js";
 import { buildCapabilitySequence } from "./services/capabilitySequencer.js";
-import { evaluateGuardrails, getSecurityPolicy } from "./services/guardrails.js";
+import { evaluateGuardrails, getSecurityPolicy, getSecurityText } from "./services/guardrails.js";
 import {
   createExecutionQuote,
   createPaymentRequiredResponse,
-  createTransactionStore,
-  markPaymentSettled
+  createTransactionStore
 } from "./services/paymentGate.js";
+import { createPaymentAdapter, type PaymentAdapter } from "./services/paymentAdapter.js";
 import { executeCapability } from "./services/executor.js";
 import { createReputationLogger } from "./services/reputationLogger.js";
 import { getHelpResponse } from "./services/helpText.js";
+import { createCommandHandler } from "./services/commandHandler.js";
 import type { CapabilityTransaction } from "./types/transaction.js";
 
-export function createApp() {
+export type AppOptions = {
+  enableMockX402?: boolean;
+};
+
+export function createApp(options: AppOptions = {}) {
   const app = express();
   const transactions = createTransactionStore();
   const reputation = createReputationLogger();
+  const paymentAdapter = createPaymentAdapter({
+    ...process.env,
+    ENABLE_MOCK_X402: options.enableMockX402 ? "true" : process.env.ENABLE_MOCK_X402
+  });
+  const commandHandler = createCommandHandler({ transactions, paymentAdapter, reputation });
 
   app.use(cors());
   app.use(express.json({ limit: "256kb" }));
 
+  app.get("/health", (_request, response) => response.json({ ok: true, service: "clawcompass-api" }));
   app.get("/api/help", (_request, response) => response.json(getHelpResponse()));
   app.get("/api/marketplace", (_request, response) => response.json({ capabilities: listCapabilities() }));
   app.get("/api/tool/:id", (request, response) => sendCapability(request, response));
   app.post("/api/ask", (request, response) => sendRecommendations(request, response));
   app.post("/api/use/:id", (request, response) => createUseQuote(request, response, transactions));
+  app.post("/api/approve/:transactionId", (request, response) => {
+    approvePayment(request, response, transactions, paymentAdapter);
+  });
+  app.post("/api/command", async (request, response) => {
+    response.json(await commandHandler.handle(request.body));
+  });
   app.post("/api/demo-settle/:transactionId", (request, response) => {
-    settleDemoPayment(request, response, transactions);
+    settleDemoPayment(request, response, transactions, paymentAdapter);
   });
   app.post("/api/execute/:id", (request, response) => {
     executePaidCapability(request, response, transactions, reputation);
@@ -42,7 +59,10 @@ export function createApp() {
   app.post("/api/retry/:transactionId", (request, response) => {
     updateTransactionStatus(request, response, transactions, "awaiting_approval");
   });
-  app.get("/api/security", (_request, response) => response.json({ policy: getSecurityPolicy() }));
+  app.get("/api/security", (_request, response) => {
+    const policy = getSecurityPolicy();
+    response.json({ policy, text: getSecurityText(policy) });
+  });
   app.get("/api/transactions", (_request, response) => {
     response.json({ transactions: transactions.list() });
   });
@@ -95,13 +115,43 @@ function createUseQuote(
 function settleDemoPayment(
   request: Request,
   response: Response,
-  transactions: ReturnType<typeof createTransactionStore>
+  transactions: ReturnType<typeof createTransactionStore>,
+  paymentAdapter: PaymentAdapter
 ) {
   const transaction = transactions.get(request.params.transactionId);
   if (!transaction) return response.status(404).json({ error: "transaction_not_found" });
 
-  const settled = transactions.save(markPaymentSettled(transaction, request.body));
-  return response.json({ transaction: settled, note: "Demo settlement only. Real x402 proof is external." });
+  paymentAdapter
+    .settleMockPayment(transaction, request.body)
+    .then((settled) => {
+      response.json({
+        transaction: transactions.save(settled),
+        note: "Local mock settlement only. Real x402 proof is external."
+      });
+    })
+    .catch(() => response.status(403).json({ error: "mock_x402_disabled" }));
+}
+
+function approvePayment(
+  request: Request,
+  response: Response,
+  transactions: ReturnType<typeof createTransactionStore>,
+  paymentAdapter: PaymentAdapter
+) {
+  const transaction = transactions.get(request.params.transactionId);
+  if (!transaction) return response.status(404).json({ error: "transaction_not_found" });
+  const capability = findCapability(transaction.capabilityId);
+  if (!capability) return response.status(404).json({ error: "capability_not_found" });
+
+  paymentAdapter
+    .createPaymentRequirement(transaction, capability)
+    .then((requirement) => {
+      response.json({
+        ...requirement,
+        transaction: transactions.save(requirement.transaction)
+      });
+    })
+    .catch(() => response.status(502).json({ error: "x402_payment_requirement_failed" }));
 }
 
 function executePaidCapability(

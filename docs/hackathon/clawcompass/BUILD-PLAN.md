@@ -16,6 +16,8 @@
 - Add pending tool submission route.
 - Add clear failure messages for unpaid, failed, blocked, and unknown capability paths.
 - Add local validation and secret scans.
+- Add `/health`, `/api/approve/:transactionId`, and `/api/command`.
+- Add `goatx402-sdk-server` adapter and keep mock settlement disabled unless `ENABLE_MOCK_X402=true`.
 
 ## External Blockers
 
@@ -35,7 +37,7 @@ npm run validate
 npm run dev
 ```
 
-The backend exposes `/api/help`, `/api/ask`, `/api/marketplace`, `/api/use/:id`, `/api/execute/:id`, `/api/security`, `/api/transactions`, and `/api/reputation/:id`.
+The backend exposes `/health`, `/api/help`, `/api/ask`, `/api/marketplace`, `/api/use/:id`, `/api/approve/:transactionId`, `/api/execute/:id`, `/api/command`, `/api/security`, `/api/transactions`, and `/api/reputation/:id`.
 
 ## Related Docs
 

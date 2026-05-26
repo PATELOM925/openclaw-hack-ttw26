@@ -7,7 +7,8 @@ const taskRules: Array<{ type: TaskType; tokens: string[]; capabilities: string[
   { type: "research", tokens: ["research", "market", "competitor"], capabilities: ["market_validation"] },
   { type: "code_review", tokens: ["review code", "readme", "bug"], capabilities: ["code_review"] },
   { type: "agent_safety", tokens: ["guardrail", "safety", "approval", "rule"], capabilities: ["agent_safety"] },
-  { type: "data_extraction", tokens: ["extract", "summarize", "parse"], capabilities: ["data_extraction"] }
+  { type: "summarization", tokens: ["summarize", "summary", "condense"], capabilities: ["summarization"] },
+  { type: "data_extraction", tokens: ["extract", "parse"], capabilities: ["data_extraction"] }
 ];
 
 export function analyzeTask(request: CapabilityRequest): TaskAnalysis {
@@ -21,7 +22,7 @@ export function analyzeTask(request: CapabilityRequest): TaskAnalysis {
     requiredCapabilities: match?.capabilities ?? ["general_capability_routing"],
     sensitivity: highRisk ? "confidential" : "internal",
     detectedSecrets: [],
-    budgetUsd: request.budgetUsd ?? parseBudget(task) ?? 0,
+    budgetUsd: request.budgetUsd ?? parseBudget(task) ?? 0.1,
     riskTolerance: chooseRiskTolerance(request.maxRisk, highRisk)
   };
 }
