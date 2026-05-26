@@ -4,6 +4,13 @@ export type ReputationOutcome =
   | "failed_execution"
   | "blocked_risk";
 
+export type ReputationWriteStatus =
+  | "not_applicable"
+  | "pending_external_proof"
+  | "ready_to_write"
+  | "written"
+  | "failed";
+
 export type ReputationEvent = {
   id: string;
   capabilityId: string;
@@ -15,6 +22,10 @@ export type ReputationEvent = {
   contextSafetyPassed: boolean;
   paymentVerified: boolean;
   executionVerified: boolean;
+  onChainWritten: boolean;
+  writeStatus: ReputationWriteStatus;
+  erc8004TxHash?: string;
+  agentId?: string;
   timestamp: string;
 };
 

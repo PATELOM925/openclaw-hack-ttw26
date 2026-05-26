@@ -11,6 +11,11 @@ Status: `review`
 Done when: docs, local backend, tests, demo flow, guardrails, payment-gated execution, local reputation, and external proof checklist are ready.
 Stop when: creating wallets, submitting forms, mutating ClawUp, spending funds, registering on-chain, or claiming unverified on-chain reputation would be required.
 
+`GOAL-200` Finish ClawCompass demo-ready full product
+Status: `blocked`
+Done when: backend alignment, full web app, ClawUp command parity, graph/docs, validation, browser QA, and explicit external-proof blockers are recorded.
+Stop when: creating wallets, submitting forms, mutating ClawUp, spending funds, registering on-chain, or sending external messages would be required.
+
 ## Top-Down Graph
 ```mermaid
 flowchart TD
@@ -29,6 +34,13 @@ flowchart TD
   E150["EPIC-150 ERC-8004 identity and reputation"]
   E160["EPIC-160 Guardrails and security"]
   E170["EPIC-170 Demo and validation"]
+  G200["GOAL-200 Finish ClawCompass demo-ready full product"]
+  E210["EPIC-210 Plan graph and source alignment"]
+  E220["EPIC-220 Backend broker alignment"]
+  E230["EPIC-230 Full web app"]
+  E240["EPIC-240 ClawUp and command shell"]
+  E250["EPIC-250 x402 and ERC-8004 proof path"]
+  E260["EPIC-260 QA, security, and demo rehearsal"]
   GOAL --> E100 --> T110["TASK-110 Context doc"]
   GOAL --> E200 --> T210["TASK-210 Idea intake doc"]
   GOAL --> E300 --> T310["TASK-310 Build runbook"]
@@ -42,6 +54,17 @@ flowchart TD
   G100 --> E150
   G100 --> E160
   G100 --> E170
+  G200 --> E210 --> T211["TASK-211 Update graph and docs"]
+  G200 --> E220 --> T221["TASK-221 LLM analyzer"]
+  E220 --> T222["TASK-222 Autonomous paid flow"]
+  E220 --> T223["TASK-223 Payment verification binding"]
+  E220 --> T224["TASK-224 ERC-8004 reputation adapter"]
+  G200 --> E230 --> T231["TASK-231 React shell"]
+  E230 --> T232["TASK-232 Broker workflow UI"]
+  E230 --> T233["TASK-233 Proof and admin UI"]
+  G200 --> E240 --> T241["TASK-241 Command parity"]
+  G200 --> E250 --> T251["TASK-251 External proof capture"]
+  G200 --> E260 --> T261["TASK-261 Validation and browser QA"]
 ```
 
 ## Node Register
@@ -86,10 +109,29 @@ flowchart TD
 | TASK-162 | task | done | app transactions | Audit log shows transactions cleanly. | `/api/transactions`. | Persist later if needed. |
 | EPIC-170 | epic | done | docs, tests, local server | Demo path and submission evidence are ready. | Timed rehearsal and validation. | Use script during live ClawUp setup. |
 | TASK-171 | task | done | tests, local server | Local demo path validates. | Route checks and scans. | Repeat after external setup. |
+| GOAL-200 | goal | blocked | app code, `web/`, docs, graph | Full local product works and external proof blockers are explicit. | Backend tests, web build, browser QA, scans, graph parse. | External proof requires user-approved ClawUp, wallet, merchant, and mainnet actions. |
+| EPIC-210 | epic | done | `docs/codex/work/`, `memory.md`, ClawCompass docs | GOAL-200 graph and source alignment are recorded. | Markdown review and JSON parse. | Keep updated after validation. |
+| TASK-211 | task | done | graph, memory, docs | GOAL-200 nodes and web/backend interface changes are durable. | Manual graph review plus JSON parse. | Update evidence after final checks. |
+| EPIC-220 | epic | done | backend services and API | LLM-first analysis, autonomous within-cap payment, payment binding, and reputation write-state exist. | Unit and API tests. | Connect real credentials only after approval. |
+| TASK-221 | task | done | `src/services/taskAnalyzer.ts` | `/api/ask` returns analysis source, model, confidence, fallback reason, and recommended sequence. | Tests cover deterministic fallback without `ANTHROPIC_API_KEY`. | Use real key only from untracked env. |
+| TASK-222 | task | done | guardrails, payment quote API | Low-risk paid tools under `0.10 USDC` skip approval but still require x402 payment. | API and unit tests. | Demo through web and command surfaces. |
+| TASK-223 | task | done | payment adapter/status API | Payment proof is bound to transaction, capability, amount, token, wallet, chain, expiry, and idempotency. | Binding mismatch test and status API test. | Verify with live x402 only after credentials/funds. |
+| TASK-224 | task | done | reputation API/logger | Reputation events expose pending/written on-chain state without false claims. | Reputation tests and `/write-onchain` API test. | Write on-chain only after wallet/registration approval. |
+| EPIC-230 | epic | done | `web/` | Browser app exposes every local workflow and proof blocker. | `npm run build:web` and browser QA. | Use during demo rehearsal. |
+| TASK-231 | task | done | Vite React shell | Web app routes and API client exist. | Production web build. | Use browser QA. |
+| TASK-232 | task | done | broker/capability/transaction/reputation UI | User can analyze, inspect, quote, status-check, settle mock, execute, retry, cancel, and inspect reputation. | Web build and API-backed controls. | Verify in browser. |
+| TASK-233 | task | done | security/proof UI | User can see guardrails, blocked-risk demo, and external proof checklist. | Web build and browser QA. | Capture screenshot evidence if needed. |
+| EPIC-240 | epic | done | command handler, ClawUp text | Command outputs match web/backend behavior. | API command tests. | Wire into ClawUp after external setup. |
+| TASK-241 | task | done | `/api/command` | `/help`, `/ask`, `/use`, `/security`, `/transactions`, `/reputation`, `/cancel`, and `/retry` remain usable. | Command adapter tests. | Use in ClawUp/Telegram. |
+| EPIC-250 | epic | blocked | ClawUp, Telegram, wallet, x402, ERC-8004 | Public proof is captured after explicit user-approved external setup. | Dashboard, payment, tx, and 8004scan evidence. | Requires user action, credentials, wallet, and funds. |
+| TASK-251 | task | blocked | public proof docs/API | Capture ClawUp agent ID, Telegram username, wallet address, x402 settlement, ERC-8004 tx hash, and 8004scan URL only. | `/api/proof` plus public evidence review. | Requires external setup approval. |
+| EPIC-260 | epic | done | tests, browser, scans, git | Local implementation is verified. | Full validation suite and git status. | Commit/push closeout. |
+| TASK-261 | task | done | validation commands | Backend, frontend, security, docs, and browser-visible paths validate. | `npm run validate`, `npm run build:web`, audit, scans, browser QA. | Repeat after external setup. |
 
 ## Status Notes
 - Required preparation nodes are `done`.
 - ClawCompass local backend, docs, route checks, and validation are `done`.
+- GOAL-200 local backend and web implementation is `done`; GOAL-200 remains `blocked` only by external proof actions.
 - External ClawUp, Telegram, wallet, merchant, funding, and ERC-8004 nodes remain `blocked` until explicit user action.
 
 ## Validation Evidence
@@ -107,3 +149,11 @@ Validated ClawCompass local build on 2026-05-26:
 - `python3 -m json.tool` passed for work graph, registration metadata, and capability seed JSON.
 - Secret scan, excluding the sanitizer regex definition, returned no matches.
 - Local route check proved health, help, ask, redaction, approval, unpaid 402 block, mock-only demo settlement, command adapter, PitchHawk delivery, security policy, and reputation update.
+
+Validated GOAL-200 local build on 2026-05-26:
+- `npm run validate` passed with 24 tests.
+- `npm run build:web` passed.
+- `npm audit --audit-level=moderate` reported 0 vulnerabilities.
+- JSON parse passed for work graph, capability seed, and registration metadata.
+- Secret scan, excluding sanitizer regex definitions and known public/demo addresses, returned no matches.
+- Browser QA verified desktop broker flow, support screens, blocked proof states, and a mobile viewport with `innerWidth=390` and `scrollWidth=390`.

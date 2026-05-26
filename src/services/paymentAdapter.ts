@@ -1,7 +1,8 @@
 import { GoatX402Client } from "goatx402-sdk-server";
 import type { CapabilityListing } from "../types/capability.js";
-import type { CapabilityTransaction } from "../types/transaction.js";
+import type { CapabilityTransaction, PaymentVerification } from "../types/transaction.js";
 import {
+  createPaymentBinding,
   createPaymentRequiredResponse,
   markPaymentSettled
 } from "./paymentGate.js";
@@ -15,6 +16,16 @@ export type PaymentEnvironment = Partial<{
   GOATX402_API_SECRET: string;
   GOATX402_MERCHANT_ID: string;
 }>;
+
+export type PaymentSettlementProof = {
+  paymentId: string;
+  txHash: string;
+  capabilityId: string;
+  amount: string;
+  token: string;
+  requesterWallet?: string;
+  chainId: number;
+};
 
 export type PaymentRequirement = {
   transaction: CapabilityTransaction;
@@ -30,8 +41,9 @@ export type PaymentAdapter = {
   ): Promise<PaymentRequirement>;
   settleMockPayment(
     transaction: CapabilityTransaction,
-    payment: { paymentId: string; txHash: string }
+    payment: PaymentSettlementProof
   ): Promise<CapabilityTransaction>;
+  getPaymentStatus(transaction: CapabilityTransaction): Promise<PaymentVerification>;
 };
 
 export function createPaymentAdapter(env: PaymentEnvironment = process.env): PaymentAdapter {
@@ -50,7 +62,11 @@ function createMockAdapter(): PaymentAdapter {
       };
     },
     async settleMockPayment(transaction, payment) {
+      assertPaymentBound(transaction, payment);
       return markPaymentSettled(transaction, payment);
+    },
+    async getPaymentStatus(transaction) {
+      return verificationForTransaction(transaction);
     }
   };
 }
@@ -96,7 +112,8 @@ function createGoatX402Adapter(env: PaymentEnvironment): PaymentAdapter {
           ...transaction,
           status: "payment_required",
           x402PaymentId: order.orderId,
-          paymentRequiredHeader
+          paymentRequiredHeader,
+          paymentBinding: createPaymentBinding(transaction, order.orderId)
         },
         paymentRequiredHeader,
         message: "Payment required. Complete the x402 order before execution."
@@ -104,6 +121,34 @@ function createGoatX402Adapter(env: PaymentEnvironment): PaymentAdapter {
     },
     async settleMockPayment() {
       throw new Error("Mock x402 is disabled");
+    },
+    async getPaymentStatus(transaction) {
+      if (!hasGoatX402Credentials(env) || !transaction.x402PaymentId) {
+        return verificationForTransaction(transaction);
+      }
+      const client = new GoatX402Client({
+        baseUrl: env.GOATX402_API_URL!,
+        apiKey: env.GOATX402_API_KEY!,
+        apiSecret: env.GOATX402_API_SECRET!
+      });
+      const proof = await client.getOrderStatus(transaction.x402PaymentId);
+      assertLiveProofBound(transaction, proof);
+      if (proof.status === "PAYMENT_CONFIRMED" || proof.status === "INVOICED") {
+        return {
+          status: "payment_settled",
+          canExecute: true,
+          reason: proof.status,
+          txHash: proof.txHash,
+          checkedAt: new Date().toISOString()
+        };
+      }
+      return {
+        status: mapOrderStatus(proof.status),
+        canExecute: false,
+        reason: proof.status,
+        txHash: proof.txHash,
+        checkedAt: new Date().toISOString()
+      };
     }
   };
 }
@@ -115,4 +160,67 @@ function hasGoatX402Credentials(env: PaymentEnvironment): boolean {
 function usdToSixDecimalAtomic(amount: string): string {
   const [whole, fraction = ""] = amount.split(".");
   return `${whole}${fraction.padEnd(6, "0").slice(0, 6)}`.replace(/^0+(?=\d)/, "");
+}
+
+function assertPaymentBound(transaction: CapabilityTransaction, proof: PaymentSettlementProof): void {
+  if (proof.capabilityId !== transaction.capabilityId) throw new Error("Payment proof capability mismatch");
+  if (proof.amount !== transaction.amount) throw new Error("Payment proof amount mismatch");
+  if (proof.token !== transaction.token) throw new Error("Payment proof token mismatch");
+  if (proof.chainId !== 2345) throw new Error("Payment proof chain mismatch");
+  if (transaction.requesterWallet && proof.requesterWallet && proof.requesterWallet !== transaction.requesterWallet) {
+    throw new Error("Payment proof requester wallet mismatch");
+  }
+  if (transaction.status === "payment_settled" || transaction.status === "delivered") {
+    throw new Error("Payment proof already used");
+  }
+  if (transaction.paymentBinding && Date.parse(transaction.paymentBinding.expiresAt) < Date.now()) {
+    throw new Error("Payment proof expired");
+  }
+}
+
+function assertLiveProofBound(transaction: CapabilityTransaction, proof: Awaited<ReturnType<GoatX402Client["getOrderStatus"]>>): void {
+  if (proof.dappOrderId !== transaction.id) throw new Error("x402 order transaction mismatch");
+  if (proof.chainId !== 2345) throw new Error("x402 order chain mismatch");
+  if (proof.tokenSymbol !== transaction.token) throw new Error("x402 order token mismatch");
+  if (proof.fromAddress && transaction.requesterWallet && proof.fromAddress !== transaction.requesterWallet) {
+    throw new Error("x402 order requester wallet mismatch");
+  }
+}
+
+function verificationForTransaction(transaction: CapabilityTransaction): PaymentVerification {
+  if (transaction.token === "FREE") {
+    return { status: "not_required", canExecute: true, reason: "free_capability", checkedAt: new Date().toISOString() };
+  }
+  if (transaction.status === "payment_settled" || transaction.status === "delivered" || transaction.status === "executing") {
+    return {
+      status: "payment_settled",
+      canExecute: true,
+      reason: "settled_transaction_state",
+      txHash: transaction.txHash,
+      checkedAt: new Date().toISOString()
+    };
+  }
+  if (transaction.status === "failed") {
+    return { status: "failed", canExecute: false, reason: transaction.error ?? "failed", checkedAt: new Date().toISOString() };
+  }
+  if (transaction.status === "cancelled") {
+    return { status: "cancelled", canExecute: false, reason: "cancelled", checkedAt: new Date().toISOString() };
+  }
+  if (transaction.paymentBinding && Date.parse(transaction.paymentBinding.expiresAt) < Date.now()) {
+    return { status: "expired", canExecute: false, reason: "payment_requirement_expired", checkedAt: new Date().toISOString() };
+  }
+  return {
+    status: transaction.status === "payment_pending" ? "payment_pending" : "payment_required",
+    canExecute: false,
+    reason: transaction.x402PaymentId ? "awaiting_x402_settlement" : "payment_required",
+    checkedAt: new Date().toISOString()
+  };
+}
+
+function mapOrderStatus(status: string): PaymentVerification["status"] {
+  if (status === "CHECKOUT_VERIFIED") return "payment_pending";
+  if (status === "EXPIRED") return "expired";
+  if (status === "CANCELLED") return "cancelled";
+  if (status === "FAILED") return "failed";
+  return "payment_required";
 }

@@ -15,6 +15,7 @@ Requesting agent or human
 -> capability executor
 -> result verifier
 -> transaction and reputation log
+-> browser dashboard and ClawUp/Telegram command output
 ```
 
 ## Backend Modules
@@ -28,6 +29,7 @@ Requesting agent or human
 - `commandHandler`: formats ClawUp/Telegram commands into chat-friendly responses.
 - `executor`: executes `PitchHawk` and free low-risk tools with sanitized input.
 - `reputationLogger`: records local outcome events.
+- `web/`: Vite React dashboard for broker workflow, capabilities, transactions, reputation, security, and proof status.
 
 ## API
 
@@ -45,6 +47,9 @@ Requesting agent or human
 - `GET /api/transactions`
 - `GET /api/reputation/:id`
 - `POST /api/register-tool`
+- `GET /api/payment/:transactionId/status`
+- `GET /api/proof`
+- `POST /api/reputation/:id/write-onchain`
 
 ## External Boundaries
 
@@ -53,6 +58,15 @@ The local API can simulate payment settlement only through the explicit `/api/de
 ## Local Payment Truth
 
 `/api/demo-settle/:transactionId` is a local mock adapter. It marks a transaction as settled for development and tests only when mock x402 is enabled, but it is not presented as real x402 proof. The live demo must replace this with GOAT x402 Merchant Portal evidence once merchant credentials and funds exist.
+
+## Web Surfaces
+
+- `/`: task intake, safe context preview, recommendations, sequence, x402 quote, payment status, execution result.
+- `/capabilities`: marketplace list and capability detail.
+- `/transactions`: payment history with status, retry, and cancel controls.
+- `/reputation`: local reputation profile and pending on-chain write state.
+- `/security`: guardrail policy and blocked-risk command demo.
+- `/proof`: external ClawUp, Telegram, x402, wallet, and ERC-8004 blocker/proof checklist.
 
 ## Related Docs
 

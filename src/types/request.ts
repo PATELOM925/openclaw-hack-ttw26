@@ -25,10 +25,15 @@ export type TaskAnalysis = {
   originalTask: string;
   taskType: TaskType;
   requiredCapabilities: string[];
+  recommendedSequence: string[];
   sensitivity: "public" | "internal" | "confidential" | "secret";
   detectedSecrets: string[];
   budgetUsd: number;
   riskTolerance: RiskLevel;
+  analysisSource: "llm" | "deterministic_fallback";
+  model: string;
+  confidence: number;
+  fallbackReason?: string;
 };
 
 export type SecureContextPackage = {

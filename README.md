@@ -48,15 +48,28 @@ The API listens on `http://localhost:3000` by default. Useful demo endpoints:
 - `GET /api/security`
 - `GET /api/transactions`
 - `GET /api/reputation/pitchhawk`
+- `GET /api/proof`
+- `GET /api/payment/:transactionId/status`
+- `POST /api/reputation/:id/write-onchain`
 
 Local development can use `ENABLE_MOCK_X402=true` to unlock `/api/demo-settle/:transactionId`.
 Keep it disabled for final demo evidence. Real paid execution uses the `goatx402-sdk-server`
 adapter when merchant credentials and a payer wallet are available in untracked `.env`.
 
+## Web App
+
+```bash
+npm run dev:web
+```
+
+The browser app runs through Vite, defaults to `http://localhost:5173`, and calls the API at
+`http://localhost:3000`. Set `VITE_API_BASE_URL` if the API runs somewhere else.
+
 Validation:
 
 ```bash
 npm run validate
+npm run build:web
 npm audit --audit-level=moderate
 ```
 
@@ -85,11 +98,11 @@ Real ClawUp, wallet, x402 merchant, and ERC-8004 actions remain external gated s
 - [ ] Confirm attendance
 - [x] Finalize project idea using the idea intake workflow
 - [x] Build local MVP
+- [x] Add full web app for broker workflow, proof, security, transactions, and reputation
 - [ ] Complete external ClawUp, x402, wallet, and ERC-8004 proof
 - [ ] Demo
 
 ## Next Steps
-1. Build the ClawCompass local backend and demo workflow
-2. Create the ClawUp agent and Telegram pairing after explicit user action
-3. Configure wallet, x402 merchant, and ERC-8004 registration after explicit user action
-4. Rehearse and submit the 2-minute demo
+1. Create the ClawUp agent and Telegram pairing after explicit user action
+2. Configure wallet, x402 merchant, and ERC-8004 registration after explicit user action
+3. Rehearse and submit the 2-minute demo with public proof visible

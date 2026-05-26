@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import type { CapabilityListing } from "../types/capability.js";
-import type { CapabilityTransaction, PaymentRequiredResponse } from "../types/transaction.js";
+import type { CapabilityTransaction, PaymentBinding, PaymentRequiredResponse } from "../types/transaction.js";
 
 const merchantId = "clawcompass-demo-merchant";
 
@@ -8,6 +8,7 @@ export function createExecutionQuote(input: {
   capability: CapabilityListing;
   requesterAgentId?: string;
   requesterWallet?: string;
+  approvalRequired?: boolean;
 }): CapabilityTransaction {
   return {
     id: `txn_${nanoid(10)}`,
@@ -17,7 +18,7 @@ export function createExecutionQuote(input: {
     merchantId,
     amount: input.capability.priceUsd.toFixed(2),
     token: input.capability.priceToken === "FREE" ? "FREE" : input.capability.priceToken,
-    status: input.capability.priceUsd > 0 ? "awaiting_approval" : "quoted",
+    status: input.capability.priceUsd > 0 && input.approvalRequired ? "awaiting_approval" : "quoted",
     createdAt: new Date().toISOString()
   };
 }
@@ -40,7 +41,12 @@ export function markPaymentRequired(
   transaction: CapabilityTransaction,
   paymentRequiredHeader = buildFallbackPaymentHeader(transaction)
 ): CapabilityTransaction {
-  return { ...transaction, status: "payment_required", paymentRequiredHeader };
+  return {
+    ...transaction,
+    status: "payment_required",
+    paymentRequiredHeader,
+    paymentBinding: transaction.paymentBinding ?? createPaymentBinding(transaction)
+  };
 }
 
 export function markPaymentSettled(
@@ -99,4 +105,18 @@ function buildFallbackPaymentHeader(transaction: CapabilityTransaction): string 
     network: "goat-mainnet",
     chainId: 2345
   });
+}
+
+export function createPaymentBinding(transaction: CapabilityTransaction, orderId?: string): PaymentBinding {
+  return {
+    transactionId: transaction.id,
+    capabilityId: transaction.capabilityId,
+    amount: transaction.amount,
+    token: transaction.token,
+    requesterWallet: transaction.requesterWallet,
+    chainId: 2345,
+    expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+    idempotencyKey: `${transaction.id}:${transaction.capabilityId}:${transaction.amount}:${transaction.token}`,
+    orderId
+  };
 }

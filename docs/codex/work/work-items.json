@@ -416,9 +416,27 @@
       "priority": "high",
       "severity": "",
       "parent_id": "",
-      "children": ["EPIC-110", "EPIC-120", "EPIC-130", "EPIC-140", "EPIC-150", "EPIC-160", "EPIC-170"],
-      "links": [{"rel": "derived_from", "href": "docs/hackathon/clawcompass/IDEA-BRIEF.md"}],
-      "tags": ["clawcompass", "hackathon", "x402", "erc8004"],
+      "children": [
+        "EPIC-110",
+        "EPIC-120",
+        "EPIC-130",
+        "EPIC-140",
+        "EPIC-150",
+        "EPIC-160",
+        "EPIC-170"
+      ],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/IDEA-BRIEF.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "hackathon",
+        "x402",
+        "erc8004"
+      ],
       "component": "clawcompass",
       "owner_surface": "docs/hackathon/clawcompass, app code",
       "context": "Implement ClawCompass as a capability broker for autonomous agents.",
@@ -440,9 +458,20 @@
       "priority": "high",
       "severity": "",
       "parent_id": "GOAL-100",
-      "children": ["TASK-111", "TASK-112"],
-      "links": [{"rel": "relates_to", "href": "docs/hackathon/IDEA-INTAKE.md"}],
-      "tags": ["idea", "docs"],
+      "children": [
+        "TASK-111",
+        "TASK-112"
+      ],
+      "links": [
+        {
+          "rel": "relates_to",
+          "href": "docs/hackathon/IDEA-INTAKE.md"
+        }
+      ],
+      "tags": [
+        "idea",
+        "docs"
+      ],
       "component": "clawcompass-docs",
       "owner_surface": "docs/hackathon/clawcompass, docs/codex/work, memory.md",
       "context": "The project can leave idea-agnostic mode only after a brief and graph update.",
@@ -466,7 +495,9 @@
       "parent_id": "EPIC-110",
       "children": [],
       "links": [],
-      "tags": ["idea"],
+      "tags": [
+        "idea"
+      ],
       "component": "idea-brief",
       "owner_surface": "docs/hackathon/clawcompass/IDEA-BRIEF.md",
       "context": "ClawCompass must pass the idea decision gate before app code.",
@@ -490,7 +521,9 @@
       "parent_id": "EPIC-110",
       "children": [],
       "links": [],
-      "tags": ["work-graph"],
+      "tags": [
+        "work-graph"
+      ],
       "component": "work-graph",
       "owner_surface": "docs/codex/work/WORK-GRAPH.md, docs/codex/work/work-items.json, memory.md",
       "context": "Implementation status must be durable for future agents.",
@@ -512,9 +545,21 @@
       "priority": "high",
       "severity": "",
       "parent_id": "GOAL-100",
-      "children": ["TASK-121", "TASK-122", "TASK-123"],
-      "links": [{"rel": "derived_from", "href": "docs/hackathon/BUILD-RUNBOOK.md"}],
-      "tags": ["clawup", "telegram"],
+      "children": [
+        "TASK-121",
+        "TASK-122",
+        "TASK-123"
+      ],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/BUILD-RUNBOOK.md"
+        }
+      ],
+      "tags": [
+        "clawup",
+        "telegram"
+      ],
       "component": "agent-shell",
       "owner_surface": "ClawUp UI, Telegram, docs",
       "context": "Submission agent must be built via ClawUp and reachable through Telegram.",
@@ -538,7 +583,9 @@
       "parent_id": "EPIC-120",
       "children": [],
       "links": [],
-      "tags": ["clawup"],
+      "tags": [
+        "clawup"
+      ],
       "component": "agent-shell",
       "owner_surface": "ClawUp UI",
       "context": "ClawUp creation is an external account action.",
@@ -562,7 +609,9 @@
       "parent_id": "EPIC-120",
       "children": [],
       "links": [],
-      "tags": ["telegram"],
+      "tags": [
+        "telegram"
+      ],
       "component": "agent-shell",
       "owner_surface": "Telegram, ClawUp UI",
       "context": "Bot token must never enter repo files.",
@@ -586,7 +635,9 @@
       "parent_id": "EPIC-120",
       "children": [],
       "links": [],
-      "tags": ["commands"],
+      "tags": [
+        "commands"
+      ],
       "component": "agent-shell",
       "owner_surface": "docs/hackathon/clawcompass/DEMO-SCRIPT.md, app routes",
       "context": "Judge will ask what the agent does and how to use it.",
@@ -608,9 +659,22 @@
       "priority": "high",
       "severity": "",
       "parent_id": "GOAL-100",
-      "children": ["TASK-131", "TASK-132", "TASK-133", "TASK-134"],
-      "links": [{"rel": "relates_to", "href": "docs/hackathon/clawcompass/ARCHITECTURE.md"}],
-      "tags": ["backend", "marketplace"],
+      "children": [
+        "TASK-131",
+        "TASK-132",
+        "TASK-133",
+        "TASK-134"
+      ],
+      "links": [
+        {
+          "rel": "relates_to",
+          "href": "docs/hackathon/clawcompass/ARCHITECTURE.md"
+        }
+      ],
+      "tags": [
+        "backend",
+        "marketplace"
+      ],
       "component": "api",
       "owner_surface": "src",
       "context": "The backend proves the broker loop locally.",
@@ -632,9 +696,21 @@
       "priority": "high",
       "severity": "",
       "parent_id": "GOAL-100",
-      "children": ["TASK-141", "TASK-142", "TASK-143"],
-      "links": [{"rel": "relates_to", "href": "skills/x402-payment-readiness/SKILL.md"}],
-      "tags": ["x402", "payments"],
+      "children": [
+        "TASK-141",
+        "TASK-142",
+        "TASK-143"
+      ],
+      "links": [
+        {
+          "rel": "relates_to",
+          "href": "skills/x402-payment-readiness/SKILL.md"
+        }
+      ],
+      "tags": [
+        "x402",
+        "payments"
+      ],
       "component": "payments",
       "owner_surface": "src",
       "context": "x402 is core because ClawCompass sells paid capability execution.",
@@ -656,9 +732,21 @@
       "priority": "high",
       "severity": "",
       "parent_id": "GOAL-100",
-      "children": ["TASK-151", "TASK-152", "TASK-153"],
-      "links": [{"rel": "relates_to", "href": "skills/erc8004-mainnet-registration/SKILL.md"}],
-      "tags": ["erc8004", "reputation"],
+      "children": [
+        "TASK-151",
+        "TASK-152",
+        "TASK-153"
+      ],
+      "links": [
+        {
+          "rel": "relates_to",
+          "href": "skills/erc8004-mainnet-registration/SKILL.md"
+        }
+      ],
+      "tags": [
+        "erc8004",
+        "reputation"
+      ],
       "component": "identity",
       "owner_surface": "GOAT mainnet, src reputation",
       "context": "Identity proof is required; reputation must not be faked.",
@@ -680,9 +768,20 @@
       "priority": "high",
       "severity": "",
       "parent_id": "GOAL-100",
-      "children": ["TASK-161", "TASK-162"],
-      "links": [{"rel": "relates_to", "href": "docs/hackathon/clawcompass/ARCHITECTURE.md"}],
-      "tags": ["guardrails", "security"],
+      "children": [
+        "TASK-161",
+        "TASK-162"
+      ],
+      "links": [
+        {
+          "rel": "relates_to",
+          "href": "docs/hackathon/clawcompass/ARCHITECTURE.md"
+        }
+      ],
+      "tags": [
+        "guardrails",
+        "security"
+      ],
       "component": "safety",
       "owner_surface": "src",
       "context": "Human-in-the-loop guardrails are a judging category and product requirement.",
@@ -704,9 +803,19 @@
       "priority": "high",
       "severity": "",
       "parent_id": "GOAL-100",
-      "children": ["TASK-171"],
-      "links": [{"rel": "relates_to", "href": "docs/hackathon/clawcompass/DEMO-SCRIPT.md"}],
-      "tags": ["demo", "validation"],
+      "children": [
+        "TASK-171"
+      ],
+      "links": [
+        {
+          "rel": "relates_to",
+          "href": "docs/hackathon/clawcompass/DEMO-SCRIPT.md"
+        }
+      ],
+      "tags": [
+        "demo",
+        "validation"
+      ],
       "component": "release",
       "owner_surface": "docs, tests, local server",
       "context": "The final judge path must fit two minutes and show proof truthfully.",
@@ -730,7 +839,9 @@
       "parent_id": "EPIC-130",
       "children": [],
       "links": [],
-      "tags": ["marketplace"],
+      "tags": [
+        "marketplace"
+      ],
       "component": "api",
       "owner_surface": "src/data/capabilities.seed.json, src/services/marketplace.ts",
       "context": "MVP needs credible capability inventory.",
@@ -754,7 +865,9 @@
       "parent_id": "EPIC-130",
       "children": [],
       "links": [],
-      "tags": ["analysis"],
+      "tags": [
+        "analysis"
+      ],
       "component": "api",
       "owner_surface": "src/services/taskAnalyzer.ts",
       "context": "Requests must map to capability requirements.",
@@ -778,7 +891,10 @@
       "parent_id": "EPIC-130",
       "children": [],
       "links": [],
-      "tags": ["redaction", "security"],
+      "tags": [
+        "redaction",
+        "security"
+      ],
       "component": "api",
       "owner_surface": "src/services/contextSanitizer.ts",
       "context": "Paid tools should receive only safe context.",
@@ -802,7 +918,9 @@
       "parent_id": "EPIC-130",
       "children": [],
       "links": [],
-      "tags": ["ranking"],
+      "tags": [
+        "ranking"
+      ],
       "component": "api",
       "owner_surface": "src/services/capabilityRanker.ts, src/services/capabilitySequencer.ts",
       "context": "ClawCompass must explain why it recommends a capability.",
@@ -826,7 +944,9 @@
       "parent_id": "EPIC-140",
       "children": [],
       "links": [],
-      "tags": ["payments"],
+      "tags": [
+        "payments"
+      ],
       "component": "payments",
       "owner_surface": "src/services/paymentGate.ts, src/services/paymentAdapter.ts",
       "context": "Paid capability execution needs clear transaction states.",
@@ -849,8 +969,16 @@
       "severity": "",
       "parent_id": "EPIC-140",
       "children": [],
-      "links": [{"rel": "blocked_by", "href": "GOAT x402 Merchant Portal credentials and funded payer wallet"}],
-      "tags": ["x402", "external"],
+      "links": [
+        {
+          "rel": "blocked_by",
+          "href": "GOAT x402 Merchant Portal credentials and funded payer wallet"
+        }
+      ],
+      "tags": [
+        "x402",
+        "external"
+      ],
       "component": "payments",
       "owner_surface": "x402 merchant, wallet, src/services/paymentGate.ts, src/services/paymentAdapter.ts",
       "context": "Real payment verification requires merchant credentials and stable funds.",
@@ -874,7 +1002,9 @@
       "parent_id": "EPIC-140",
       "children": [],
       "links": [],
-      "tags": ["execution"],
+      "tags": [
+        "execution"
+      ],
       "component": "executor",
       "owner_surface": "src/services/executor.ts, src/app.ts",
       "context": "One paid capability must execute end to end.",
@@ -898,7 +1028,9 @@
       "parent_id": "EPIC-150",
       "children": [],
       "links": [],
-      "tags": ["wallet"],
+      "tags": [
+        "wallet"
+      ],
       "component": "identity",
       "owner_surface": "wallet, GOAT funding forms",
       "context": "Mainnet registration and x402 demo need gas and stables.",
@@ -922,7 +1054,9 @@
       "parent_id": "EPIC-150",
       "children": [],
       "links": [],
-      "tags": ["erc8004"],
+      "tags": [
+        "erc8004"
+      ],
       "component": "identity",
       "owner_surface": "GOAT mainnet, 8004scan",
       "context": "Main prize eligibility requires visible registration.",
@@ -946,7 +1080,9 @@
       "parent_id": "EPIC-150",
       "children": [],
       "links": [],
-      "tags": ["reputation"],
+      "tags": [
+        "reputation"
+      ],
       "component": "reputation",
       "owner_surface": "src/services/reputationLogger.ts, src/app.ts",
       "context": "Do not fake on-chain reputation; local events prove intended outcome flow.",
@@ -970,7 +1106,9 @@
       "parent_id": "EPIC-160",
       "children": [],
       "links": [],
-      "tags": ["guardrails"],
+      "tags": [
+        "guardrails"
+      ],
       "component": "safety",
       "owner_surface": "src/services/guardrails.ts",
       "context": "Human-in-the-loop safety must be visible to judges.",
@@ -994,7 +1132,9 @@
       "parent_id": "EPIC-160",
       "children": [],
       "links": [],
-      "tags": ["audit-log"],
+      "tags": [
+        "audit-log"
+      ],
       "component": "transactions",
       "owner_surface": "src/services/paymentGate.ts, src/app.ts",
       "context": "Demo should show payment history and clean cancellation.",
@@ -1018,7 +1158,10 @@
       "parent_id": "EPIC-170",
       "children": [],
       "links": [],
-      "tags": ["demo", "validation"],
+      "tags": [
+        "demo",
+        "validation"
+      ],
       "component": "release",
       "owner_surface": "tests, local server, docs/hackathon/clawcompass/DEMO-SCRIPT.md",
       "context": "Local demo should be ready before external proof steps.",
@@ -1027,6 +1170,606 @@
       "evidence": "npm run validate passed with 19 tests, npm audit reported 0 vulnerabilities, JSON parsed, secret scan returned no matches, and route checks passed.",
       "completion_percent": 100,
       "blocker_reason": "Live ClawUp/x402/ERC-8004 proof still external.",
+      "next_action": "Repeat after external setup.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "GOAL-200",
+      "title": "Finish ClawCompass demo-ready full product",
+      "kind": "goal",
+      "category": "implementation",
+      "status": "blocked",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "",
+      "children": [
+        "EPIC-210",
+        "EPIC-220",
+        "EPIC-230",
+        "EPIC-240",
+        "EPIC-250",
+        "EPIC-260"
+      ],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "app code, web, docs, graph",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "Full local product works and external proof blockers are explicit.",
+      "verification": "Backend tests, web build, browser QA, scans, graph parse.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 86,
+      "blocker_reason": "External ClawUp, Telegram, wallet/funds, x402 merchant, live settlement, ERC-8004 registration, and on-chain reputation proof require explicit user approval and credentials/funds.",
+      "next_action": "Perform external proof steps only after explicit user approval.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "EPIC-210",
+      "title": "Plan graph and source alignment",
+      "kind": "epic",
+      "category": "implementation",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "GOAL-200",
+      "children": [
+        "TASK-211"
+      ],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "docs/codex/work, memory, ClawCompass docs",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "GOAL-200 graph and source alignment are recorded.",
+      "verification": "Markdown review and JSON parse.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Keep updated after validation.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-211",
+      "title": "Update graph, memory, and docs",
+      "kind": "task",
+      "category": "task",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-210",
+      "children": [],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "graph, memory, docs",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "GOAL-200 nodes and web/backend interface changes are durable.",
+      "verification": "Manual graph review plus JSON parse.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Update evidence after final checks.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "EPIC-220",
+      "title": "Backend broker alignment",
+      "kind": "epic",
+      "category": "implementation",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "GOAL-200",
+      "children": [
+        "TASK-221",
+        "TASK-222",
+        "TASK-223",
+        "TASK-224"
+      ],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "backend services and API",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "LLM-first analysis, autonomous within-cap payment, payment binding, and reputation write-state exist.",
+      "verification": "Unit and API tests.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Connect real credentials only after approval.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-221",
+      "title": "LLM-first analyzer with deterministic fallback",
+      "kind": "task",
+      "category": "task",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-220",
+      "children": [],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "src/services/taskAnalyzer.ts",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "/api/ask returns analysis source, model, confidence, fallback reason, and recommended sequence.",
+      "verification": "Tests cover deterministic fallback without ANTHROPIC_API_KEY.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Use real key only from untracked env.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-222",
+      "title": "Autonomous within-cap paid flow",
+      "kind": "task",
+      "category": "task",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-220",
+      "children": [],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "guardrails, payment quote API",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "Low-risk paid tools under 0.10 USDC skip approval but still require x402 payment.",
+      "verification": "API and unit tests.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Demo through web and command surfaces.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-223",
+      "title": "Payment verification and replay-safe binding",
+      "kind": "task",
+      "category": "task",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-220",
+      "children": [],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "payment adapter/status API",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "Payment proof is bound to transaction, capability, amount, token, wallet, chain, expiry, and idempotency.",
+      "verification": "Binding mismatch test and status API test.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Verify with live x402 only after credentials/funds.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-224",
+      "title": "ERC-8004-ready reputation adapter",
+      "kind": "task",
+      "category": "task",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-220",
+      "children": [],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "reputation API/logger",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "Reputation events expose pending/written on-chain state without false claims.",
+      "verification": "Reputation tests and write-onchain API test.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Write on-chain only after wallet/registration approval.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "EPIC-230",
+      "title": "Full web app",
+      "kind": "epic",
+      "category": "implementation",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "GOAL-200",
+      "children": [
+        "TASK-231",
+        "TASK-232",
+        "TASK-233"
+      ],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "web",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "Browser app exposes every local workflow and proof blocker.",
+      "verification": "npm run build:web and browser QA.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Use during demo rehearsal.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-231",
+      "title": "React app shell and API client",
+      "kind": "task",
+      "category": "task",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-230",
+      "children": [],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "web/src, vite.config.ts",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "Web app routes and API client exist.",
+      "verification": "Production web build.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Use browser QA.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-232",
+      "title": "Broker workflow screens",
+      "kind": "task",
+      "category": "task",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-230",
+      "children": [],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "web/src/App.tsx",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "User can analyze, inspect, quote, status-check, settle mock, execute, retry, cancel, and inspect reputation.",
+      "verification": "Web build and API-backed controls.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Verify in browser.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-233",
+      "title": "Proof, security, and admin screens",
+      "kind": "task",
+      "category": "task",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-230",
+      "children": [],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "web/src/App.tsx",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "User can see guardrails, blocked-risk demo, and external proof checklist.",
+      "verification": "Web build and browser QA.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Capture screenshot evidence if needed.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "EPIC-240",
+      "title": "ClawUp and command shell parity",
+      "kind": "epic",
+      "category": "implementation",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "GOAL-200",
+      "children": [
+        "TASK-241"
+      ],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "command handler, ClawUp text",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "Command outputs match web/backend behavior.",
+      "verification": "API command tests.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Wire into ClawUp after external setup.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-241",
+      "title": "ClawUp prompt and Telegram command parity",
+      "kind": "task",
+      "category": "task",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-240",
+      "children": [],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "/api/command",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "/help, /ask, /use, /security, /transactions, /reputation, /cancel, and /retry remain usable.",
+      "verification": "Command adapter tests.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Use in ClawUp/Telegram.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "EPIC-250",
+      "title": "x402 and ERC-8004 proof path",
+      "kind": "epic",
+      "category": "implementation",
+      "status": "blocked",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "GOAL-200",
+      "children": [
+        "TASK-251"
+      ],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "ClawUp, Telegram, wallet, x402, ERC-8004",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "Public proof is captured after explicit user-approved external setup.",
+      "verification": "Dashboard, payment, tx, and 8004scan evidence.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 35,
+      "blocker_reason": "External account, wallet, payment, or mainnet action requires explicit user approval and credentials/funds.",
+      "next_action": "Requires user action, credentials, wallet, and funds.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-251",
+      "title": "External setup checklist and public proof capture",
+      "kind": "task",
+      "category": "task",
+      "status": "blocked",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-250",
+      "children": [],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "public proof docs/API",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "Capture ClawUp agent ID, Telegram username, wallet address, x402 settlement, ERC-8004 tx hash, and 8004scan URL only.",
+      "verification": "/api/proof plus public evidence review.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 35,
+      "blocker_reason": "External account, wallet, payment, or mainnet action requires explicit user approval and credentials/funds.",
+      "next_action": "Requires external setup approval.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "EPIC-260",
+      "title": "QA, security, and demo rehearsal",
+      "kind": "epic",
+      "category": "implementation",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "GOAL-200",
+      "children": [
+        "TASK-261"
+      ],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "tests, browser, scans, git",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "Local implementation is verified and committed/pushed.",
+      "verification": "Full validation suite and git status.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Commit/push closeout.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-261",
+      "title": "Test suite, browser QA, secret scan, demo run",
+      "kind": "task",
+      "category": "task",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-260",
+      "children": [],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "validation commands",
+      "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
+      "acceptance": "Backend, frontend, security, docs, and browser-visible paths validate.",
+      "verification": "npm run validate, npm run build:web, audit, scans, browser QA.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "completion_percent": 100,
+      "blocker_reason": "",
       "next_action": "Repeat after external setup.",
       "updated_at": "2026-05-26"
     }

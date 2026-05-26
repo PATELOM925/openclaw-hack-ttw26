@@ -16,7 +16,9 @@ export function buildCapabilitySequence(
   analysis: TaskAnalysis,
   capabilities: CapabilityListing[]
 ): CapabilitySequenceStep[] {
-  const ids = sequences[analysis.taskType] ?? sequences.unknown;
+  const ids = analysis.recommendedSequence.length
+    ? analysis.recommendedSequence
+    : sequences[analysis.taskType] ?? sequences.unknown;
   return ids.flatMap((id, index) => {
     const capability = capabilities.find((item) => item.id === id);
     return capability ? [toStep(capability, index + 1)] : [];

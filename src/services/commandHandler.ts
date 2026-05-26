@@ -1,5 +1,5 @@
 import type { CapabilityTransaction } from "../types/transaction.js";
-import { analyzeTask } from "./taskAnalyzer.js";
+import { analyzeTaskWithLLM } from "./taskAnalyzer.js";
 import { sanitizeContext } from "./contextSanitizer.js";
 import { listCapabilities, findCapability } from "./marketplace.js";
 import { rankCapabilities } from "./capabilityRanker.js";
@@ -45,7 +45,7 @@ export function createCommandHandler(input: {
       if (text === "CANCEL") return cancel(session, input.transactions);
       if (text === "APPROVE_WRITE") return { text: "Write approval noted. No write action will run in the MVP demo." };
       if (text.startsWith("/ask")) return ask(text, commandInput, session, input.reputation);
-      if (text.startsWith("/use")) return useCapability(text, commandInput, session, input.transactions);
+      if (text.startsWith("/use")) return useCapability(text, commandInput, session, input.transactions, input.paymentAdapter);
       if (text.startsWith("/tool")) return showTool(text);
       if (text.startsWith("/marketplace")) return showMarketplace();
       if (text.startsWith("/security")) return { text: getSecurityText() };
@@ -67,14 +67,14 @@ function getSession(sessions: Map<string, CommandSession>, sessionId = "default"
   return created;
 }
 
-function ask(
+async function ask(
   rawText: string,
   input: { context?: string },
   session: CommandSession,
   reputation: ReputationLogger
-): { text: string; data: unknown } {
+): Promise<{ text: string; data: unknown }> {
   const task = rawText.replace(/^\/ask\s*/i, "").trim();
-  const analysis = analyzeTask({ task });
+  const analysis = await analyzeTaskWithLLM({ task });
   const secureContext = sanitizeContext(task, input.context ?? "");
   const ranked = rankCapabilities(analysis, secureContext, listCapabilities()).slice(0, 3);
   session.task = task;
@@ -106,30 +106,42 @@ function useCapability(
   rawText: string,
   input: { context?: string; requesterAgentId?: string; requesterWallet?: string },
   session: CommandSession,
-  transactions: TransactionStore
-): { text: string; data?: unknown } {
+  transactions: TransactionStore,
+  paymentAdapter: PaymentAdapter
+): Promise<{ text: string; data?: unknown }> {
   const name = rawText.replace(/^\/use\s*/i, "").trim();
   const capability = findCapability(name);
-  if (!capability) return { text: `Capability not found: ${name}` };
-  const transaction = transactions.save(
-    createExecutionQuote({
-      capability,
-      requesterAgentId: input.requesterAgentId,
-      requesterWallet: input.requesterWallet
-    })
-  );
+  if (!capability) return Promise.resolve({ text: `Capability not found: ${name}` });
   const secureContext = sanitizeContext(session.task ?? "", input.context ?? session.context ?? "");
   const guardrail = evaluateGuardrails({
     capability,
     policy: getSecurityPolicy(),
-    requestedAmountUsd: capability.priceUsd
+    requestedAmountUsd: capability.priceUsd,
+    secureContext
   });
+  const transaction = transactions.save(
+    createExecutionQuote({
+      capability,
+      requesterAgentId: input.requesterAgentId,
+      requesterWallet: input.requesterWallet,
+      approvalRequired: guardrail.approvalRequired
+    })
+  );
   session.transactionId = transaction.id;
   session.capabilityId = capability.id;
-  return {
+  if (capability.priceUsd > 0 && !guardrail.approvalRequired) {
+    return paymentAdapter.createPaymentRequirement(transaction, capability).then((requirement) => {
+      transactions.save(requirement.transaction);
+      return {
+        text: formatPaymentRequired(capability.name, requirement.transaction),
+        data: { ...requirement, guardrail, secureContext }
+      };
+    });
+  }
+  return Promise.resolve({
     text: formatUseQuote(capability.name, transaction, secureContext.blockedContext),
     data: { transaction, guardrail, secureContext }
-  };
+  });
 }
 
 async function approve(
@@ -141,6 +153,7 @@ async function approve(
   const transaction = transactions.get(session.transactionId);
   const capability = findCapability(session.capabilityId);
   if (!transaction || !capability) return { text: "Pending transaction was not found." };
+  if (transaction.status === "payment_required") return { text: "No pending approval-gated capability. Payment is already required.", data: transaction };
   const requirement = await paymentAdapter.createPaymentRequirement(transaction, capability);
   transactions.save(requirement.transaction);
   return {
@@ -155,6 +168,19 @@ async function approve(
     ].join("\n"),
     data: requirement
   };
+}
+
+function formatPaymentRequired(name: string, transaction: CapabilityTransaction): string {
+  return [
+    `${name} costs ${transaction.amount} ${transaction.token} for one execution.`,
+    "",
+    "Payment required.",
+    `Capability: ${name}`,
+    `Amount: ${transaction.amount} ${transaction.token}`,
+    "Rail: x402",
+    "Merchant: ClawCompass",
+    "Status: awaiting verified settlement"
+  ].join("\n");
 }
 
 function cancel(session: CommandSession, transactions: TransactionStore): { text: string; data?: unknown } {

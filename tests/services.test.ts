@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { analyzeTask } from "../src/services/taskAnalyzer.js";
+import { analyzeTask, analyzeTaskWithLLM } from "../src/services/taskAnalyzer.js";
 import { sanitizeContext } from "../src/services/contextSanitizer.js";
 import { listCapabilities } from "../src/services/marketplace.js";
 import { rankCapabilities } from "../src/services/capabilityRanker.js";
@@ -36,6 +36,19 @@ describe("task analysis", () => {
     expect(analysis.taskType).toBe("repo_write");
     expect(analysis.requiredCapabilities).toContain("repo_write");
     expect(analysis.riskTolerance).toBe("high");
+  });
+
+  it("returns LLM fallback metadata when no Anthropic key is configured", async () => {
+    const analysis = await analyzeTaskWithLLM(
+      { task: "Validate the market and then write homepage copy", budgetUsd: 0.1 },
+      { ANTHROPIC_API_KEY: "" }
+    );
+
+    expect(analysis.analysisSource).toBe("deterministic_fallback");
+    expect(analysis.model).toBe("claude-sonnet-4-6");
+    expect(analysis.fallbackReason).toBe("missing_anthropic_api_key");
+    expect(analysis.recommendedSequence).toEqual(["researchfox", "pitchhawk"]);
+    expect(analysis.confidence).toBeGreaterThanOrEqual(0.6);
   });
 });
 
@@ -110,6 +123,22 @@ describe("capability ranking and sequencing", () => {
 });
 
 describe("guardrails", () => {
+  it("allows low-risk paid capability within the autonomous spend cap", () => {
+    const pitchHawk = listCapabilities().find((capability) => capability.id === "pitchhawk");
+    const policy = getSecurityPolicy();
+
+    expect(pitchHawk).toBeDefined();
+    const decision = evaluateGuardrails({
+      capability: pitchHawk!,
+      policy,
+      requestedAmountUsd: pitchHawk!.priceUsd
+    });
+
+    expect(decision.allowed).toBe(true);
+    expect(decision.approvalRequired).toBe(false);
+    expect(decision.reasons).not.toContain("paid_capability");
+  });
+
   it("requires approval for paid capabilities and high-risk write permissions", () => {
     const githubHelper = listCapabilities().find((capability) => capability.id === "githubhelper");
     const policy = getSecurityPolicy();
@@ -124,7 +153,7 @@ describe("guardrails", () => {
     expect(decision.allowed).toBe(false);
     expect(decision.approvalRequired).toBe(true);
     expect(decision.reasons).toEqual(
-      expect.arrayContaining(["paid_capability", "write_action", "high_risk"])
+      expect.arrayContaining(["write_action", "high_risk", "unverified_provider"])
     );
   });
 });
@@ -143,12 +172,39 @@ describe("payment, execution, and reputation", () => {
     const mockAdapter = createPaymentAdapter({ ENABLE_MOCK_X402: "true" });
     const settled = await mockAdapter.settleMockPayment(quote, {
       paymentId: "demo-payment",
-      txHash: "0xabc123"
+      txHash: "0xabc123",
+      capabilityId: "pitchhawk",
+      amount: "0.10",
+      token: "USDC",
+      requesterWallet: quote.requesterWallet,
+      chainId: 2345
     });
 
     expect(mockAdapter.mode).toBe("mock");
     expect(settled.status).toBe("payment_settled");
     expect(settled.x402PaymentId).toBe("demo-payment");
+  });
+
+  it("rejects mock settlement proof that is not bound to the transaction", async () => {
+    const capability = listCapabilities().find((item) => item.id === "pitchhawk");
+    expect(capability).toBeDefined();
+    const quote = createExecutionQuote({
+      capability: capability!,
+      requesterWallet: "0x0000000000000000000000000000000000000001"
+    });
+    const mockAdapter = createPaymentAdapter({ ENABLE_MOCK_X402: "true" });
+
+    await expect(
+      mockAdapter.settleMockPayment(quote, {
+        paymentId: "demo-payment",
+        txHash: "0xabc123",
+        capabilityId: "codewolf",
+        amount: "0.10",
+        token: "USDC",
+        requesterWallet: quote.requesterWallet,
+        chainId: 2345
+      })
+    ).rejects.toThrow("Payment proof capability mismatch");
   });
 
   it("blocks paid execution until payment is settled, then executes PitchHawk and logs reputation", () => {
@@ -161,7 +217,7 @@ describe("payment, execution, and reputation", () => {
       requesterWallet: "0x0000000000000000000000000000000000000001"
     });
 
-    expect(quote.status).toBe("awaiting_approval");
+    expect(quote.status).toBe("quoted");
 
     const paymentRequired = createPaymentRequiredResponse(quote, capability!);
     expect(paymentRequired.httpStatus).toBe(402);
@@ -191,6 +247,8 @@ describe("payment, execution, and reputation", () => {
     expect(settled.status).toBe("payment_settled");
     expect(output.headline).toContain("Stop guessing");
     expect(event.outcome).toBe("success");
+    expect(event.onChainWritten).toBe(false);
+    expect(event.writeStatus).toBe("pending_external_proof");
     expect(logger.getProfile("pitchhawk").successfulExecutions).toBe(1);
   });
 });

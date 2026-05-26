@@ -32,7 +32,7 @@ export function executePitchHawk(input: ExecutionInput): PitchHawkOutput {
     threeBullets: [
       "Analyze the task before selecting tools.",
       "Share only the minimum safe context.",
-      "Pay through x402 only when execution is approved."
+      "Execute paid capabilities only after verified x402 settlement."
     ],
     confidenceScore: 0.91
   };

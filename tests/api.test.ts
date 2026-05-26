@@ -49,6 +49,9 @@ describe("ClawCompass API", () => {
       .expect(200);
 
     expect(response.body.analysis.taskType).toBe("copywriting");
+    expect(response.body.analysis.analysisSource).toBe("deterministic_fallback");
+    expect(response.body.analysis.model).toBe("claude-sonnet-4-6");
+    expect(response.body.analysis.recommendedSequence).toContain("pitchhawk");
     expect(response.body.secureContext.allowedContext).not.toContain("FAKE_OPENAI_KEY");
     expect(response.body.recommendations[0].capability.name).toBe("PitchHawk");
     expect(response.body.sequence.map((step: { capabilityId: string }) => step.capabilityId)).toContain(
@@ -56,7 +59,7 @@ describe("ClawCompass API", () => {
     );
   });
 
-  it("quotes, approves, and blocks unpaid paid capability execution", async () => {
+  it("quotes low-risk paid capabilities autonomously and blocks unpaid execution", async () => {
     const app = createApp();
 
     const quote = await request(app)
@@ -64,21 +67,20 @@ describe("ClawCompass API", () => {
       .send({
         requesterAgentId: "agent-demo",
         task: "Improve homepage",
-        context: "Project summary\nOPENAI_API_KEY=FAKE_OPENAI_KEY_VALUE_123456"
+        context: "Project summary: ClawCompass routes safe capabilities"
       })
       .expect(202);
 
-    expect(quote.body.transaction.status).toBe("awaiting_approval");
-    expect(quote.body.secureContext.allowedContext).not.toContain("FAKE_OPENAI_KEY");
-    expect(quote.body.secureContext.blockedContext).toContain("api_key");
+    expect(quote.body.transaction.status).toBe("payment_required");
+    expect(quote.body.paymentRequiredHeader).toContain("\"protocol\":\"x402\"");
+    expect(quote.body.guardrail.approvalRequired).toBe(false);
+    expect(quote.body.secureContext.blockedContext).toEqual([]);
 
-    const approved = await request(app)
-      .post(`/api/approve/${quote.body.transaction.id}`)
-      .send()
-      .expect(200);
+    const status = await request(app).get(`/api/payment/${quote.body.transaction.id}/status`).expect(200);
 
-    expect(approved.body.transaction.status).toBe("payment_required");
-    expect(approved.body.paymentRequiredHeader).toContain("\"protocol\":\"x402\"");
+    expect(status.body.transaction.status).toBe("payment_required");
+    expect(status.body.verification.status).toBe("payment_required");
+    expect(status.body.verification.canExecute).toBe(false);
 
     const blocked = await request(app)
       .post("/api/execute/pitchhawk")
@@ -90,6 +92,21 @@ describe("ClawCompass API", () => {
       .expect(402);
 
     expect(blocked.body.canExecute).toBe(false);
+  });
+
+  it("keeps high-risk capabilities approval-gated", async () => {
+    const app = createApp();
+
+    const quote = await request(app)
+      .post("/api/use/githubhelper")
+      .send({ requesterAgentId: "agent-demo", task: "Rewrite repo and push" })
+      .expect(202);
+
+    expect(quote.body.transaction.status).toBe("awaiting_approval");
+    expect(quote.body.guardrail.approvalRequired).toBe(true);
+    expect(quote.body.guardrail.reasons).toEqual(
+      expect.arrayContaining(["write_action", "high_risk", "unverified_provider"])
+    );
   });
 
   it("keeps demo settlement disabled unless mock x402 is enabled", async () => {
@@ -118,7 +135,14 @@ describe("ClawCompass API", () => {
 
     await request(app)
       .post(`/api/demo-settle/${quote.body.transaction.id}`)
-      .send({ paymentId: "demo-payment", txHash: "0xabc123" })
+      .send({
+        paymentId: "demo-payment",
+        txHash: "0xabc123",
+        capabilityId: "pitchhawk",
+        amount: "0.10",
+        token: "USDC",
+        chainId: 2345
+      })
       .expect(200);
 
     const executed = await request(app)
@@ -135,6 +159,7 @@ describe("ClawCompass API", () => {
 
     const reputation = await request(app).get("/api/reputation/pitchhawk").expect(200);
     expect(reputation.body.profile.successfulExecutions).toBe(1);
+    expect(reputation.body.profile.events[0].writeStatus).toBe("pending_external_proof");
   });
 
   it("returns a clean failure for unsupported paid capability execution", async () => {
@@ -147,7 +172,14 @@ describe("ClawCompass API", () => {
 
     await request(app)
       .post(`/api/demo-settle/${quote.body.transaction.id}`)
-      .send({ paymentId: "demo-payment", txHash: "0xabc123" })
+      .send({
+        paymentId: "demo-payment",
+        txHash: "0xabc123",
+        capabilityId: "codewolf",
+        amount: "0.10",
+        token: "USDC",
+        chainId: 2345
+      })
       .expect(200);
 
     const failed = await request(app)
@@ -201,15 +233,15 @@ describe("ClawCompass API", () => {
       .expect(200);
 
     expect(use.body.text).toContain("PitchHawk costs 0.10 USDC");
-    expect(use.body.text).toContain("Reply APPROVE or CANCEL.");
+    expect(use.body.text).toContain("Payment required.");
+    expect(use.body.text).toContain("Rail: x402");
 
     const approve = await request(app)
       .post("/api/command")
       .send({ sessionId: "demo-session", text: "APPROVE" })
       .expect(200);
 
-    expect(approve.body.text).toContain("Payment required.");
-    expect(approve.body.text).toContain("Rail: x402");
+    expect(approve.body.text).toContain("No pending approval-gated capability.");
 
     const cancel = await request(app)
       .post("/api/command")
@@ -241,5 +273,23 @@ describe("ClawCompass API", () => {
 
     const transactions = await request(app).get("/api/transactions").expect(200);
     expect(transactions.body.transactions[0].status).toBe("cancelled");
+  });
+
+  it("exposes external proof status and pending on-chain reputation write state", async () => {
+    const app = createApp();
+
+    const proof = await request(app).get("/api/proof").expect(200);
+
+    expect(proof.body.status).toBe("blocked_external_actions_required");
+    expect(proof.body.requiredProof.clawUp.status).toBe("blocked");
+    expect(proof.body.requiredProof.erc8004.chainId).toBe(2345);
+
+    const write = await request(app)
+      .post("/api/reputation/pitchhawk/write-onchain")
+      .send()
+      .expect(202);
+
+    expect(write.body.writeStatus).toBe("pending_external_proof");
+    expect(write.body.onChainWritten).toBe(false);
   });
 });

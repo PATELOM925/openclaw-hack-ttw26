@@ -1,4 +1,5 @@
 import type { CapabilityListing } from "../types/capability.js";
+import type { SecureContextPackage } from "../types/request.js";
 
 export type SecurityPolicy = {
   autonomousSpendCapUsd: number;
@@ -49,19 +50,22 @@ export function evaluateGuardrails(input: {
   capability: CapabilityListing;
   policy: SecurityPolicy;
   requestedAmountUsd: number;
+  secureContext?: SecureContextPackage;
 }): GuardrailDecision {
-  const reasons = collectReasons(input.capability, input.policy, input.requestedAmountUsd);
+  const reasons = collectReasons(input.capability, input.policy, input.requestedAmountUsd, input.secureContext);
   return { allowed: reasons.length === 0, approvalRequired: reasons.length > 0, reasons };
 }
 
 function collectReasons(
   capability: CapabilityListing,
   policy: SecurityPolicy,
-  amount: number
+  amount: number,
+  secureContext?: SecureContextPackage
 ): string[] {
   const reasons: string[] = [];
-  if (capability.priceUsd > 0) reasons.push("paid_capability");
   if (amount > policy.hardSpendStopUsd) reasons.push("hard_spend_stop");
+  else if (amount > policy.autonomousSpendCapUsd) reasons.push("above_autonomous_spend_cap");
+  if (secureContext?.sensitivity === "secret") reasons.push("secret_context");
   if (capability.riskLevel === "high") reasons.push("high_risk");
   if (!capability.verified && policy.unverifiedToolsRequireApproval) reasons.push("unverified_provider");
   if (capability.permissions.some((permission) => permission.includes("write"))) reasons.push("write_action");

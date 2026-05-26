@@ -13,7 +13,7 @@ A requesting agent describes its task, goal, constraints, budget, and safe conte
 -> analyze task and context
 -> recommend 3 capabilities
 -> show redacted context preview
--> approve paid capability
+-> approval only for risky or above-cap actions
 -> require x402 payment
 -> verify payment
 -> execute PitchHawk
@@ -25,9 +25,27 @@ A requesting agent describes its task, goal, constraints, budget, and safe conte
 ## Status
 
 - Idea brief: accepted.
-- Local backend: implemented and validated.
+- Local backend and full web app: implemented for local validation.
+- Low-risk paid capabilities create x402 payment requirements autonomously within the `0.10 USDC` cap.
+- High-risk, write, wallet, external-message, unverified, above-cap, and secret-sensitive flows remain approval-gated.
 - ClawUp agent, wallet, merchant, funding, and mainnet registration: blocked until explicit user action.
 - On-chain reputation: not claimed until implemented and verified.
+
+## Web App
+
+Run:
+
+```bash
+npm run dev:web
+```
+
+Routes:
+- `/`: broker workflow.
+- `/capabilities`: marketplace and capability details.
+- `/transactions`: status, retry, and cancel.
+- `/reputation`: local reputation and pending ERC-8004 write state.
+- `/security`: policy and blocked-risk demo.
+- `/proof`: ClawUp, Telegram, x402, wallet, and ERC-8004 proof blockers.
 
 ## Related Docs
 
