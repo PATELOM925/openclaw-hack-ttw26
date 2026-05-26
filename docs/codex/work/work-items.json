@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-05-26",
+  "updated_at": "2026-05-27",
   "nodes": [
     {
       "id": "GOAL-000",
@@ -18,7 +18,8 @@
         "EPIC-300",
         "EPIC-400",
         "EPIC-500",
-        "EPIC-600"
+        "EPIC-600",
+        "EPIC-700"
       ],
       "links": [
         {
@@ -39,8 +40,8 @@
       "evidence": "Validated on 2026-05-26: JSON parsed, no unresolved marker matches, no secret-pattern matches, all local skills valid, and authored Markdown files are under 300 lines.",
       "completion_percent": 100,
       "blocker_reason": "",
-      "next_action": "Select or draft the idea using docs/hackathon/IDEA-INTAKE.md.",
-      "updated_at": "2026-05-26"
+      "next_action": "Finish the ClawCompass API framework and setup docs.",
+      "updated_at": "2026-05-27"
     },
     {
       "id": "EPIC-100",
@@ -405,6 +406,208 @@
       "blocker_reason": "",
       "next_action": "Fill when agent exists.",
       "updated_at": "2026-05-26"
+    },
+    {
+      "id": "EPIC-700",
+      "title": "Build ClawCompass MVP framework",
+      "kind": "epic",
+      "category": "api-development",
+      "status": "done",
+      "resolution": "completed",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "GOAL-000",
+      "children": [
+        "TASK-710",
+        "TASK-720",
+        "TASK-730",
+        "TASK-740",
+        "TASK-750",
+        "TASK-760"
+      ],
+      "links": [],
+      "tags": [
+        "clawcompass",
+        "selected-idea",
+        "framework"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "docs/ideas, clawcompass/apps/api, docs/hackathon",
+      "context": "ClawCompass is the selected hackathon idea and needs a runnable local framework for ClawUp/Telegram integration.",
+      "acceptance": "The repo contains an accepted idea brief, work graph nodes, a runnable TypeScript API, mock-local x402 flow, and non-secret setup docs.",
+      "verification": "Run API tests, typecheck, build, JSON validation, and secret scan.",
+      "evidence": "Validated on 2026-05-27: npm test passed with 18 tests, npm run typecheck passed, npm run build passed, npm audit reported 0 vulnerabilities, work-items JSON parsed, built server smoke checks passed, readiness review was added, and SetupPilot was added as the primary demo capability.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Wire ClawUp/Telegram and real GOAT/x402 credentials after explicit approval.",
+      "updated_at": "2026-05-27"
+    },
+    {
+      "id": "TASK-710",
+      "title": "Accept ClawCompass idea brief",
+      "kind": "task",
+      "category": "documentation",
+      "status": "done",
+      "resolution": "completed",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-700",
+      "children": [],
+      "links": [],
+      "tags": [
+        "idea",
+        "clawcompass"
+      ],
+      "component": "idea-selection",
+      "owner_surface": "docs/ideas/clawcompass-idea-brief.md",
+      "context": "The selected idea must be explicit before app code starts.",
+      "acceptance": "Brief states problem, user, market, action, GOAT fit, demo path, risks, and decision.",
+      "verification": "Manual review against docs/hackathon/IDEA-INTAKE.md.",
+      "evidence": "docs/ideas/clawcompass-idea-brief.md added on 2026-05-27.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Use the brief to guide framework build and demo copy.",
+      "updated_at": "2026-05-27"
+    },
+    {
+      "id": "TASK-720",
+      "title": "Create ClawCompass TypeScript API framework",
+      "kind": "task",
+      "category": "api-development",
+      "status": "done",
+      "resolution": "completed",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-700",
+      "children": [],
+      "links": [],
+      "tags": [
+        "typescript",
+        "express",
+        "api"
+      ],
+      "component": "api",
+      "owner_surface": "clawcompass/apps/api",
+      "context": "The local backend supports ClawUp/Telegram command execution without replacing ClawUp.",
+      "acceptance": "API exposes health, marketplace, tool, ask, security, use, execute, transactions, and reputation endpoints.",
+      "verification": "Vitest unit and API smoke tests pass; TypeScript build succeeds.",
+      "evidence": "clawcompass/apps/api added with Express app, package scripts, seed data, routes, and tests. npm test, typecheck, and build passed on 2026-05-27.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Start local API when ready for ClawUp command wiring.",
+      "updated_at": "2026-05-27"
+    },
+    {
+      "id": "TASK-730",
+      "title": "Implement safety and x402-gated execution loop",
+      "kind": "task",
+      "category": "security",
+      "status": "done",
+      "resolution": "completed",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-700",
+      "children": [],
+      "links": [],
+      "tags": [
+        "x402",
+        "guardrails",
+        "reputation"
+      ],
+      "component": "safety-payments",
+      "owner_surface": "clawcompass/apps/api/src/services",
+      "context": "Paid capability execution must be blocked until payment is verified and risky actions must require approval.",
+      "acceptance": "Redaction, guardrails, transaction states, mock-local x402, PitchHawk execution, and reputation logging are implemented.",
+      "verification": "Tests cover redaction, high-risk halt, unpaid blocking, mock verified execution, and reputation update.",
+      "evidence": "Tests cover secret redaction, high-risk write halt, unpaid execution blocking, mock-settled PitchHawk execution, and reputation update.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Replace mock x402 with real credentials and proof when supplied.",
+      "updated_at": "2026-05-27"
+    },
+    {
+      "id": "TASK-740",
+      "title": "Document ClawUp and GOAT setup boundaries",
+      "kind": "task",
+      "category": "documentation",
+      "status": "done",
+      "resolution": "completed",
+      "priority": "medium",
+      "severity": "",
+      "parent_id": "EPIC-700",
+      "children": [],
+      "links": [],
+      "tags": [
+        "clawup",
+        "erc8004",
+        "setup"
+      ],
+      "component": "setup-docs",
+      "owner_surface": "docs/hackathon/clawcompass-setup.md, clawcompass/apps/api/.env.example",
+      "context": "Secrets and external GOAT actions happen later, outside tracked files and only with explicit approval.",
+      "acceptance": "Docs list runtime env vars, public evidence fields, and explicit stop conditions for wallet, payment, and mainnet actions.",
+      "verification": "Manual review and secret scan.",
+      "evidence": "docs/hackathon/clawcompass-setup.md and clawcompass/apps/api/.env.example added with secret-handling boundaries.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Record only public ClawUp/GOAT/x402 evidence after external setup.",
+      "updated_at": "2026-05-27"
+    },
+    {
+      "id": "TASK-750",
+      "title": "Review ClawCompass against event judging criteria",
+      "kind": "task",
+      "category": "release",
+      "status": "done",
+      "resolution": "completed",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-700",
+      "children": [],
+      "links": [],
+      "tags": [
+        "judging",
+        "readiness",
+        "demo"
+      ],
+      "component": "demo-readiness",
+      "owner_surface": "docs/hackathon/clawcompass-readiness-review.md",
+      "context": "The local framework needs a gap review against event scorecard, onboarding steps, and implementation brief before external setup.",
+      "acceptance": "Review lists current evidence, scorecard readiness, remaining work, positioning, and demo skeleton.",
+      "verification": "PDF extraction, local build verification, and live local API walkthrough.",
+      "evidence": "docs/hackathon/clawcompass-readiness-review.md added on 2026-05-27.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Execute remaining ClawUp, ERC-8004, real x402, and submission tasks.",
+      "updated_at": "2026-05-27"
+    },
+    {
+      "id": "TASK-760",
+      "title": "Make SetupPilot the primary demo capability",
+      "kind": "task",
+      "category": "api-development",
+      "status": "done",
+      "resolution": "completed",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-700",
+      "children": [],
+      "links": [],
+      "tags": [
+        "onboarding",
+        "clawup",
+        "internship-signal"
+      ],
+      "component": "demo-capability",
+      "owner_surface": "clawcompass/apps/api, docs/clawup-skills, docs/ideas",
+      "context": "The strongest lived pain is ClawUp/GOAT onboarding, so ClawCompass should route to a paid onboarding diagnosis capability first.",
+      "acceptance": "SetupPilot is seeded, ranked for onboarding prompts, payment-gated, executable after verification, and documented as custom ClawUp skill behavior.",
+      "verification": "Vitest covers onboarding classification, SetupPilot ranking, secret redaction, unpaid blocking, paid execution, and on-chain approval halt.",
+      "evidence": "SetupPilot implementation and docs added on 2026-05-27. Tests passed with 18 cases and live smoke check returned onboarding classification, setuppilot top recommendation, setup diagnosis, and APPROVE_ONCHAIN halt.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Install/express these skills in ClawUp and demonstrate through Telegram.",
+      "updated_at": "2026-05-27"
     }
   ]
 }

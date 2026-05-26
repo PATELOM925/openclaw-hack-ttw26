@@ -14,9 +14,9 @@
 | Kumar Managalam | Role pending |
 
 ## Project
-Idea pending. The current repository state is an idea-agnostic planning base for selecting and building a ClawUp agent on GOAT Network.
+Selected idea: **ClawCompass**, a capability broker that helps AI agents discover, pay for, and safely execute trusted capabilities from a managed marketplace of skills, MCPs, hooks, plugins, rules, and sub-agents. The primary demo capability is **ClawUp SetupPilot**, focused on the real onboarding pain around ClawUp, Telegram pairing, ERC-8004, x402, and submission proof.
 
-Strategy: choose a real user problem, validate the market and data access, build through ClawUp, register the agent on GOAT Mainnet with ERC-8004, and add x402 only when the idea genuinely needs payments or settlement.
+Strategy: build the local ClawCompass framework, wire it through ClawUp/Telegram, register the agent on GOAT Mainnet with ERC-8004, and use x402 for paid capability execution.
 
 ## Planning Scaffold
 - Project instructions: [`AGENTS.md`](AGENTS.md)
@@ -25,10 +25,13 @@ Strategy: choose a real user problem, validate the market and data access, build
 - Idea intake: [`docs/hackathon/IDEA-INTAKE.md`](docs/hackathon/IDEA-INTAKE.md)
 - Build runbook: [`docs/hackathon/BUILD-RUNBOOK.md`](docs/hackathon/BUILD-RUNBOOK.md)
 - Demo and submission guide: [`docs/hackathon/DEMO-SUBMISSION.md`](docs/hackathon/DEMO-SUBMISSION.md)
+- ClawCompass idea brief: [`docs/ideas/clawcompass-idea-brief.md`](docs/ideas/clawcompass-idea-brief.md)
+- ClawCompass setup: [`docs/hackathon/clawcompass-setup.md`](docs/hackathon/clawcompass-setup.md)
+- Local API: [`clawcompass/`](clawcompass/)
 
 ## Action Items
 - [ ] Review OpenClaw's required frameworks and documentation
-- [ ] Identify compatible project ideas within host constraints
+- [x] Identify compatible project idea within host constraints
 - [ ] Finalize roles per team member
 - [ ] Build and demo
 
@@ -41,7 +44,7 @@ Strategy: choose a real user problem, validate the market and data access, build
 
 ## Status
 - [ ] Confirm attendance
-- [ ] Finalize project idea using the idea intake workflow
+- [x] Finalize project idea using the idea intake workflow
 - [ ] Build MVP
 - [ ] Demo
 
