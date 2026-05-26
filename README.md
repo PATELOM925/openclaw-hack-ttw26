@@ -97,6 +97,7 @@ Sanitized public details extracted from the ClawUp environment document are trac
 - Source snapshot: [`docs/hackathon/clawcompass/SOURCE-OF-TRUTH.md`](docs/hackathon/clawcompass/SOURCE-OF-TRUTH.md)
 - External proof intake: [`docs/hackathon/clawcompass/EXTERNAL-PROOF-INTAKE.md`](docs/hackathon/clawcompass/EXTERNAL-PROOF-INTAKE.md)
 - Judge demo deck: [`docs/presentations/clawcompass_judge_full_demo_stage.pptx`](docs/presentations/clawcompass_judge_full_demo_stage.pptx)
+- Graphical demo deck copy: [`docs/presentations/clawcompass_stage_graphical_demo.pptx`](docs/presentations/clawcompass_stage_graphical_demo.pptx)
 
 ## Action Items
 - [ ] Review OpenClaw's required frameworks and documentation
