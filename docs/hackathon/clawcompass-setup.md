@@ -1,7 +1,7 @@
 # ClawCompass Setup
 
 ## Local Framework
-The local API lives in `clawcompass/apps/api`. It supports the broker loop that the ClawUp agent can call:
+The local API lives at the repository root. It supports the broker loop that the ClawUp agent can call:
 
 ```text
 ask -> recommend -> redact -> request payment -> execute -> reputation
@@ -10,7 +10,6 @@ ask -> recommend -> redact -> request payment -> execute -> reputation
 Run locally:
 
 ```bash
-cd clawcompass/apps/api
 npm install
 npm run dev
 ```
@@ -23,7 +22,7 @@ curl http://localhost:3000/api/marketplace
 ```
 
 ## Runtime Configuration
-Use `clawcompass/apps/api/.env.example` as the shape for local runtime variables. Keep the real `.env` untracked.
+Use `.env.example` as the shape for local runtime variables. Keep the real `.env` untracked.
 
 Tracked docs may contain only public evidence:
 

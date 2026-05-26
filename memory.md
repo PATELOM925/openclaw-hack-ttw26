@@ -1,13 +1,22 @@
 # Project Memory
 
 ## Summary
-This workspace is the GOAT/OpenClaw Toronto hackathon repo for ClawCompass, a capability broker for AI agents. The project started as an idea-agnostic scaffold and moved to the selected ClawCompass idea on 2026-05-27.
+This workspace is now building ClawCompass for the GOAT/OpenClaw Toronto hackathon on May 26, 2026. ClawCompass is a paid capability broker for autonomous agents.
 
 ## Durable Facts
 - Workspace: `/Users/shreyapatel/Projects/GOAT Hack`
 - GitHub remote: https://github.com/PATELOM925/openclaw-hack-ttw26
-- Current project state: ClawCompass selected; local TypeScript/Express framework is being added under `clawcompass/apps/api`.
-- Primary demo direction: SetupPilot, a paid ClawUp/GOAT onboarding diagnosis capability for Telegram pairing, ERC-8004, x402, and submission readiness.
+- Current project state: selected ClawCompass idea with implementation in progress.
+- Selected idea: ClawCompass, a capability acquisition layer that analyzes agent tasks, redacts context, recommends capabilities, gates paid execution with x402, and logs reputation.
+- Primary demo capability: ClawUp SetupPilot, a paid onboarding diagnosis for ClawUp, Telegram pairing, ERC-8004, x402, wallet readiness, and submission proof.
+- Full product target: local API plus full Vite React web app, with ClawUp/Telegram remaining the required hackathon channel.
+- Local web app routes: `/`, `/capabilities`, `/transactions`, `/reputation`, `/security`, and `/proof`.
+- Backend now exposes proof, payment status, and pending ERC-8004 write-state APIs for the web app.
+- The `om` branch is integrated onto the root `origin/development` app rather than the removed nested `clawcompass/apps/api` scaffold.
+- Source-of-truth implementation brief: `/Users/shreyapatel/Projects/zzz project docs/GOAT Hack/CODEX_IMPLEMENTATION_BRIEF_CLAWCOMPASS.md`
+- Brief SHA-256: `224ca580d65e7bb3ddc5096ff5747487fd201c56151f8ca53a043149ceef01c0`
+- Saved local implementation plan: `docs/hackathon/clawcompass/CODEX_IMPLEMENTATION_PLAN_CLAWCOMPASS.md`
+- Saved source snapshot: `docs/hackathon/clawcompass/SOURCE-OF-TRUTH.md`
 - Event path: choose a real problem, build a ClawUp agent, register it on GOAT Mainnet through ERC-8004, and prepare a 2-minute live demo.
 - Main prize hard gates: ClawUp-built agent, ERC-8004 mainnet registration, listing on `8004scan`.
 - Judging emphasis: market and earning potential, usability and self-disclosure, x402 integrity when used, human-in-the-loop guardrails, and post-hackathon continuation.
@@ -25,25 +34,29 @@ This workspace is the GOAT/OpenClaw Toronto hackathon repo for ClawCompass, a ca
 ## Current Blockers
 - No ClawUp agent, Telegram bot, wallet, gas tokens, stable tokens, merchant account, or ERC-8004 registration has been created from this workspace.
 - Git is initialized and connected to the project GitHub remote.
-- Secrets, keys, public addresses, merchant IDs, and registration evidence will be supplied later and must remain outside tracked files unless explicitly public.
 
 ## Last Validation
-On 2026-05-27, the ClawCompass framework validated cleanly:
-- `npm test` in `clawcompass/apps/api`: 2 test files, 18 tests passed after SetupPilot addition.
-- `npm run typecheck` in `clawcompass/apps/api`: passed.
-- `npm run build` in `clawcompass/apps/api`: passed.
-- `npm audit` in `clawcompass/apps/api`: 0 vulnerabilities.
-- `python3 -m json.tool docs/codex/work/work-items.json`: passed.
-- Earlier built server smoke check on port 3307 returned `/health` ok and the then-current 6 marketplace capabilities; SetupPilot later expands the seed set to 7.
-- SetupPilot added as the primary demo capability on 2026-05-27.
-- Live SetupPilot smoke check on port 3309 returned onboarding classification, `setuppilot` top recommendation, setup diagnosis, and `APPROVE_ONCHAIN` halt.
+On 2026-05-27, `om` was integrated onto the root `origin/development` app:
+- `npm run validate` passed with 29 tests.
+- `npm run build:web` passed.
+- `npm audit --audit-level=moderate` reported 0 vulnerabilities.
+- Route smoke on port 3311 proved onboarding analysis, `setuppilot` top recommendation, x402 payment-required quote, mock-local settlement, SetupPilot execution, and delivered transaction.
+- The old nested `clawcompass/apps/api` scaffold was removed; use the root app for backend, web, command, and payment-proof work.
 
-Earlier scaffold validation on 2026-05-26:
-- Work graph JSON and registration metadata JSON parsed.
-- No unresolved marker strings were found.
-- No secret-like patterns were found.
-- All authored Markdown files were under 300 lines.
-- All four local project skills passed the skill validator.
+On 2026-05-26, ClawCompass local validation passed:
+- `npm run validate` passed with 19 tests.
+- `npm audit --audit-level=moderate` reported 0 vulnerabilities.
+- Work graph, registration metadata, and capability seed JSON parsed.
+- Secret scan, excluding the sanitizer regex definition, returned no matches.
+- Local route check proved `/health`, `/api/help`, `/api/ask`, redaction, approval, unpaid 402 block, local-only mock settlement, PitchHawk execution, `/api/security`, `/api/command`, and `/api/reputation/pitchhawk`.
+
+On 2026-05-26, the GOAL-200 implementation added:
+- LLM-first task analysis with deterministic fallback when `ANTHROPIC_API_KEY` is unavailable.
+- Autonomous low-risk paid x402 quote creation within the `0.10 USDC` cap.
+- Replay/binding checks for mock settlement proof.
+- Pending external-proof fields for ERC-8004 reputation writes.
+- Vite React web app for broker workflow, capabilities, transactions, reputation, security, and proof status.
+- SetupPilot onboarding classification, ranking, payment-gated execution, command usage, and web defaults were merged into the root app on 2026-05-27.
 
 ## Next Action
-Finish the ClawCompass API framework, then wire ClawUp/Telegram and real GOAT/x402 credentials only after explicit user instruction.
+Next external actions, only after explicit user approval: create the ClawUp agent, pair Telegram, create or connect wallet, fund gas/stables, configure x402 Merchant Portal, register ERC-8004 identity, and record public proof.

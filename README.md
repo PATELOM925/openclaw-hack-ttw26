@@ -14,9 +14,11 @@
 | Kumar Managalam | Role pending |
 
 ## Project
-Selected idea: **ClawCompass**, a capability broker that helps AI agents discover, pay for, and safely execute trusted capabilities from a managed marketplace of skills, MCPs, hooks, plugins, rules, and sub-agents. The primary demo capability is **ClawUp SetupPilot**, focused on the real onboarding pain around ClawUp, Telegram pairing, ERC-8004, x402, and submission proof.
+Selected idea: **ClawCompass**, a paid capability broker for autonomous agents.
 
-Strategy: build the local ClawCompass framework, wire it through ClawUp/Telegram, register the agent on GOAT Mainnet with ERC-8004, and use x402 for paid capability execution.
+ClawCompass lets a requesting agent describe its task and safe context, then analyzes which skill, MCP, hook, plugin, rule, or sub-agent is needed. It recommends and sequences the right capability, redacts sensitive context, charges per paid capability through x402, executes after verified payment, and records reputation.
+
+The primary demo capability is **ClawUp SetupPilot**, focused on the lived onboarding pain around ClawUp, Telegram pairing, ERC-8004, x402, wallet readiness, and submission proof.
 
 ## Planning Scaffold
 - Project instructions: [`AGENTS.md`](AGENTS.md)
@@ -25,13 +27,66 @@ Strategy: build the local ClawCompass framework, wire it through ClawUp/Telegram
 - Idea intake: [`docs/hackathon/IDEA-INTAKE.md`](docs/hackathon/IDEA-INTAKE.md)
 - Build runbook: [`docs/hackathon/BUILD-RUNBOOK.md`](docs/hackathon/BUILD-RUNBOOK.md)
 - Demo and submission guide: [`docs/hackathon/DEMO-SUBMISSION.md`](docs/hackathon/DEMO-SUBMISSION.md)
-- ClawCompass idea brief: [`docs/ideas/clawcompass-idea-brief.md`](docs/ideas/clawcompass-idea-brief.md)
-- ClawCompass setup: [`docs/hackathon/clawcompass-setup.md`](docs/hackathon/clawcompass-setup.md)
-- Local API: [`clawcompass/`](clawcompass/)
+- ClawCompass hub: [`docs/hackathon/clawcompass/README.md`](docs/hackathon/clawcompass/README.md)
+- Custom ClawUp skill specs: [`docs/clawup-skills/`](docs/clawup-skills/)
+
+## Local Backend
+
+```bash
+npm install
+npm run dev
+```
+
+The API listens on `http://localhost:3000` by default. Useful demo endpoints:
+
+- `GET /health`
+- `GET /api/help`
+- `POST /api/ask`
+- `GET /api/marketplace`
+- `GET /api/tool/setuppilot`
+- `POST /api/use/setuppilot`
+- `POST /api/approve/:transactionId`
+- `POST /api/execute/setuppilot`
+- `POST /api/command`
+- `GET /api/security`
+- `GET /api/transactions`
+- `GET /api/reputation/setuppilot`
+- `GET /api/proof`
+- `GET /api/payment/:transactionId/status`
+- `POST /api/reputation/:id/write-onchain`
+
+Local development can use `ENABLE_MOCK_X402=true` to unlock `/api/demo-settle/:transactionId`.
+Keep it disabled for final demo evidence. Real paid execution uses the `goatx402-sdk-server`
+adapter when merchant credentials and a payer wallet are available in untracked `.env`.
+
+## Web App
+
+```bash
+npm run dev:web
+```
+
+The browser app runs through Vite, defaults to `http://localhost:5173`, and calls the API at
+`http://localhost:3000`. Set `VITE_API_BASE_URL` if the API runs somewhere else.
+
+Validation:
+
+```bash
+npm run validate
+npm run build:web
+npm audit --audit-level=moderate
+```
+
+Real ClawUp, wallet, x402 merchant, and ERC-8004 actions remain external gated steps. Put real credentials only in untracked `.env`, never in repo docs.
+
+## Brief And Plan
+
+- Source-of-truth brief: `/Users/shreyapatel/Projects/zzz project docs/GOAT Hack/CODEX_IMPLEMENTATION_BRIEF_CLAWCOMPASS.md`
+- Saved implementation plan: [`docs/hackathon/clawcompass/CODEX_IMPLEMENTATION_PLAN_CLAWCOMPASS.md`](docs/hackathon/clawcompass/CODEX_IMPLEMENTATION_PLAN_CLAWCOMPASS.md)
+- Source snapshot: [`docs/hackathon/clawcompass/SOURCE-OF-TRUTH.md`](docs/hackathon/clawcompass/SOURCE-OF-TRUTH.md)
 
 ## Action Items
 - [ ] Review OpenClaw's required frameworks and documentation
-- [x] Identify compatible project idea within host constraints
+- [x] Identify compatible project ideas within host constraints
 - [ ] Finalize roles per team member
 - [ ] Build and demo
 
@@ -45,11 +100,12 @@ Strategy: build the local ClawCompass framework, wire it through ClawUp/Telegram
 ## Status
 - [ ] Confirm attendance
 - [x] Finalize project idea using the idea intake workflow
-- [ ] Build MVP
+- [x] Build local MVP
+- [x] Add full web app for broker workflow, proof, security, transactions, and reputation
+- [ ] Complete external ClawUp, x402, wallet, and ERC-8004 proof
 - [ ] Demo
 
 ## Next Steps
-1. Fill an idea brief from `docs/templates/idea-brief.md`
-2. Update the work graph with idea-specific build tasks
-3. Create the ClawUp agent and Telegram pairing
-4. Build and demo within time limit
+1. Create the ClawUp agent and Telegram pairing after explicit user action
+2. Configure wallet, x402 merchant, and ERC-8004 registration after explicit user action
+3. Rehearse and submit the 2-minute demo with public proof visible

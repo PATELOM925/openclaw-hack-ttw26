@@ -8,11 +8,11 @@ Date: 2026-05-27
 - `/Users/om-college/Downloads/OpenClaw Hack Ideas Mar 2026.pdf`
 - `/Users/om-college/Downloads/GOAT Toronto Hackathon Onboarding Guide - May 2026.pdf`
 - Local docs in `docs/hackathon/`, `docs/codex/work/`, and `docs/ideas/`
-- Local build in `clawcompass/apps/api`
+- Local root TypeScript/Express API and Vite web app
 
 ## Current Build Evidence
-- `npm test`: 2 test files, 18 tests passed.
-- `npm run typecheck`: passed.
+- `npm run validate`: root TypeScript build and API tests passed after the merge.
+- `npm run build:web`: root Vite web app build passed after the merge.
 - `npm run build`: passed.
 - `npm audit`: 0 vulnerabilities.
 - JSON validation passed for work graph, registration template, and capability seed data.
@@ -20,9 +20,9 @@ Date: 2026-05-27
   - `/api/help` self-disclosed ClawCompass and commands.
   - `/api/ask` recommends `setuppilot` for ClawUp onboarding work and `pitchhawk` for homepage/pitch work.
   - Secret-like context was redacted.
-  - `/api/use/pitchhawk` created a 0.10 USDC payment-required transaction.
-  - Unpaid `/api/execute/pitchhawk` returned payment required.
-  - Mock-local settled execution returned PitchHawk output and a success reputation event.
+  - `/api/use/setuppilot` created a 0.10 USDC payment-required transaction.
+  - Unpaid `/api/execute/setuppilot` returned payment required.
+  - Mock-local settled execution returned SetupPilot output and a success reputation event.
   - GitHub repo-write prompt recommended `githubhelper` and required `APPROVE_WRITE`.
 - Live SetupPilot walkthrough on port 3309:
   - onboarding prompt classified as `onboarding`.
