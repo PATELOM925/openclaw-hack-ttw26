@@ -1,26 +1,43 @@
-import { useEffect, useState } from "react";
+import { type ChangeEvent, useEffect, useMemo, useState } from "react";
 import { CheckCircle2, CreditCard, PackagePlus, Play, RefreshCw, Store, WalletCards } from "lucide-react";
 import { type BuyerIntent, type Capability, type Transaction, routes } from "./api";
+import { loadContextFiles, mergeContext, type AttachedContextFile } from "./contextUploadHelpers";
 
 export function BuyerScreen() {
   const [agentId, setAgentId] = useState("buyer-agent-001");
   const [wallet, setWallet] = useState("0x0000000000000000000000000000000000000001");
   const [task, setTask] = useState("Validate competitors and improve homepage positioning. Budget: 0.10 USDC.");
   const [context, setContext] = useState("Public product summary for autonomous agent builders.");
+  const [attachedContext, setAttachedContext] = useState<AttachedContextFile[]>([]);
+  const [contextError, setContextError] = useState("");
   const [intent, setIntent] = useState<BuyerIntent>();
   const [transaction, setTransaction] = useState<Transaction>();
   const [output, setOutput] = useState<Record<string, unknown>>();
   const [message, setMessage] = useState("");
 
+  const composedContext = useMemo(() => mergeContext(context, attachedContext), [context, attachedContext]);
+
+  async function onUploadContext(event: ChangeEvent<HTMLInputElement>) {
+    setContextError("");
+    try {
+      const loaded = await loadContextFiles(event.target.files);
+      setAttachedContext((current) => [...current, ...loaded]);
+    } catch (error) {
+      setContextError(error instanceof Error ? error.message : "Unable to load context files.");
+    } finally {
+      event.currentTarget.value = "";
+    }
+  }
+
   async function createIntent() {
-    const result = await routes.buy({
-      requesterAgentId: agentId,
-      requesterWallet: wallet,
-      task,
-      context,
-      budgetUsd: 0.1,
-      maxRisk: "low"
-    });
+      const result = await routes.buy({
+        requesterAgentId: agentId,
+        requesterWallet: wallet,
+        task,
+        context: composedContext,
+        budgetUsd: 0.1,
+        maxRisk: "low"
+      });
     setIntent(result);
     setTransaction(result.transaction);
     setMessage(result.purchaseInstructions.message);
@@ -51,7 +68,7 @@ export function BuyerScreen() {
       const result = await routes.execute(transaction.capabilityId, {
         transactionId: transaction.id,
         task,
-        allowedContext: intent?.secureContext.allowedContext || context
+        allowedContext: intent?.secureContext.allowedContext || composedContext
       });
       setTransaction(result.transaction);
       setOutput(result.result);
@@ -73,6 +90,23 @@ export function BuyerScreen() {
           <label>Buyer task</label>
           <textarea wrap="soft" value={task} onChange={(event) => setTask(event.target.value)} />
           <label>Buyer context</label>
+          <div className="inline">
+            <input
+              type="file"
+              multiple
+              accept=".txt,.md,.markdown,.json,.yaml,.yml,.csv,.toml,.log,.ini,.env,text/plain,application/json"
+              onChange={onUploadContext}
+            />
+            <button
+              type="button"
+              disabled={!attachedContext.length}
+              onClick={() => setAttachedContext([])}
+            >
+              Clear uploaded context
+            </button>
+          </div>
+          {attachedContext.length ? <p className="muted">Using {attachedContext.length} uploaded file(s): {attachedContext.map((item) => item.name).join(", ")}</p> : null}
+          {contextError && <p className="notice">{contextError}</p>}
           <textarea wrap="soft" value={context} onChange={(event) => setContext(event.target.value)} />
           <div className="actions">
             <button onClick={createIntent}><CreditCard size={16} />Create buy intent</button>

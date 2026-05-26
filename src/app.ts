@@ -33,7 +33,7 @@ export function createApp(options: AppOptions = {}) {
   const commandHandler = createCommandHandler({ transactions, paymentAdapter, reputation });
 
   app.use(cors());
-  app.use(express.json({ limit: "256kb" }));
+  app.use(express.json({ limit: "1mb" }));
 
   app.get("/health", (_request, response) => response.json({ ok: true, service: "clawcompass-api" }));
   app.get("/api/help", (_request, response) => response.json(getHelpResponse()));

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { type ChangeEvent, useEffect, useMemo, useState } from "react";
 import {
   Activity,
   CheckCircle2,
@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { type AskResponse, type Transaction, routes } from "./api";
 import { BuyerScreen, SellerScreen } from "./BuyerSeller";
+import { loadContextFiles, mergeContext, type AttachedContextFile } from "./contextUploadHelpers";
 
 type Page = "/" | "/buy" | "/sell" | "/capabilities" | "/transactions" | "/reputation" | "/security" | "/proof";
 
@@ -68,22 +69,38 @@ export function App() {
 function BrokerScreen() {
   const [task, setTask] = useState("I am stuck setting up my ClawUp hackathon agent. Telegram pairing is confusing and I still need ERC-8004 and x402.");
   const [context, setContext] = useState("Public status: ClawUp agent draft exists, Telegram pairing is not confirmed, no wallet or x402 proof yet.");
+  const [attachedContext, setAttachedContext] = useState<AttachedContextFile[]>([]);
+  const [contextError, setContextError] = useState("");
   const [ask, setAsk] = useState<AskResponse>();
   const [transaction, setTransaction] = useState<Transaction>();
   const [selected, setSelected] = useState("setuppilot");
   const [output, setOutput] = useState<Record<string, unknown>>();
   const [message, setMessage] = useState("");
 
+  const composedContext = useMemo(() => mergeContext(context, attachedContext), [context, attachedContext]);
+
+  async function onUploadContext(event: ChangeEvent<HTMLInputElement>) {
+    setContextError("");
+    try {
+      const loaded = await loadContextFiles(event.target.files);
+      setAttachedContext((current) => [...current, ...loaded]);
+    } catch (error) {
+      setContextError(error instanceof Error ? error.message : "Unable to load context files.");
+    } finally {
+      event.currentTarget.value = "";
+    }
+  }
+
   async function analyze() {
     setMessage("");
-    const result = await routes.ask({ task, context, budgetUsd: 0.1 });
+    const result = await routes.ask({ task, context: composedContext, budgetUsd: 0.1 });
     setAsk(result);
     setSelected(result.recommendations[0]?.capability.id || "pitchhawk");
   }
 
   async function useCapability(id = selected) {
     setMessage("");
-    const result = await routes.use(id, { task, context, requesterAgentId: "web-demo" });
+    const result = await routes.use(id, { task, context: composedContext, requesterAgentId: "web-demo" });
     setTransaction(result.transaction);
     setMessage(result.guardrail.approvalRequired ? "Approval required before payment." : "Payment required via x402.");
   }
@@ -119,7 +136,7 @@ function BrokerScreen() {
       const result = await routes.execute(transaction.capabilityId, {
         transactionId: transaction.id,
         task,
-        allowedContext: ask?.secureContext.allowedContext || context
+        allowedContext: ask?.secureContext.allowedContext || composedContext
       });
       setTransaction(result.transaction);
       setOutput(result.result);
@@ -137,6 +154,23 @@ function BrokerScreen() {
           <label>Task</label>
           <textarea wrap="soft" value={task} onChange={(event) => setTask(event.target.value)} />
           <label>Context</label>
+          <div className="inline">
+            <input
+              type="file"
+              multiple
+              accept=".txt,.md,.markdown,.json,.yaml,.yml,.csv,.toml,.log,.ini,.env,text/plain,application/json"
+              onChange={onUploadContext}
+            />
+            <button
+              type="button"
+              disabled={!attachedContext.length}
+              onClick={() => setAttachedContext([])}
+            >
+              Clear uploaded context
+            </button>
+          </div>
+          {attachedContext.length ? <p className="muted">Using {attachedContext.length} uploaded file(s): {attachedContext.map((item) => item.name).join(", ")}</p> : null}
+          {contextError && <p className="notice">{contextError}</p>}
           <textarea wrap="soft" value={context} onChange={(event) => setContext(event.target.value)} />
           <div className="actions">
             <button onClick={analyze}><Compass size={16} />Analyze</button>
