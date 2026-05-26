@@ -20,6 +20,24 @@ Expected response: ClawCompass explains that it analyzes tasks, redacts sensitiv
 6. ClawCompass executes PitchHawk and returns headline, subheadline, CTA, bullets, and confidence.
 7. Reputation updates locally.
 
+## Buyer And Seller Proof
+
+Buyer path in the web app:
+
+1. Open `/buy`.
+2. Keep the demo buyer agent ID, wallet, task, and public context.
+3. Click `Create buy intent`.
+4. Verify the selected capability, recommended tools to buy, blocked-context field, and x402 transaction.
+5. Click `Settle buyer payment` only in local mock mode.
+6. Click `Execute bought tool` and show the bought output.
+
+Seller path in the web app:
+
+1. Open `/sell`.
+2. Show listed capabilities and prices ClawCompass can sell.
+3. Submit a provider capability.
+4. Verify the API returns `pending_review`, proving provider intake exists without auto-listing unsafe tools.
+
 ## Guardrail Moment
 
 User requests: `/ask I need a tool that can rewrite my repo and push changes to GitHub.`

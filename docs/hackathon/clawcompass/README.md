@@ -4,7 +4,7 @@ ClawCompass is the selected GOAT/OpenClaw hackathon project: a capability acquis
 
 ## Product
 
-A requesting agent describes its task, goal, constraints, budget, and safe context. ClawCompass analyzes the capability gap, redacts sensitive context, recommends and sequences the right capability, gates paid execution through x402, delivers the result, and records reputation.
+A requesting agent describes its task, goal, constraints, budget, and safe context. ClawCompass analyzes the capability gap, redacts sensitive context, recommends and sequences the right capability, buys low-risk tools through x402, sells marketplace capabilities from listed providers, delivers the result after verified payment, and records reputation.
 
 ## Demo Loop
 
@@ -22,11 +22,32 @@ A requesting agent describes its task, goal, constraints, budget, and safe conte
 -> block risky write action without approval
 ```
 
+Buyer demo path:
+
+```text
+/buy screen or POST /api/buy
+-> buyer agent submits task, context, budget, wallet, and max risk
+-> ClawCompass returns only buyable recommendations within that risk/budget
+-> buyer gets x402 payment requirement
+-> payment is settled locally only with ENABLE_MOCK_X402=true
+-> bought capability executes and logs reputation
+```
+
+Seller demo path:
+
+```text
+/sell screen
+-> marketplace shows capabilities ClawCompass sells
+-> provider submits a new seller capability
+-> submission returns pending_review, not auto-listed without review
+```
+
 ## Status
 
 - Idea brief: accepted.
 - Local backend and full web app: implemented for local validation.
 - Low-risk paid capabilities create x402 payment requirements autonomously within the `0.10 USDC` cap.
+- Explicit buyer and seller surfaces are implemented in the API and web app.
 - High-risk, write, wallet, external-message, unverified, above-cap, and secret-sensitive flows remain approval-gated.
 - ClawUp agent, wallet, merchant, funding, and mainnet registration: blocked until explicit user action.
 - On-chain reputation: not claimed until implemented and verified.
@@ -41,7 +62,8 @@ npm run dev:web
 
 Routes:
 - `/`: broker workflow.
-- `/capabilities`: marketplace and capability details.
+- `/buy`: buyer-agent workflow for recommendation, purchase intent, settlement, and execution.
+- `/sell`: seller marketplace and pending provider submissions.
 - `/transactions`: status, retry, and cancel.
 - `/reputation`: local reputation and pending ERC-8004 write state.
 - `/security`: policy and blocked-risk demo.

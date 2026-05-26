@@ -94,6 +94,55 @@ describe("ClawCompass API", () => {
     expect(blocked.body.canExecute).toBe(false);
   });
 
+  it("creates an explicit buyer intent from another agent context", async () => {
+    const app = createApp();
+
+    const response = await request(app)
+      .post("/api/buy")
+      .send({
+        requesterAgentId: "buyer-agent-001",
+        requesterWallet: "0x0000000000000000000000000000000000000001",
+        task: "Validate competitors and improve homepage positioning. Budget: 0.10 USDC.",
+        context: "Public product summary for autonomous agent builders.",
+        budgetUsd: 0.1,
+        maxRisk: "low"
+      })
+      .expect(202);
+
+    expect(response.body.role).toBe("buyer");
+    expect(response.body.buyer.requesterAgentId).toBe("buyer-agent-001");
+    expect(response.body.selectedCapability.id).toBe("pitchhawk");
+    expect(response.body.recommendations.map((item: { capability: { id: string } }) => item.capability.id)).toContain(
+      "researchfox"
+    );
+    expect(response.body.secureContext.blockedContext).toEqual([]);
+    expect(response.body.transaction.status).toBe("payment_required");
+    expect(response.body.transaction.requesterWallet).toBe("0x0000000000000000000000000000000000000001");
+    expect(response.body.purchaseInstructions.nextStep).toBe("pay_x402_then_execute");
+  });
+
+  it("keeps buyer selections inside the other agent risk budget", async () => {
+    const app = createApp();
+
+    const response = await request(app)
+      .post("/api/buy")
+      .send({
+        requesterAgentId: "careful-buyer",
+        requesterWallet: "0x0000000000000000000000000000000000000001",
+        task: "Rewrite the repository and push changes, but only buy low risk help.",
+        context: "Public repo summary only.",
+        budgetUsd: 0.1,
+        maxRisk: "low"
+      })
+      .expect(202);
+
+    expect(response.body.role).toBe("buyer");
+    expect(response.body.selectedCapability.riskLevel).toBe("low");
+    expect(response.body.selectedCapability.id).not.toBe("githubhelper");
+    expect(response.body.recommendations.every((item: { capability: { riskLevel: string } }) => item.capability.riskLevel === "low"))
+      .toBe(true);
+  });
+
   it("keeps high-risk capabilities approval-gated", async () => {
     const app = createApp();
 

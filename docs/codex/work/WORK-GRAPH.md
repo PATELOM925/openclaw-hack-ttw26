@@ -59,9 +59,11 @@ flowchart TD
   E220 --> T222["TASK-222 Autonomous paid flow"]
   E220 --> T223["TASK-223 Payment verification binding"]
   E220 --> T224["TASK-224 ERC-8004 reputation adapter"]
+  E220 --> T225["TASK-225 Buyer purchase API"]
   G200 --> E230 --> T231["TASK-231 React shell"]
   E230 --> T232["TASK-232 Broker workflow UI"]
   E230 --> T233["TASK-233 Proof and admin UI"]
+  E230 --> T234["TASK-234 Buyer and seller UI"]
   G200 --> E240 --> T241["TASK-241 Command parity"]
   G200 --> E250 --> T251["TASK-251 External proof capture"]
   G200 --> E260 --> T261["TASK-261 Validation and browser QA"]
@@ -117,10 +119,12 @@ flowchart TD
 | TASK-222 | task | done | guardrails, payment quote API | Low-risk paid tools under `0.10 USDC` skip approval but still require x402 payment. | API and unit tests. | Demo through web and command surfaces. |
 | TASK-223 | task | done | payment adapter/status API | Payment proof is bound to transaction, capability, amount, token, wallet, chain, expiry, and idempotency. | Binding mismatch test and status API test. | Verify with live x402 only after credentials/funds. |
 | TASK-224 | task | done | reputation API/logger | Reputation events expose pending/written on-chain state without false claims. | Reputation tests and `/write-onchain` API test. | Write on-chain only after wallet/registration approval. |
+| TASK-225 | task | done | `/api/buy`, buyer flow service | Another agent can submit task/context/budget/risk and receive buyable recommendations plus a payment-bound purchase intent. | API tests cover buyer intent and low-risk budget filtering. | Use `/buy` in browser demo. |
 | EPIC-230 | epic | done | `web/` | Browser app exposes every local workflow and proof blocker. | `npm run build:web` and browser QA. | Use during demo rehearsal. |
 | TASK-231 | task | done | Vite React shell | Web app routes and API client exist. | Production web build. | Use browser QA. |
 | TASK-232 | task | done | broker/capability/transaction/reputation UI | User can analyze, inspect, quote, status-check, settle mock, execute, retry, cancel, and inspect reputation. | Web build and API-backed controls. | Verify in browser. |
 | TASK-233 | task | done | security/proof UI | User can see guardrails, blocked-risk demo, and external proof checklist. | Web build and browser QA. | Capture screenshot evidence if needed. |
+| TASK-234 | task | done | `/buy`, `/sell`, API client | Web app shows both buyer-agent purchase flow and seller marketplace/provider intake flow. | Web build and browser QA on buyer and seller routes. | Re-run after real x402 credentials are added. |
 | EPIC-240 | epic | done | command handler, ClawUp text | Command outputs match web/backend behavior. | API command tests. | Wire into ClawUp after external setup. |
 | TASK-241 | task | done | `/api/command` | `/help`, `/ask`, `/use`, `/security`, `/transactions`, `/reputation`, `/cancel`, and `/retry` remain usable. | Command adapter tests. | Use in ClawUp/Telegram. |
 | EPIC-250 | epic | blocked | ClawUp, Telegram, wallet, x402, ERC-8004 | Public proof is captured after explicit user-approved external setup. | Dashboard, payment, tx, and 8004scan evidence. | Requires user action, credentials, wallet, and funds. |
@@ -131,7 +135,7 @@ flowchart TD
 ## Status Notes
 - Required preparation nodes are `done`.
 - ClawCompass local backend, docs, route checks, and validation are `done`.
-- GOAL-200 local backend and web implementation is `done`; GOAL-200 remains `blocked` only by external proof actions.
+- GOAL-200 local backend and web implementation is `done`, including explicit buyer and seller surfaces; GOAL-200 remains `blocked` only by external proof actions.
 - External ClawUp, Telegram, wallet, merchant, funding, and ERC-8004 nodes remain `blocked` until explicit user action.
 
 ## Validation Evidence
@@ -151,9 +155,9 @@ Validated ClawCompass local build on 2026-05-26:
 - Local route check proved health, help, ask, redaction, approval, unpaid 402 block, mock-only demo settlement, command adapter, PitchHawk delivery, security policy, and reputation update.
 
 Validated GOAL-200 local build on 2026-05-26:
-- `npm run validate` passed with 24 tests.
+- `npm run validate` passed with 26 tests.
 - `npm run build:web` passed.
 - `npm audit --audit-level=moderate` reported 0 vulnerabilities.
 - JSON parse passed for work graph, capability seed, and registration metadata.
 - Secret scan, excluding sanitizer regex definitions and known public/demo addresses, returned no matches.
-- Browser QA verified desktop broker flow, support screens, blocked proof states, and a mobile viewport with `innerWidth=390` and `scrollWidth=390`.
+- Browser QA verified desktop broker flow, buyer purchase flow, seller marketplace/provider flow, support screens, blocked proof states, and a mobile viewport with `innerWidth=390` and `scrollWidth=390`.

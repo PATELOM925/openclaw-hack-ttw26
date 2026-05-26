@@ -1,10 +1,7 @@
 import cors from "cors";
 import express, { type Request, type Response } from "express";
-import { analyzeTaskWithLLM } from "./services/taskAnalyzer.js";
 import { sanitizeContext } from "./services/contextSanitizer.js";
 import { listCapabilities, findCapability } from "./services/marketplace.js";
-import { rankCapabilities } from "./services/capabilityRanker.js";
-import { buildCapabilitySequence } from "./services/capabilitySequencer.js";
 import { evaluateGuardrails, getSecurityPolicy, getSecurityText } from "./services/guardrails.js";
 import {
   createExecutionQuote,
@@ -18,6 +15,7 @@ import { createReputationLogger } from "./services/reputationLogger.js";
 import { getHelpResponse } from "./services/helpText.js";
 import { createCommandHandler } from "./services/commandHandler.js";
 import { getExternalProofStatus } from "./services/proofStatus.js";
+import { createBuyerIntent, sendCapability, sendRecommendations } from "./routes/recommendationRoutes.js";
 import type { CapabilityTransaction } from "./types/transaction.js";
 
 export type AppOptions = {
@@ -42,6 +40,7 @@ export function createApp(options: AppOptions = {}) {
   app.get("/api/marketplace", (_request, response) => response.json({ capabilities: listCapabilities() }));
   app.get("/api/tool/:id", (request, response) => sendCapability(request, response));
   app.post("/api/ask", async (request, response) => sendRecommendations(request, response));
+  app.post("/api/buy", async (request, response) => createBuyerIntent(request, response, transactions, paymentAdapter));
   app.post("/api/use/:id", (request, response) => createUseQuote(request, response, transactions, paymentAdapter));
   app.post("/api/approve/:transactionId", (request, response) => {
     approvePayment(request, response, transactions, paymentAdapter);
@@ -85,22 +84,6 @@ export function createApp(options: AppOptions = {}) {
   });
 
   return app;
-}
-function sendCapability(request: Request, response: Response) {
-  const capability = findCapability(request.params.id);
-  if (!capability) return response.status(404).json({ error: "capability_not_found" });
-  return response.json({ capability });
-}
-async function sendRecommendations(request: Request, response: Response) {
-  const analysis = await analyzeTaskWithLLM(request.body);
-  const secureContext = sanitizeContext(analysis.originalTask, request.body.context ?? "");
-  const capabilities = listCapabilities();
-  response.json({
-    analysis: { ...analysis, sensitivity: secureContext.sensitivity, detectedSecrets: secureContext.detectedSecrets },
-    secureContext,
-    recommendations: rankCapabilities(analysis, secureContext, capabilities).slice(0, 3),
-    sequence: buildCapabilitySequence(analysis, capabilities)
-  });
 }
 function createUseQuote(
   request: Request,

@@ -5,20 +5,21 @@ import {
   ClipboardCheck,
   Compass,
   CreditCard,
-  Database,
   Play,
   RefreshCw,
   ShieldCheck,
   WalletCards,
   XCircle
 } from "lucide-react";
-import { type AskResponse, type Capability, type Transaction, routes } from "./api";
+import { type AskResponse, type Transaction, routes } from "./api";
+import { BuyerScreen, SellerScreen } from "./BuyerSeller";
 
-type Page = "/" | "/capabilities" | "/transactions" | "/reputation" | "/security" | "/proof";
+type Page = "/" | "/buy" | "/sell" | "/capabilities" | "/transactions" | "/reputation" | "/security" | "/proof";
 
 const pages: Array<{ path: Page; label: string }> = [
   { path: "/", label: "Broker" },
-  { path: "/capabilities", label: "Capabilities" },
+  { path: "/buy", label: "Buyer" },
+  { path: "/sell", label: "Seller" },
   { path: "/transactions", label: "Transactions" },
   { path: "/reputation", label: "Reputation" },
   { path: "/security", label: "Security" },
@@ -53,7 +54,8 @@ export function App() {
       </aside>
       <main>
         {page === "/" && <BrokerScreen />}
-        {page === "/capabilities" && <CapabilitiesScreen />}
+        {page === "/buy" && <BuyerScreen />}
+        {(page === "/sell" || page === "/capabilities") && <SellerScreen />}
         {page === "/transactions" && <TransactionsScreen />}
         {page === "/reputation" && <ReputationScreen />}
         {page === "/security" && <SecurityScreen />}
@@ -161,21 +163,6 @@ function BrokerScreen() {
   );
 }
 
-function CapabilitiesScreen() {
-  const [capabilities, setCapabilities] = useState<Capability[]>([]);
-  const [selected, setSelected] = useState<Capability>();
-  useEffect(() => { routes.marketplace().then((data) => { setCapabilities(data.capabilities); setSelected(data.capabilities[0]); }); }, []);
-  return (
-    <section className="panel">
-      <Header icon={<Database />} title="Capabilities" subtitle="Every listed tool can be inspected and invoked from the broker screen." />
-      <div className="grid two">
-        <div className="surface list">{capabilities.map((item) => <button className="listRow" key={item.id} onClick={() => setSelected(item)}><span>{item.name}</span><strong>{item.priceUsd ? `${item.priceUsd} ${item.priceToken}` : "free"}</strong></button>)}</div>
-        <div className="surface">{selected && <CapabilityDetail capability={selected} />}</div>
-      </div>
-    </section>
-  );
-}
-
 function TransactionsScreen() {
   const [items, setItems] = useState<Transaction[]>([]);
   const refresh = () => routes.transactions().then((data) => setItems(data.transactions));
@@ -239,10 +226,6 @@ function Header({ icon, title, subtitle }: { icon: JSX.Element; title: string; s
 
 function Metric({ label, value }: { label: string; value: string }) {
   return <div className="metric"><span>{label}</span><strong>{value}</strong></div>;
-}
-
-function CapabilityDetail({ capability }: { capability: Capability }) {
-  return <><h2>{capability.name}</h2><p>{capability.description}</p><Metric label="Risk" value={capability.riskLevel} /><Metric label="Trust" value={`${capability.trustScore}`} /><p className="muted">Permissions: {capability.permissions.join(", ")}</p><p className="muted">Output: {capability.outputFormat}</p></>;
 }
 
 function TransactionRow({ item, refresh }: { item: Transaction; refresh: () => void }) {

@@ -18,6 +18,23 @@ Requesting agent or human
 -> browser dashboard and ClawUp/Telegram command output
 ```
 
+Buyer and seller surfaces share the same broker core:
+
+```text
+Buyer agent
+-> POST /api/buy
+-> risk and budget-filtered recommendations
+-> x402-bound purchase intent
+-> payment verification
+-> bought capability execution
+
+Seller/provider
+-> listed marketplace capability or POST /api/register-tool
+-> broker quote through POST /api/use/:id
+-> x402 payment requirement
+-> delivery and reputation event
+```
+
 ## Backend Modules
 
 - `taskAnalyzer`: classifies task type, risk tolerance, budget, and required capability hints.
@@ -26,6 +43,7 @@ Requesting agent or human
 - `guardrails`: decides whether approval is required.
 - `paymentGate`: creates transactions and blocks unpaid paid executions.
 - `paymentAdapter`: wraps `goatx402-sdk-server` for real x402 order creation and exposes local mock settlement only when enabled.
+- `buyerFlow`: shapes buyer-agent profiles, budget/risk-filtered buyable recommendations, and purchase instructions.
 - `commandHandler`: formats ClawUp/Telegram commands into chat-friendly responses.
 - `executor`: executes `PitchHawk` and free low-risk tools with sanitized input.
 - `reputationLogger`: records local outcome events.
@@ -37,6 +55,7 @@ Requesting agent or human
 - `POST /api/ask`
 - `GET /api/marketplace`
 - `GET /api/tool/:id`
+- `POST /api/buy`
 - `POST /api/use/:id`
 - `POST /api/approve/:transactionId`
 - `POST /api/execute/:id`
@@ -62,7 +81,8 @@ The local API can simulate payment settlement only through the explicit `/api/de
 ## Web Surfaces
 
 - `/`: task intake, safe context preview, recommendations, sequence, x402 quote, payment status, execution result.
-- `/capabilities`: marketplace list and capability detail.
+- `/buy`: buyer-agent task/context intake, recommended tools to buy, payment settlement, and execution.
+- `/sell`: listed seller capabilities and pending provider submissions.
 - `/transactions`: payment history with status, retry, and cancel controls.
 - `/reputation`: local reputation profile and pending on-chain write state.
 - `/security`: guardrail policy and blocked-risk command demo.

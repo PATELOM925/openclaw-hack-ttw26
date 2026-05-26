@@ -16,7 +16,7 @@
 ## Project
 Selected idea: **ClawCompass**, a paid capability broker for autonomous agents.
 
-ClawCompass lets a requesting agent describe its task and safe context, then analyzes which skill, MCP, hook, plugin, rule, or sub-agent is needed. It recommends and sequences the right capability, redacts sensitive context, charges per paid capability through x402, executes after verified payment, and records reputation.
+ClawCompass lets a requesting agent describe its task and safe context, then analyzes which skill, MCP, hook, plugin, rule, or sub-agent is needed. It recommends and sequences the right capability, redacts sensitive context, buys low-risk capabilities through x402 on behalf of the requester, sells listed capabilities as the marketplace broker, executes after verified payment, and records reputation.
 
 ## Planning Scaffold
 - Project instructions: [`AGENTS.md`](AGENTS.md)
@@ -41,9 +41,11 @@ The API listens on `http://localhost:3000` by default. Useful demo endpoints:
 - `POST /api/ask`
 - `GET /api/marketplace`
 - `GET /api/tool/pitchhawk`
+- `POST /api/buy`
 - `POST /api/use/pitchhawk`
 - `POST /api/approve/:transactionId`
 - `POST /api/execute/pitchhawk`
+- `POST /api/register-tool`
 - `POST /api/command`
 - `GET /api/security`
 - `GET /api/transactions`
@@ -64,6 +66,11 @@ npm run dev:web
 
 The browser app runs through Vite, defaults to `http://localhost:5173`, and calls the API at
 `http://localhost:3000`. Set `VITE_API_BASE_URL` if the API runs somewhere else.
+
+Routes:
+- `/buy`: buyer-agent workflow for context analysis, tool recommendation, x402 purchase intent, mock settlement, and execution.
+- `/sell`: seller marketplace for listed paid capabilities and pending provider submissions.
+- `/`: broker workflow for task intake, x402 payment, execution, transactions, and reputation.
 
 Validation:
 

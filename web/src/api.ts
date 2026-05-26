@@ -23,6 +23,25 @@ export type Transaction = {
   txHash?: string;
 };
 
+export type BuyerIntent = {
+  role: "buyer";
+  buyer: {
+    requesterAgentId?: string;
+    requesterWallet?: string;
+    budgetUsd: number;
+    maxRisk: string;
+  };
+  analysis: AskResponse["analysis"];
+  secureContext: AskResponse["secureContext"];
+  recommendations: AskResponse["recommendations"];
+  sequence: AskResponse["sequence"];
+  selectedCapability: Capability;
+  transaction: Transaction;
+  guardrail: { approvalRequired: boolean; reasons: string[] };
+  paymentRequiredHeader?: string;
+  purchaseInstructions: { nextStep: string; message: string };
+};
+
 export type AskResponse = {
   analysis: {
     taskType: string;
@@ -57,6 +76,7 @@ export async function apiPost<T>(path: string, body: unknown = {}): Promise<T> {
 
 export const routes = {
   ask: (body: unknown) => apiPost<AskResponse>("/api/ask", body),
+  buy: (body: unknown) => apiPost<BuyerIntent>("/api/buy", body),
   marketplace: () => apiGet<{ capabilities: Capability[] }>("/api/marketplace"),
   tool: (id: string) => apiGet<{ capability: Capability }>(`/api/tool/${id}`),
   use: (id: string, body: unknown) => apiPost<{ transaction: Transaction; guardrail: { approvalRequired: boolean; reasons: string[] }; paymentRequiredHeader?: string }>(`/api/use/${id}`, body),
@@ -70,7 +90,8 @@ export const routes = {
   writeReputation: (id: string) => apiPost<{ onChainWritten: boolean; writeStatus: string; agentId?: string }>(`/api/reputation/${id}/write-onchain`),
   security: () => apiGet<{ policy: Record<string, unknown>; text: string }>("/api/security"),
   command: (text: string) => apiPost<{ text: string; data?: unknown }>("/api/command", { text, sessionId: "web-demo" }),
-  proof: () => apiGet<{ status: string; requiredProof: Record<string, { status: string; blocker?: string; [key: string]: unknown }> }>("/api/proof")
+  proof: () => apiGet<{ status: string; requiredProof: Record<string, { status: string; blocker?: string; [key: string]: unknown }> }>("/api/proof"),
+  registerTool: (body: unknown) => apiPost<{ status: string; submission: unknown }>("/api/register-tool", body)
 };
 
 async function readJson<T>(response: Response): Promise<T> {

@@ -14,12 +14,13 @@
 
 - Add transaction cancel and retry routes.
 - Add pending tool submission route.
+- Add explicit buyer purchase-intent route for other agents.
 - Add clear failure messages for unpaid, failed, blocked, and unknown capability paths.
 - Add local validation and secret scans.
 - Add `/health`, `/api/approve/:transactionId`, `/api/payment/:transactionId/status`, `/api/proof`, and `/api/command`.
 - Add `goatx402-sdk-server` adapter and keep mock settlement disabled unless `ENABLE_MOCK_X402=true`.
 - Add LLM-first task analysis with deterministic fallback.
-- Add full Vite React web app for broker workflow, capabilities, transactions, reputation, security, and proof status.
+- Add full Vite React web app for buyer, seller, broker workflow, transactions, reputation, security, and proof status.
 
 ## External Blockers
 
@@ -40,9 +41,9 @@ npm run dev
 npm run dev:web
 ```
 
-The backend exposes `/health`, `/api/help`, `/api/ask`, `/api/marketplace`, `/api/use/:id`, `/api/approve/:transactionId`, `/api/payment/:transactionId/status`, `/api/execute/:id`, `/api/command`, `/api/security`, `/api/proof`, `/api/transactions`, and `/api/reputation/:id`.
+The backend exposes `/health`, `/api/help`, `/api/ask`, `/api/buy`, `/api/marketplace`, `/api/use/:id`, `/api/register-tool`, `/api/approve/:transactionId`, `/api/payment/:transactionId/status`, `/api/execute/:id`, `/api/command`, `/api/security`, `/api/proof`, `/api/transactions`, and `/api/reputation/:id`.
 
-The web app exposes `/`, `/capabilities`, `/transactions`, `/reputation`, `/security`, and `/proof`.
+The web app exposes `/`, `/buy`, `/sell`, `/transactions`, `/reputation`, `/security`, and `/proof`.
 
 ## Related Docs
 

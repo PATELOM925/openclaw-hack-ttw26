@@ -1199,14 +1199,15 @@
       ],
       "tags": [
         "clawcompass",
-        "goal-200"
+        "goal-200",
+        "buyer-seller"
       ],
       "component": "clawcompass",
       "owner_surface": "app code, web, docs, graph",
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "Full local product works and external proof blockers are explicit.",
       "verification": "Backend tests, web build, browser QA, scans, graph parse.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 86,
       "blocker_reason": "External ClawUp, Telegram, wallet/funds, x402 merchant, live settlement, ERC-8004 registration, and on-chain reputation proof require explicit user approval and credentials/funds.",
       "next_action": "Perform external proof steps only after explicit user approval.",
@@ -1240,7 +1241,7 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "GOAL-200 graph and source alignment are recorded.",
       "verification": "Markdown review and JSON parse.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Keep updated after validation.",
@@ -1272,7 +1273,7 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "GOAL-200 nodes and web/backend interface changes are durable.",
       "verification": "Manual graph review plus JSON parse.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Update evidence after final checks.",
@@ -1292,7 +1293,8 @@
         "TASK-221",
         "TASK-222",
         "TASK-223",
-        "TASK-224"
+        "TASK-224",
+        "TASK-225"
       ],
       "links": [
         {
@@ -1302,14 +1304,15 @@
       ],
       "tags": [
         "clawcompass",
-        "goal-200"
+        "goal-200",
+        "buyer-seller"
       ],
       "component": "clawcompass",
       "owner_surface": "backend services and API",
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "LLM-first analysis, autonomous within-cap payment, payment binding, and reputation write-state exist.",
       "verification": "Unit and API tests.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Connect real credentials only after approval.",
@@ -1341,7 +1344,7 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "/api/ask returns analysis source, model, confidence, fallback reason, and recommended sequence.",
       "verification": "Tests cover deterministic fallback without ANTHROPIC_API_KEY.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Use real key only from untracked env.",
@@ -1366,14 +1369,15 @@
       ],
       "tags": [
         "clawcompass",
-        "goal-200"
+        "goal-200",
+        "buyer-seller"
       ],
       "component": "clawcompass",
       "owner_surface": "guardrails, payment quote API",
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "Low-risk paid tools under 0.10 USDC skip approval but still require x402 payment.",
       "verification": "API and unit tests.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Demo through web and command surfaces.",
@@ -1405,7 +1409,7 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "Payment proof is bound to transaction, capability, amount, token, wallet, chain, expiry, and idempotency.",
       "verification": "Binding mismatch test and status API test.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Verify with live x402 only after credentials/funds.",
@@ -1437,7 +1441,7 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "Reputation events expose pending/written on-chain state without false claims.",
       "verification": "Reputation tests and write-onchain API test.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Write on-chain only after wallet/registration approval.",
@@ -1456,7 +1460,8 @@
       "children": [
         "TASK-231",
         "TASK-232",
-        "TASK-233"
+        "TASK-233",
+        "TASK-234"
       ],
       "links": [
         {
@@ -1466,14 +1471,15 @@
       ],
       "tags": [
         "clawcompass",
-        "goal-200"
+        "goal-200",
+        "buyer-seller"
       ],
       "component": "clawcompass",
       "owner_surface": "web",
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "Browser app exposes every local workflow and proof blocker.",
       "verification": "npm run build:web and browser QA.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Use during demo rehearsal.",
@@ -1505,7 +1511,7 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "Web app routes and API client exist.",
       "verification": "Production web build.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Use browser QA.",
@@ -1530,14 +1536,15 @@
       ],
       "tags": [
         "clawcompass",
-        "goal-200"
+        "goal-200",
+        "buyer-seller"
       ],
       "component": "clawcompass",
       "owner_surface": "web/src/App.tsx",
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "User can analyze, inspect, quote, status-check, settle mock, execute, retry, cancel, and inspect reputation.",
       "verification": "Web build and API-backed controls.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Verify in browser.",
@@ -1569,7 +1576,7 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "User can see guardrails, blocked-risk demo, and external proof checklist.",
       "verification": "Web build and browser QA.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Capture screenshot evidence if needed.",
@@ -1603,7 +1610,7 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "Command outputs match web/backend behavior.",
       "verification": "API command tests.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Wire into ClawUp after external setup.",
@@ -1635,7 +1642,7 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "/help, /ask, /use, /security, /transactions, /reputation, /cancel, and /retry remain usable.",
       "verification": "Command adapter tests.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Use in ClawUp/Telegram.",
@@ -1669,7 +1676,7 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "Public proof is captured after explicit user-approved external setup.",
       "verification": "Dashboard, payment, tx, and 8004scan evidence.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 35,
       "blocker_reason": "External account, wallet, payment, or mainnet action requires explicit user approval and credentials/funds.",
       "next_action": "Requires user action, credentials, wallet, and funds.",
@@ -1701,7 +1708,7 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "Capture ClawUp agent ID, Telegram username, wallet address, x402 settlement, ERC-8004 tx hash, and 8004scan URL only.",
       "verification": "/api/proof plus public evidence review.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 35,
       "blocker_reason": "External account, wallet, payment, or mainnet action requires explicit user approval and credentials/funds.",
       "next_action": "Requires external setup approval.",
@@ -1735,7 +1742,7 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "Local implementation is verified and committed/pushed.",
       "verification": "Full validation suite and git status.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Commit/push closeout.",
@@ -1767,11 +1774,77 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "Backend, frontend, security, docs, and browser-visible paths validate.",
       "verification": "npm run validate, npm run build:web, audit, scans, browser QA.",
-      "evidence": "Validated on 2026-05-26: npm run validate passed with 24 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified desktop broker flow, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Repeat after external setup.",
       "updated_at": "2026-05-26"
+    },
+    {
+      "kind": "task",
+      "category": "task",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "children": [],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200",
+        "buyer-seller"
+      ],
+      "component": "clawcompass",
+      "context": "GOAL-200 now includes explicit buyer and seller surfaces so the demo proves both sides of agent-to-agent commerce locally.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "updated_at": "2026-05-26",
+      "id": "TASK-225",
+      "title": "Explicit buyer purchase API",
+      "parent_id": "EPIC-220",
+      "owner_surface": "src/app.ts, src/services/buyerFlow.ts",
+      "acceptance": "Another agent can submit task, context, wallet, budget, and max risk, then receive buyable recommendations and a payment-bound purchase intent.",
+      "verification": "API tests cover buyer intent creation and low-risk budget filtering.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "next_action": "Use POST /api/buy and /buy during the working demo."
+    },
+    {
+      "kind": "task",
+      "category": "task",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "children": [],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200",
+        "buyer-seller"
+      ],
+      "component": "clawcompass",
+      "context": "GOAL-200 now includes explicit buyer and seller surfaces so the demo proves both sides of agent-to-agent commerce locally.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "updated_at": "2026-05-26",
+      "id": "TASK-234",
+      "title": "Buyer and seller web surfaces",
+      "parent_id": "EPIC-230",
+      "owner_surface": "web/src/BuyerSeller.tsx, web/src/App.tsx, web/src/api.ts",
+      "acceptance": "Web app exposes buyer-agent purchase flow and seller marketplace/provider intake flow with API-backed controls.",
+      "verification": "Frontend build and browser QA on /buy and /sell.",
+      "evidence": "Validated on 2026-05-26: npm run validate passed with 26 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified broker, buyer purchase, seller marketplace/provider, support screens, proof blockers, and mobile viewport 390px with no horizontal document overflow.",
+      "next_action": "Re-run browser QA after real x402 credentials are configured."
     }
   ]
 }
