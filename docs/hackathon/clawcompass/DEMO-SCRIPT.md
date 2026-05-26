@@ -3,6 +3,11 @@
 ## Goal
 Show that ClawCompass safely recommends, paid-gates, executes, and records outcomes for a real developer pain: ClawUp/GOAT onboarding.
 
+## Stage Deck
+- Primary deck: `docs/presentations/clawcompass_stage_graphical_demo.pptx`
+- Compatibility copy: `docs/presentations/clawcompass_judge_full_demo_stage.pptx`
+- Use the deck as the visual spine and this script as the click/talk track.
+
 ## Before you run
 1. Start backend:
    - `npm run dev`

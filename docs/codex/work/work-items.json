@@ -400,10 +400,10 @@
       "context": "The final team needs a short live demo path and final submission checklist.",
       "acceptance": "Templates cover 2-minute live demo and final form readiness.",
       "verification": "Open templates and compare to DEMO-SUBMISSION.md; run a 2-minute local dry-run with `/` + `/buy` + `/sell` screens.",
-      "evidence": "Validated on 2026-05-26: ClawCompass demo script and judge deck were completed with concrete steps for local execution, guardrails, buyer/seller flow, and proof blockers.",
+      "evidence": "Validated on 2026-05-26: ClawCompass demo script and graphical judge deck were completed with concrete steps for local execution, guardrails, buyer/seller flow, and proof blockers.",
       "completion_percent": 100,
       "blocker_reason": "",
-      "next_action": "Run this script and deck for final judge-style rehearsal; swap proof placeholders with live ClawUp/chain outputs when external setup completes.",
+      "next_action": "Use docs/presentations/clawcompass_stage_graphical_demo.pptx for final judge-style rehearsal; swap proof placeholders with live ClawUp/chain outputs when external setup completes.",
       "updated_at": "2026-05-26"
     },
     {
@@ -1771,11 +1771,11 @@
         "goal-200"
       ],
       "component": "clawcompass",
-      "owner_surface": "validation commands",
+      "owner_surface": "validation commands, docs/demo-recordings",
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
-      "acceptance": "Backend, frontend, security, docs, and browser-visible paths validate.",
-      "verification": "npm run validate, npm run build:web, audit, scans, browser QA.",
-      "evidence": "Validated on 2026-05-26 after merging origin/om: npm run validate passed with 31 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified SetupPilot broker execution, buyer purchase flow, seller marketplace/provider flow, and mobile viewport 390px with no horizontal document overflow.",
+      "acceptance": "Backend, frontend, security, docs, browser-visible paths, and recorded transaction walkthrough validate.",
+      "verification": "npm run validate, npm run build:web, audit, scans, browser QA, and recorded transaction walkthrough.",
+      "evidence": "Validated on 2026-05-26 after merging origin/om: npm run validate passed with 31 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified SetupPilot broker execution, buyer purchase flow, seller marketplace/provider flow, and mobile viewport 390px with no horizontal document overflow. Transaction QA on 2026-05-26 verified SetupPilot quote, unpaid HTTP 402 block, mock settlement, delivered broker transaction, reputation update, buyer delivery, transaction history, and proof blockers; recording saved at docs/demo-recordings/clawcompass-transactions-qa-2026-05-26.webm.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Repeat after external setup.",

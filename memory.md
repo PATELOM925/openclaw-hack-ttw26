@@ -9,6 +9,7 @@ This workspace is now building ClawCompass for the GOAT/OpenClaw Toronto hackath
 - Current project state: selected ClawCompass idea with implementation in progress.
 - Selected idea: ClawCompass, a capability acquisition layer that analyzes agent tasks, redacts context, recommends capabilities, buys safe paid tools through x402, sells marketplace capabilities, and logs reputation.
 - Primary demo capability: ClawUp SetupPilot, a paid onboarding diagnosis for ClawUp, Telegram pairing, ERC-8004, x402, wallet readiness, and submission proof.
+- Primary stage deck: `docs/presentations/clawcompass_stage_graphical_demo.pptx`, mirrored to `docs/presentations/clawcompass_judge_full_demo_stage.pptx`.
 - Full product target: local API plus full Vite React web app, with ClawUp/Telegram remaining the required hackathon channel.
 - Local web app routes: `/`, `/buy`, `/sell`, `/transactions`, `/reputation`, `/security`, and `/proof`.
 - Buyer surface: `POST /api/buy` and `/buy` let another agent submit task/context/budget/risk, receive buyable recommendations, create a payment-bound purchase intent, settle locally in demo mode, and execute.
@@ -73,6 +74,12 @@ On 2026-05-26, external proof intake from `ClawUp ENV.docx` was sanitized:
 - Public identifiers were recorded in `docs/hackathon/clawcompass/EXTERNAL-PROOF-INTAKE.md`.
 - Source secrets were not written to repo docs or `.env`; `.env` is currently absent and ignored.
 - `/api/proof` now requires verification evidence instead of treating public IDs alone as final proof.
+
+On 2026-05-26, transaction QA passed on a local mock-payment stack:
+- API ran on `http://127.0.0.1:3308` with `ENABLE_MOCK_X402=true`; web ran on `http://127.0.0.1:5174`.
+- Browser QA proved SetupPilot quote, unpaid HTTP `402` execution block, local mock settlement, delivered broker transaction, reputation update, buyer transaction delivery, transaction history, and blocked external proof gates.
+- Demo recording: `docs/demo-recordings/clawcompass-transactions-qa-2026-05-26.webm`.
+- QA report: `docs/demo-recordings/TRANSACTION-QA-2026-05-26.md`.
 
 ## Next Action
 Next external actions, only after explicit user approval: rotate or securely load exposed secrets, verify ClawUp agent and Telegram pairing, confirm wallet/funds, run real x402 payment, register ERC-8004 identity, and record public proof.
