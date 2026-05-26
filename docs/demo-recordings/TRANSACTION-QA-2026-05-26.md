@@ -17,11 +17,21 @@ Transaction QA passed against a local demo stack with mock x402 enabled only for
 
 - Broker flow recommended `setuppilot` for the ClawUp/Telegram/ERC-8004/x402 onboarding task.
 - `POST /api/execute/setuppilot` before settlement returned HTTP `402` with `canExecute=false`.
+- The web UI shows `Payment required before paid capability execution.` for the unpaid execute path without an unhandled page error.
 - Broker transaction `txn_qeHMY2nbCj` moved to `delivered` after local mock settlement and execution.
 - Reputation for `setuppilot` showed `successfulExecutions: 1` and `pending_external_proof`.
 - Buyer flow created transaction `txn_USTmDkMFLX`, settled it locally, executed `pitchhawk`, and returned bought output.
 - Transaction history showed both tested transactions as `delivered`.
 - Proof page still showed ClawUp, Telegram, real x402, and ERC-8004 as blocked external proof gates.
+
+## Verification
+
+- `npm run validate`: passed with 33 tests.
+- `npm run build:web`: passed.
+- `npm audit --audit-level=moderate`: passed with 0 vulnerabilities.
+- `python3 -m json.tool docs/codex/work/work-items.json`: passed.
+- High-confidence secret scan: only intentional fake API key test fixtures matched; no real committed secrets found.
+- Recording file verified as WebM.
 
 ## Notes
 

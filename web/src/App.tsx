@@ -97,27 +97,36 @@ function BrokerScreen() {
 
   async function demoSettle() {
     if (!transaction) return;
-    const result = await routes.settle(transaction.id, {
-      paymentId: "web-demo-payment",
-      txHash: "0xwebdemo",
-      capabilityId: transaction.capabilityId,
-      amount: transaction.amount,
-      token: transaction.token,
-      chainId: 2345
-    });
-    setTransaction(result.transaction);
-    setMessage(result.note);
+    try {
+      const result = await routes.settle(transaction.id, {
+        paymentId: "web-demo-payment",
+        txHash: "0xwebdemo",
+        capabilityId: transaction.capabilityId,
+        amount: transaction.amount,
+        token: transaction.token,
+        chainId: 2345
+      });
+      setTransaction(result.transaction);
+      setMessage(result.note);
+    } catch (error) {
+      setMessage(errorMessage(error));
+    }
   }
 
   async function execute() {
     if (!transaction) return;
-    const result = await routes.execute(transaction.capabilityId, {
-      transactionId: transaction.id,
-      task,
-      allowedContext: ask?.secureContext.allowedContext || context
-    });
-    setTransaction(result.transaction);
-    setOutput(result.result);
+    try {
+      const result = await routes.execute(transaction.capabilityId, {
+        transactionId: transaction.id,
+        task,
+        allowedContext: ask?.secureContext.allowedContext || context
+      });
+      setTransaction(result.transaction);
+      setOutput(result.result);
+      setMessage("Execution delivered.");
+    } catch (error) {
+      setMessage(errorMessage(error));
+    }
   }
 
   return (
@@ -235,4 +244,8 @@ function TransactionRow({ item, refresh }: { item: Transaction; refresh: () => v
 function ResultStrip({ transaction, output }: { transaction?: Transaction; output?: Record<string, unknown> }) {
   const rendered = useMemo(() => output ? JSON.stringify(output, null, 2) : "No execution output yet.", [output]);
   return <div className="grid two"><div className="surface"><h2>Transaction</h2><pre>{transaction ? JSON.stringify(transaction, null, 2) : "No transaction yet."}</pre></div><div className="surface"><h2>Execution Result</h2><pre>{rendered}</pre></div></div>;
+}
+
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : "Request failed.";
 }

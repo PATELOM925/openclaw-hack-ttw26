@@ -67,6 +67,7 @@ flowchart TD
   G200 --> E240 --> T241["TASK-241 Command parity"]
   G200 --> E250 --> T251["TASK-251 External proof capture"]
   G200 --> E260 --> T261["TASK-261 Validation and browser QA"]
+  E260 --> T262["TASK-262 Blocker audit"]
   E260 --> T770["TASK-770 Merge om and development"]
 ```
 
@@ -132,12 +133,14 @@ flowchart TD
 | TASK-251 | task | blocked | public proof docs/API | Capture ClawUp agent ID, Telegram username, wallet address, x402 settlement, ERC-8004 tx hash, and 8004scan URL only. | `/api/proof` plus public evidence review. | Sanitized intake done; verification and external actions still need approval. |
 | EPIC-260 | epic | done | tests, browser, scans, git | Local implementation is verified. | Full validation suite and git status. | Commit/push closeout. |
 | TASK-261 | task | done | validation commands, `docs/demo-recordings/` | Backend, frontend, security, docs, browser-visible paths, and transaction demo recording validate. | `npm run validate`, `npm run build:web`, audit, scans, browser QA, and recorded transaction walkthrough. | Repeat after external setup. |
+| TASK-262 | task | done | docs/proof safety review | Local blocker audit distinguishes fixed local mock-safety guard from remaining external proof blockers. | Source review of `createPaymentAdapter`, `/api/demo-settle`, and readiness docs. | No local-actionable blockers remain; mock settlement is dev-only behind `ENABLE_MOCK_X402=true`, and real x402 mode rejects mock settlement. | Continue only with user-approved external proof actions. |
 | TASK-770 | task | done | root ClawCompass app, web app, command handler, work graph | `om` is merged onto `origin/development` as the integration base, with SetupPilot available through root API, command, payment, dashboard, tests, and docs. | API tests, TypeScript build, web build, JSON validation, audit, route smoke checks, and secret scan. | Push `origin/om` and use root app for demo work. |
 
 ## Status Notes
 - Required preparation nodes are `done`.
 - ClawCompass local backend, docs, route checks, and validation are `done`.
 - GOAL-200 local backend and web implementation is `done`, including explicit buyer and seller surfaces; GOAL-200 remains `blocked` only by external proof actions.
+- Local blocker audit on 2026-05-26 found no remaining local-actionable blockers; mock x402 settlement is development-only and final proof remains external/live.
 - External proof intake found public Telegram, wallet, merchant, and GOAT setup details, but no verified pairing, funding, x402 settlement, ERC-8004 agent ID, registration transaction, or 8004scan listing.
 - External ClawUp, Telegram pairing, wallet use/funding, merchant credentials, and ERC-8004 nodes remain `blocked` until explicit user action and verified proof.
 - `om` now uses the root `origin/development` app as the integration base; the older nested API scaffold was removed.
@@ -179,5 +182,9 @@ Validated external proof intake on 2026-05-26:
 
 Validated transaction QA on 2026-05-26:
 - Local mock-payment stack used API `http://127.0.0.1:3308` and web `http://127.0.0.1:5174`.
-- In-app browser QA verified SetupPilot recommendation, payment-required quote, unpaid HTTP `402` block, mock settlement, delivered broker transaction, reputation update, buyer transaction delivery, transaction history, and blocked external proof gates.
+- In-app browser QA verified SetupPilot recommendation, payment-required quote, unpaid HTTP `402` block with visible UI message, mock settlement, delivered broker transaction, reputation update, buyer transaction delivery, transaction history, and blocked external proof gates.
 - Demo recording saved to `docs/demo-recordings/clawcompass-transactions-qa-2026-05-26.webm`; QA note saved to `docs/demo-recordings/TRANSACTION-QA-2026-05-26.md`.
+
+Blocker audit evidence on 2026-05-26:
+- Source review confirmed mock settlement is selected only with `ENABLE_MOCK_X402=true`; real x402 mode rejects mock settlement.
+- Product-path validation evidence is captured under TASK-261.

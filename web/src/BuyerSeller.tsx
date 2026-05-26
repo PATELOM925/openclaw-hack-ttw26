@@ -28,28 +28,37 @@ export function BuyerScreen() {
 
   async function settleBuyerPayment() {
     if (!transaction) return;
-    const result = await routes.settle(transaction.id, {
-      paymentId: "buyer-demo-payment",
-      txHash: "0xbuyerdemo",
-      capabilityId: transaction.capabilityId,
-      amount: transaction.amount,
-      token: transaction.token,
-      requesterWallet: wallet,
-      chainId: 2345
-    });
-    setTransaction(result.transaction);
-    setMessage(result.note);
+    try {
+      const result = await routes.settle(transaction.id, {
+        paymentId: "buyer-demo-payment",
+        txHash: "0xbuyerdemo",
+        capabilityId: transaction.capabilityId,
+        amount: transaction.amount,
+        token: transaction.token,
+        requesterWallet: wallet,
+        chainId: 2345
+      });
+      setTransaction(result.transaction);
+      setMessage(result.note);
+    } catch (error) {
+      setMessage(errorMessage(error));
+    }
   }
 
   async function executeBuyerPurchase() {
     if (!transaction) return;
-    const result = await routes.execute(transaction.capabilityId, {
-      transactionId: transaction.id,
-      task,
-      allowedContext: intent?.secureContext.allowedContext || context
-    });
-    setTransaction(result.transaction);
-    setOutput(result.result);
+    try {
+      const result = await routes.execute(transaction.capabilityId, {
+        transactionId: transaction.id,
+        task,
+        allowedContext: intent?.secureContext.allowedContext || context
+      });
+      setTransaction(result.transaction);
+      setOutput(result.result);
+      setMessage("Execution delivered.");
+    } catch (error) {
+      setMessage(errorMessage(error));
+    }
   }
 
   return (
@@ -157,4 +166,8 @@ function ResultStrip({ transaction, output }: { transaction?: Transaction; outpu
       <div className="surface"><h2>Bought Capability Output</h2><pre>{output ? JSON.stringify(output, null, 2) : "No bought output yet."}</pre></div>
     </div>
   );
+}
+
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : "Request failed.";
 }

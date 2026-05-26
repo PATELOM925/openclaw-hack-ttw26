@@ -1207,7 +1207,7 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "Full local product works and external proof blockers are explicit.",
       "verification": "Backend tests, web build, browser QA, scans, graph parse.",
-      "evidence": "Validated on 2026-05-26 after merging origin/om: npm run validate passed with 31 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified SetupPilot broker execution, buyer purchase flow, seller marketplace/provider flow, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26 after merging origin/om: npm run validate passed with 31 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified SetupPilot broker execution, buyer purchase flow, seller marketplace/provider flow, and mobile viewport 390px with no horizontal document overflow. Blocker audit on 2026-05-26 confirmed remaining blockers are external/live proof actions, not local implementation blockers.",
       "completion_percent": 86,
       "blocker_reason": "External ClawUp, Telegram, wallet/funds, x402 merchant, live settlement, ERC-8004 registration, and on-chain reputation proof require explicit user approval and credentials/funds.",
       "next_action": "Perform external proof steps only after explicit user approval.",
@@ -1726,7 +1726,8 @@
       "parent_id": "GOAL-200",
       "children": [
         "TASK-261",
-        "TASK-770"
+        "TASK-770",
+        "TASK-262"
       ],
       "links": [
         {
@@ -1743,10 +1744,10 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "Local implementation is verified and committed/pushed.",
       "verification": "Full validation suite and git status.",
-      "evidence": "Validated on 2026-05-26 after merging origin/om: npm run validate passed with 31 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified SetupPilot broker execution, buyer purchase flow, seller marketplace/provider flow, and mobile viewport 390px with no horizontal document overflow.",
+      "evidence": "Validated on 2026-05-26 after merging origin/om: npm run validate passed with 31 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified SetupPilot broker execution, buyer purchase flow, seller marketplace/provider flow, and mobile viewport 390px with no horizontal document overflow. Blocker audit on 2026-05-26 found no remaining local-actionable blockers; external proof actions remain blocked pending explicit user approval.",
       "completion_percent": 100,
       "blocker_reason": "",
-      "next_action": "Push merged development and main branches.",
+      "next_action": "Repeat validation after external setup; continue only with user-approved ClawUp, wallet, merchant, x402, and ERC-8004 proof actions.",
       "updated_at": "2026-05-26"
     },
     {
@@ -1775,10 +1776,38 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "Backend, frontend, security, docs, browser-visible paths, and recorded transaction walkthrough validate.",
       "verification": "npm run validate, npm run build:web, audit, scans, browser QA, and recorded transaction walkthrough.",
-      "evidence": "Validated on 2026-05-26 after merging origin/om: npm run validate passed with 31 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified SetupPilot broker execution, buyer purchase flow, seller marketplace/provider flow, and mobile viewport 390px with no horizontal document overflow. Transaction QA on 2026-05-26 verified SetupPilot quote, unpaid HTTP 402 block, mock settlement, delivered broker transaction, reputation update, buyer delivery, transaction history, and proof blockers; recording saved at docs/demo-recordings/clawcompass-transactions-qa-2026-05-26.webm.",
+      "evidence": "Validated on 2026-05-26 after merging origin/om: npm run validate passed with 31 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified SetupPilot broker execution, buyer purchase flow, seller marketplace/provider flow, and mobile viewport 390px with no horizontal document overflow. Transaction QA on 2026-05-26 verified SetupPilot quote, unpaid HTTP 402 block with visible UI message, mock settlement, delivered broker transaction, reputation update, buyer delivery, transaction history, and proof blockers; recording saved at docs/demo-recordings/clawcompass-transactions-qa-2026-05-26.webm.",
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Repeat after external setup.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-262",
+      "title": "Audit remaining blockers",
+      "kind": "task",
+      "category": "qa",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-260",
+      "children": [],
+      "links": [],
+      "tags": [
+        "blocker-audit",
+        "x402",
+        "proof"
+      ],
+      "component": "demo-readiness",
+      "owner_surface": "docs/hackathon/clawcompass-readiness-review.md, src/services/paymentAdapter.ts, src/app.ts",
+      "context": "Check whether any remaining blocker is local-actionable before asking for external hackathon proof actions.",
+      "acceptance": "Local mock-payment safety is distinguished from external proof blockers, and remaining blockers have exact next actions.",
+      "verification": "Source review of payment adapter mode selection, demo settle route behavior, readiness review, work graph, and external proof intake.",
+      "evidence": "Blocker audit on 2026-05-26 found no remaining local-actionable blockers. Mock settlement is development-only behind ENABLE_MOCK_X402=true, and real x402 mode rejects mock settlement.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Continue only with explicit user-approved external proof actions: ClawUp/Telegram verification, wallet/funds, real x402 settlement, ERC-8004 registration, and 8004scan proof.",
       "updated_at": "2026-05-26"
     },
     {

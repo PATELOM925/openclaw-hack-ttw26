@@ -28,6 +28,7 @@ Date: 2026-05-26
   - onboarding prompt classified as `onboarding`.
   - top recommendation was `setuppilot`.
   - mock-local paid execution returned `telegram_pairing` diagnosis and public evidence checklist.
+  - blocker audit confirmed mock settlement is development-only behind `ENABLE_MOCK_X402=true`; the real x402 adapter rejects mock settlement.
   - risky mainnet/private-key prompt required `APPROVE_ONCHAIN`.
 
 ## Judging Readiness
@@ -50,7 +51,7 @@ Date: 2026-05-26
 5. Register ClawCompass on GOAT Mainnet ERC-8004 and verify it appears on `https://8004scan.io/agents?chain=2345`.
 6. Register/approve x402 merchant setup and load credentials only through runtime environment or ClawUp secrets.
 7. Run one real x402 payment test with amount, token, payer, receiver, merchant ID, payment status, and transaction hash captured.
-8. Replace or wrap mock-local x402 in the demo path so final judging cannot hit a fake payment success.
+8. Keep mock-local x402 disabled for final judging unless explicitly doing a labeled local dry run; final proof still requires real GOAT x402 settlement evidence.
 9. Final two-minute demo script completed with SetupPilot-first Telegram/web prompts and explicit proof blocker handling.
 10. Add a one-paragraph continuation plan focused on paid onboarding/capability providers, routing fee, and portable reputation.
 

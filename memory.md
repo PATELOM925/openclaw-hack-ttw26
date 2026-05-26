@@ -75,9 +75,14 @@ On 2026-05-26, external proof intake from `ClawUp ENV.docx` was sanitized:
 - Source secrets were not written to repo docs or `.env`; `.env` is currently absent and ignored.
 - `/api/proof` now requires verification evidence instead of treating public IDs alone as final proof.
 
+On 2026-05-26, blocker audit confirmed no remaining local-actionable blockers:
+- Mock x402 settlement remains development-only behind `ENABLE_MOCK_X402=true`; real adapter mode rejects mock settlement.
+- Remaining blockers are external proof actions: ClawUp/Telegram verification, safe wallet/funds, real x402 settlement, ERC-8004 registration, and 8004scan listing.
+
 On 2026-05-26, transaction QA passed on a local mock-payment stack:
 - API ran on `http://127.0.0.1:3308` with `ENABLE_MOCK_X402=true`; web ran on `http://127.0.0.1:5174`.
 - Browser QA proved SetupPilot quote, unpaid HTTP `402` execution block, local mock settlement, delivered broker transaction, reputation update, buyer transaction delivery, transaction history, and blocked external proof gates.
+- A frontend unpaid-execute rejection was fixed so the web UI now shows the payment-required message without an unhandled page error.
 - Demo recording: `docs/demo-recordings/clawcompass-transactions-qa-2026-05-26.webm`.
 - QA report: `docs/demo-recordings/TRANSACTION-QA-2026-05-26.md`.
 
