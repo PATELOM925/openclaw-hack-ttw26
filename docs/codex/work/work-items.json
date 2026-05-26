@@ -423,7 +423,8 @@
         "TASK-730",
         "TASK-740",
         "TASK-750",
-        "TASK-760"
+        "TASK-760",
+        "TASK-770"
       ],
       "links": [],
       "tags": [
@@ -607,6 +608,34 @@
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Install/express these skills in ClawUp and demonstrate through Telegram.",
+      "updated_at": "2026-05-27"
+    },
+    {
+      "id": "TASK-770",
+      "title": "Integrate om SetupPilot into development app",
+      "kind": "task",
+      "category": "api-development",
+      "status": "in_progress",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-700",
+      "children": [],
+      "links": [],
+      "tags": [
+        "integration",
+        "development",
+        "setuppilot"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "root ClawCompass app, docs/clawup-skills, work graph",
+      "context": "The om branch contains SetupPilot/onboarding work while origin/development contains the stronger dashboard, chat-command, and payment-proof surface.",
+      "acceptance": "om is merged onto origin/development as the integration base, with SetupPilot available through root API, command, payment, dashboard, tests, and docs without retaining duplicate nested app code.",
+      "verification": "Run API tests, TypeScript build, web build, JSON validation, and secret scan.",
+      "evidence": "",
+      "completion_percent": 10,
+      "blocker_reason": "",
+      "next_action": "Merge origin/development, resolve conflicts by keeping root app architecture, and port SetupPilot behavior.",
       "updated_at": "2026-05-27"
     }
   ]

@@ -27,6 +27,7 @@ flowchart TD
   E700 --> T720["TASK-720 API framework"]
   E700 --> T730["TASK-730 Safety and payment loop"]
   E700 --> T740["TASK-740 ClawUp/GOAT setup docs"]
+  E700 --> T770["TASK-770 Development integration"]
 ```
 
 ## Node Register
@@ -52,6 +53,7 @@ flowchart TD
 | TASK-740 | task | done | `docs/hackathon/clawcompass-setup.md`, `.env.example` | Docs explain later ClawUp, Telegram, ERC-8004, and x402 setup without storing secrets. | Manual review, npm audit, and no committed real secret values. | Fill public evidence after ClawUp/GOAT setup. |
 | TASK-750 | task | done | `docs/hackathon/clawcompass-readiness-review.md` | Build is evaluated against implementation brief, judging scorecard, onboarding guide, and ideas guidance. | Local tests, live API walkthrough, PDF review, and readiness gap list. | Execute external ClawUp, ERC-8004, and real x402 gates. |
 | TASK-760 | task | done | `clawcompass/apps/api/`, `docs/clawup-skills/`, `docs/ideas/` | SetupPilot is the primary demo capability and custom ClawUp usage skills are specified. | Tests cover onboarding classification, ranking, redaction, gated execution, and on-chain approval halt. | Add skills to ClawUp and verify Telegram demo. |
+| TASK-770 | task | in_progress | root ClawCompass app, `docs/clawup-skills/`, work graph | `om` uses `origin/development` as the integration base while preserving SetupPilot/onboarding behavior. | Merge/cherry-pick review, API tests, TypeScript build, web build, JSON validation, secret scan. | Integrate SetupPilot into the root dashboard/chat/payment app and push `origin/om`. |
 
 ## Status Notes
 - Required preparation nodes are `done`.
