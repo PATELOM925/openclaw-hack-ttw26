@@ -1593,7 +1593,8 @@
       "severity": "",
       "parent_id": "GOAL-200",
       "children": [
-        "TASK-241"
+        "TASK-241",
+        "TASK-242"
       ],
       "links": [
         {
@@ -1646,6 +1647,39 @@
       "completion_percent": 100,
       "blocker_reason": "",
       "next_action": "Use in ClawUp/Telegram.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-242",
+      "title": "Optional Telegram runtime bridge",
+      "kind": "task",
+      "category": "task",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-240",
+      "children": [],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "docs/hackathon/clawcompass/BUILD-PLAN.md"
+        }
+      ],
+      "tags": [
+        "clawcompass",
+        "goal-200",
+        "telegram"
+      ],
+      "component": "clawcompass",
+      "owner_surface": "src/services/telegramBridge.ts, src/index.ts",
+      "context": "The official submission path remains ClawUp, but the local app can also bridge Telegram messages into the same command handler when explicitly enabled.",
+      "acceptance": "Telegram text updates route through command handling, replies are sent back to the chat, and the bridge stays disabled unless a runtime flag and bot token are present.",
+      "verification": "Telegram bridge unit tests plus full validation.",
+      "evidence": "Added on 2026-05-26 with test-first coverage; final validation evidence is recorded in WORK-GRAPH.md.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Use only with a rotated token in untracked runtime environment.",
       "updated_at": "2026-05-26"
     },
     {

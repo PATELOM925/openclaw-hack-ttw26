@@ -45,6 +45,7 @@ Seller/provider
 - `paymentAdapter`: wraps `goatx402-sdk-server` for real x402 order creation and exposes local mock settlement only when enabled.
 - `buyerFlow`: shapes buyer-agent profiles, budget/risk-filtered buyable recommendations, and purchase instructions.
 - `commandHandler`: formats ClawUp/Telegram commands into chat-friendly responses.
+- `telegramBridge`: optional runtime polling bridge from Telegram messages to the command handler; disabled unless explicitly enabled with a runtime token.
 - `executor`: executes `SetupPilot`, `PitchHawk`, and free low-risk tools with sanitized input.
 - `reputationLogger`: records local outcome events.
 - `web/`: Vite React dashboard for broker workflow, capabilities, transactions, reputation, security, and proof status.
@@ -73,6 +74,8 @@ Seller/provider
 ## External Boundaries
 
 The local API can simulate payment settlement only through the explicit `/api/demo-settle/:transactionId` development route when `ENABLE_MOCK_X402=true`. Real ClawUp, wallet, merchant, x402, and ERC-8004 actions stay blocked until the user explicitly approves them.
+
+The optional Telegram bridge is a local convenience runner, not a replacement for the required ClawUp-built agent. It starts only when `TELEGRAM_BOT_ENABLED=true` and `TELEGRAM_BOT_TOKEN` are present in the runtime environment.
 
 ## Local Payment Truth
 

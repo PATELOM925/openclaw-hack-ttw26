@@ -65,6 +65,7 @@ flowchart TD
   E230 --> T233["TASK-233 Proof and admin UI"]
   E230 --> T234["TASK-234 Buyer and seller UI"]
   G200 --> E240 --> T241["TASK-241 Command parity"]
+  E240 --> T242["TASK-242 Telegram bridge"]
   G200 --> E250 --> T251["TASK-251 External proof capture"]
   G200 --> E260 --> T261["TASK-261 Validation and browser QA"]
   E260 --> T262["TASK-262 Blocker audit"]
@@ -131,8 +132,9 @@ flowchart TD
 | TASK-232 | task | done | homepage, broker/capability/transaction/reputation UI | Homepage presents the judge-critical problem, demo flow, toolchain, scorecard coverage, mandatory gates, proof status, and links into the broker workflow. User can still analyze, quote, settle mock, execute, retry, cancel, and inspect reputation from `/broker`. | `npm run build:web`; Vite served `/` at `http://127.0.0.1:5175/` with HTTP 200. | Use `/` as the stage overview and `/broker` for live workflow execution. |
 | TASK-233 | task | done | security/proof UI | User can see guardrails, blocked-risk demo, and external proof checklist. | Web build and browser QA. | Capture screenshot evidence if needed. |
 | TASK-234 | task | done | `/buy`, `/sell`, API client | Web app shows both buyer-agent purchase flow and seller marketplace/provider intake flow. | Web build and browser QA on buyer and seller routes. | Re-run after real x402 credentials are added. |
-| EPIC-240 | epic | done | command handler, ClawUp text | Command outputs match web/backend behavior. | API command tests. | Wire into ClawUp after external setup. |
+| EPIC-240 | epic | done | command handler, ClawUp text, Telegram bridge | Command outputs match web/backend behavior and optional Telegram polling can route messages when explicitly enabled. | API command tests and Telegram bridge tests. | Wire into ClawUp after external setup; use Telegram bridge only with rotated runtime token. |
 | TASK-241 | task | done | `/api/command` | `/help`, `/ask`, `/use`, `/security`, `/transactions`, `/reputation`, `/cancel`, and `/retry` remain usable. | Command adapter tests. | Use in ClawUp/Telegram. |
+| TASK-242 | task | done | `src/services/telegramBridge.ts`, `src/index.ts` | Telegram text updates route through the command handler and replies return to the chat; bridge stays disabled unless `TELEGRAM_BOT_ENABLED=true` and a runtime token exist. | `npx vitest run tests/telegramBridge.test.ts` and full validation. | Use only with a rotated token in untracked runtime environment. |
 | EPIC-250 | epic | blocked | ClawUp, Telegram, wallet, x402, ERC-8004 | Public proof is captured after explicit user-approved external setup. | Dashboard, payment, tx, and 8004scan evidence. | Requires user action, credentials, wallet, and funds. |
 | TASK-251 | task | blocked | public proof docs/API | Capture ClawUp agent ID, Telegram username, wallet address, x402 settlement, ERC-8004 tx hash, and 8004scan URL only. | `/api/proof` plus public evidence review. | Requires external setup approval plus exact missing proof fields from `/api/proof`. |
 | EPIC-260 | epic | done | tests, browser, scans, git | Local implementation is verified. | Full validation suite and git status. | Commit/push closeout. |
@@ -192,3 +194,13 @@ Validated transaction QA on 2026-05-26:
 Blocker audit evidence on 2026-05-26:
 - Source review confirmed mock settlement is selected only with `ENABLE_MOCK_X402=true`; real x402 mode rejects mock settlement.
 - Product-path validation evidence is captured under TASK-261.
+
+Validated Telegram bridge and current local app on 2026-05-26:
+- `npx vitest run tests/telegramBridge.test.ts` passed with 2 tests after red-green implementation.
+- `npm run validate` passed with 37 tests across 3 files.
+- `npm run build:web` passed.
+- `npm audit --audit-level=moderate` found 0 vulnerabilities.
+- JSON parse passed for work graph, registration metadata, and capability seed data.
+- Secret-pattern scan found only the README placeholder command, no saved credential values.
+- API `http://127.0.0.1:3310` and web `http://127.0.0.1:5176` browser QA verified SetupPilot analysis, x402 payment-required quote, unpaid execution block, local mock settlement, delivered execution, proof page blockers, and mobile proof layout at `390px` with no horizontal overflow.
+- Read-only GOAT RPC check confirmed chain ID `2345`, public wallet balance `0.00001` native gas token, canonical registry code at `0x8004A169FB4a3325136EB29fA0ceB6D2e539a432`, and unverified code at `0xE1AD845D93853fff44990aE0DcecD8575293681e`.

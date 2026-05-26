@@ -31,6 +31,7 @@ export function createApp(options: AppOptions = {}) {
     ENABLE_MOCK_X402: options.enableMockX402 ? "true" : process.env.ENABLE_MOCK_X402
   });
   const commandHandler = createCommandHandler({ transactions, paymentAdapter, reputation });
+  app.locals.commandHandler = commandHandler;
 
   app.use(cors());
   app.use(express.json({ limit: "1mb" }));
