@@ -1,5 +1,5 @@
 import type { CapabilityTransaction } from "../types/transaction.js";
-import { analyzeTaskWithLLM } from "./taskAnalyzer.js";
+import { analyzeTask, analyzeTaskWithLLM } from "./taskAnalyzer.js";
 import { sanitizeContext } from "./contextSanitizer.js";
 import { listCapabilities, findCapability } from "./marketplace.js";
 import { rankCapabilities } from "./capabilityRanker.js";
@@ -13,11 +13,14 @@ import { createReputationLogger } from "./reputationLogger.js";
 type TransactionStore = ReturnType<typeof createTransactionStore>;
 type ReputationLogger = ReturnType<typeof createReputationLogger>;
 
+type ApprovalKind = "approve" | "write" | "wallet" | "onchain" | "external";
+
 export type CommandSession = {
   transactionId?: string;
   capabilityId?: string;
   task?: string;
   context?: string;
+  approvalKinds?: ApprovalKind[];
 };
 
 export type CommandHandler = {
@@ -41,9 +44,12 @@ export function createCommandHandler(input: {
     async handle(commandInput) {
       const text = commandInput.text.trim();
       const session = getSession(sessions, commandInput.sessionId);
-      if (text === "APPROVE") return approve(session, input.transactions, input.paymentAdapter);
+      if (text === "APPROVE") return approve(session, input.transactions, input.paymentAdapter, "approve");
+      if (text === "APPROVE_WRITE") return approve(session, input.transactions, input.paymentAdapter, "write");
+      if (text === "APPROVE_WALLET") return approve(session, input.transactions, input.paymentAdapter, "wallet");
+      if (text === "APPROVE_ONCHAIN") return approve(session, input.transactions, input.paymentAdapter, "onchain");
+      if (text === "APPROVE_EXTERNAL") return approve(session, input.transactions, input.paymentAdapter, "external");
       if (text === "CANCEL") return cancel(session, input.transactions);
-      if (text === "APPROVE_WRITE") return { text: "Write approval noted. No write action will run in the MVP demo." };
       if (text.startsWith("/ask")) return ask(text, commandInput, session, input.reputation);
       if (text.startsWith("/use")) return useCapability(text, commandInput, session, input.transactions, input.paymentAdapter);
       if (text.startsWith("/tool")) return showTool(text);
@@ -77,8 +83,12 @@ async function ask(
   const analysis = await analyzeTaskWithLLM({ task });
   const secureContext = sanitizeContext(task, input.context ?? "");
   const ranked = rankCapabilities(analysis, secureContext, listCapabilities()).slice(0, 3);
+  const taskLower = task.toLowerCase();
+
   session.task = task;
   session.context = input.context ?? "";
+  session.approvalKinds = extractApprovalKindsFromAnalysis(analysis, ranked, taskLower);
+
   if (analysis.taskType === "repo_write") {
     reputation.record({
       capabilityId: "githubhelper",
@@ -89,8 +99,31 @@ async function ask(
       paymentVerified: false,
       executionVerified: false
     });
-    return { text: highRiskWriteText(), data: { analysis, secureContext, recommendations: ranked } };
+    return {
+      text: highRiskActionText(task, ["write"], analysis.taskType),
+      data: { analysis, secureContext, recommendations: ranked }
+    };
   }
+
+  const primary = ranked[0];
+  if (primary) {
+    const primaryGuardrail = evaluateGuardrails({
+      capability: primary.capability,
+      policy: getSecurityPolicy(),
+      requestedAmountUsd: primary.capability.priceUsd,
+      secureContext
+    });
+    if (primaryGuardrail.approvalRequired) {
+      const approvalKinds = extractApprovalKindsFromGuardrails(primaryGuardrail.reasons, taskLower);
+      if (approvalKinds.length > 0) {
+        return {
+          text: highRiskActionText(task, approvalKinds, analysis.taskType),
+          data: { analysis, secureContext, recommendations: ranked }
+        };
+      }
+    }
+  }
+
   return {
     text: formatRecommendations(analysis.taskType, ranked, secureContext.detectedSecrets),
     data: {
@@ -112,13 +145,17 @@ function useCapability(
   const name = rawText.replace(/^\/use\s*/i, "").trim();
   const capability = findCapability(name);
   if (!capability) return Promise.resolve({ text: `Capability not found: ${name}` });
-  const secureContext = sanitizeContext(session.task ?? "", input.context ?? session.context ?? "");
+
+  const taskContext = session.task ?? "";
+  const secureContext = sanitizeContext(taskContext, input.context ?? session.context ?? "");
   const guardrail = evaluateGuardrails({
     capability,
     policy: getSecurityPolicy(),
     requestedAmountUsd: capability.priceUsd,
     secureContext
   });
+  const approvalKinds = extractApprovalKindsFromGuardrails(guardrail.reasons, taskContext);
+
   const transaction = transactions.save(
     createExecutionQuote({
       capability,
@@ -129,6 +166,8 @@ function useCapability(
   );
   session.transactionId = transaction.id;
   session.capabilityId = capability.id;
+  session.approvalKinds = approvalKinds;
+
   if (capability.priceUsd > 0 && !guardrail.approvalRequired) {
     return paymentAdapter.createPaymentRequirement(transaction, capability).then((requirement) => {
       transactions.save(requirement.transaction);
@@ -138,8 +177,9 @@ function useCapability(
       };
     });
   }
+
   return Promise.resolve({
-    text: formatUseQuote(capability.name, transaction, secureContext.blockedContext),
+    text: formatUseQuote(capability.name, transaction, secureContext.blockedContext, approvalKinds),
     data: { transaction, guardrail, secureContext }
   });
 }
@@ -147,13 +187,34 @@ function useCapability(
 async function approve(
   session: CommandSession,
   transactions: TransactionStore,
-  paymentAdapter: PaymentAdapter
+  paymentAdapter: PaymentAdapter,
+  requestedKind: ApprovalKind
 ): Promise<{ text: string; data?: unknown }> {
   if (!session.transactionId || !session.capabilityId) return { text: "No pending paid capability to approve." };
   const transaction = transactions.get(session.transactionId);
   const capability = findCapability(session.capabilityId);
   if (!transaction || !capability) return { text: "Pending transaction was not found." };
   if (transaction.status === "payment_required") return { text: "No pending approval-gated capability. Payment is already required.", data: transaction };
+
+  const requiredKinds: ApprovalKind[] =
+    session.approvalKinds && session.approvalKinds.length > 0 ? session.approvalKinds : ["approve"];
+  const explicitKinds = requiredKinds.filter((kind) => kind !== "approve");
+
+  if (requestedKind !== "approve") {
+    if (explicitKinds.length === 0) {
+      return {
+        text: "This workflow accepts APPROVE only.",
+        data: transaction
+      };
+    }
+    if (!explicitKinds.includes(requestedKind)) {
+      return {
+        text: `This workflow requires ${explicitKinds.map(formatApprovalTokenDisplay).join(", ")} approval.`,
+        data: transaction
+      };
+    }
+  }
+
   const requirement = await paymentAdapter.createPaymentRequirement(transaction, capability);
   transactions.save(requirement.transaction);
   return {
@@ -242,7 +303,10 @@ function retry(rawText: string, transactions: TransactionStore): { text: string;
   const id = rawText.replace(/^\/retry\s*/i, "").trim();
   const transaction = transactions.get(id);
   if (!transaction) return { text: `Transaction not found: ${id}` };
-  return { text: `Retry ready for ${id}. Reply APPROVE to request payment again.`, data: transactions.save({ ...transaction, status: "awaiting_approval" }) };
+  return {
+    text: `Retry ready for ${id}. Reply APPROVE to request payment again.`,
+    data: transactions.save({ ...transaction, status: "awaiting_approval" })
+  };
 }
 
 function cancelByCommand(rawText: string, transactions: TransactionStore): { text: string; data?: unknown } {
@@ -252,7 +316,22 @@ function cancelByCommand(rawText: string, transactions: TransactionStore): { tex
   return { text: `Cancelled ${id}.`, data: transactions.save({ ...transaction, status: "cancelled" }) };
 }
 
-function formatUseQuote(name: string, transaction: CapabilityTransaction, blockedContext: string[]): string {
+function formatUseQuote(
+  name: string,
+  transaction: CapabilityTransaction,
+  blockedContext: string[],
+  approvalKinds: ApprovalKind[] = ["approve"]
+): string {
+  return formatUseQuoteWithApprovals(name, transaction, blockedContext, approvalKinds);
+}
+
+function formatUseQuoteWithApprovals(
+  name: string,
+  transaction: CapabilityTransaction,
+  blockedContext: string[],
+  approvalKinds: ApprovalKind[]
+): string {
+  const requestedApprovals = approvalKinds.length ? approvalKinds : (["approve"] as ApprovalKind[]);
   return [
     `${name} costs ${transaction.amount} ${transaction.token} for one execution.`,
     "",
@@ -265,8 +344,8 @@ function formatUseQuote(name: string, transaction: CapabilityTransaction, blocke
     "Context blocked:",
     ...(blockedContext.length ? blockedContext.map((item) => `- ${item}`) : ["- none detected"]),
     "",
-    "Proceed with x402 payment?",
-    "Reply APPROVE or CANCEL."
+    `Requires approval: ${requestedApprovals.map(formatApprovalTokenDisplay).join(", ")}`,
+    "Reply with one approval token or CANCEL."
   ].join("\n");
 }
 
@@ -284,15 +363,84 @@ function formatRecommendations(taskType: string, ranked: ReturnType<typeof rankC
   return lines.join("\n");
 }
 
-function highRiskWriteText(): string {
-  return `High-risk action detected.
+function formatApprovalToken(kind: ApprovalKind): string {
+  if (kind === "write") return "APPROVE_WRITE";
+  if (kind === "wallet") return "APPROVE_WALLET";
+  if (kind === "onchain") return "APPROVE_ONCHAIN";
+  if (kind === "external") return "APPROVE_EXTERNAL";
+  return "APPROVE";
+}
 
-Reason:
-- Requires code modification
-- Requires external write access
-- Could affect a production repository
+function formatApprovalTokenDisplay(kind: ApprovalKind): string {
+  return formatApprovalToken(kind);
+}
 
-I can recommend GitHubHelper, but I will not execute write or push actions without explicit approval.
+function highRiskActionText(task: string, approvalKinds: ApprovalKind[], taskType: string): string {
+  return [
+    "High-risk action detected.",
+    "",
+    `Task context: ${taskType}`,
+    `Reason: ${task.includes("private key") || task.toLowerCase().includes("mainnet") ? "sensitive credentials or onchain action" : "requires privileged action"}`,
+    `Requested capabilities include risk: ${approvalKinds.map(formatApprovalTokenDisplay).join(", ")}`,
+    "",
+    `Reply with ${approvalKinds.map(formatApprovalTokenDisplay).join(" or ")} or CANCEL.`
+  ].join("\n");
+}
 
-Reply APPROVE_WRITE or CANCEL.`;
+function extractApprovalKindsFromAnalysis(
+  analysis: ReturnType<typeof analyzeTask>,
+  recommendations: ReturnType<typeof rankCapabilities>,
+  taskHint = ""
+): ApprovalKind[] {
+  if (analysis.taskType === "repo_write") return ["write"];
+
+  const highRiskHints: ApprovalKind[] = [];
+  const task = taskHint.toLowerCase();
+  if (task.includes("private key") || task.includes("onchain") || task.includes("mainnet")) {
+    highRiskHints.push("onchain");
+  }
+  if (task.includes("wallet") || task.includes("deploy") || task.includes("transfer") || task.includes("stables") || task.includes("deposit")) {
+    highRiskHints.push("wallet");
+  }
+  if (task.includes("send") && task.includes("telegram")) {
+    highRiskHints.push("external");
+  }
+  if (highRiskHints.length > 0) return dedupeKinds(highRiskHints);
+
+  const best = recommendations[0];
+  if (!best) return [];
+  const reasons = evaluateGuardrails({
+    capability: best.capability,
+    policy: getSecurityPolicy(),
+    requestedAmountUsd: best.capability.priceUsd,
+    secureContext: {
+      task: analysis.originalTask,
+      allowedContext: analysis.originalTask,
+      blockedContext: [],
+      detectedSecrets: [],
+      sensitivity: "public",
+      approvalRequired: false
+    }
+  }).reasons;
+
+  return extractApprovalKindsFromGuardrails(reasons, task);
+}
+
+function extractApprovalKindsFromGuardrails(reasons: string[], taskHint = ""): ApprovalKind[] {
+  const lowerTask = taskHint.toLowerCase();
+  const kinds = new Set<ApprovalKind>();
+
+  if (reasons.includes("write_action")) kinds.add("write");
+  if (reasons.includes("wallet_action")) kinds.add("wallet");
+  if (reasons.includes("external_action")) kinds.add("external");
+
+  if (lowerTask.includes("private key") || lowerTask.includes("mainnet") || lowerTask.includes("onchain")) {
+    kinds.add("onchain");
+  }
+
+  return dedupeKinds(Array.from(kinds));
+}
+
+function dedupeKinds(values: ApprovalKind[]): ApprovalKind[] {
+  return Array.from(new Set(values));
 }

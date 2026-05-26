@@ -322,7 +322,7 @@ describe("ClawCompass API", () => {
       .expect(200);
 
     expect(ask.body.text).toContain("High-risk action detected.");
-    expect(ask.body.text).toContain("Reply APPROVE_WRITE or CANCEL.");
+    expect(ask.body.text).toContain("Reply with APPROVE_WRITE or CANCEL.");
 
     const blockedReputation = await request(app).get("/api/reputation/githubhelper").expect(200);
     expect(blockedReputation.body.profile.blockedRiskEvents).toBe(1);
@@ -359,6 +359,45 @@ describe("ClawCompass API", () => {
       .expect(200);
 
     expect(cancel.body.text).toContain("Cancelled");
+  });
+
+  it("enforces explicit onchain approval before payment for mainnet/private-key prompts", async () => {
+    const app = createApp();
+
+    await request(app)
+      .post("/api/command")
+      .send({
+        sessionId: "onchain-risk-session",
+        text: "/ask register on mainnet using this wallet and private key style guidance for onboarding"
+      })
+      .expect(200);
+
+    const use = await request(app)
+      .post("/api/command")
+      .send({
+        sessionId: "onchain-risk-session",
+        text: "/use GitHubHelper"
+      })
+      .expect(200);
+
+    expect(use.body.text).toContain("Requires approval:");
+    expect(use.body.text).toContain("APPROVE_ONCHAIN");
+    expect(use.body.text).toContain("APPROVE_WRITE");
+
+    const wrong = await request(app)
+      .post("/api/command")
+      .send({ sessionId: "onchain-risk-session", text: "APPROVE_WALLET" })
+      .expect(200);
+
+    expect(wrong.body.text).toContain("This workflow requires");
+
+    const approved = await request(app)
+      .post("/api/command")
+      .send({ sessionId: "onchain-risk-session", text: "APPROVE_ONCHAIN" })
+      .expect(200);
+
+    expect(approved.body.text).toContain("Payment required.");
+    expect(approved.body.text).toContain("Rail: x402");
   });
 
   it("exposes security policy and records cancel flow", async () => {
