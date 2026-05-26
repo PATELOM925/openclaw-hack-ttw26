@@ -13,6 +13,7 @@ import {
 import { createPaymentAdapter } from "../src/services/paymentAdapter.js";
 import { executeCapability, executeSetupPilot } from "../src/services/executor.js";
 import { createReputationLogger } from "../src/services/reputationLogger.js";
+import { getExternalProofStatus } from "../src/services/proofStatus.js";
 
 describe("task analysis", () => {
   it("classifies homepage pitch work as copywriting with low risk and parsed budget", () => {
@@ -293,5 +294,23 @@ describe("payment, execution, and reputation", () => {
     expect(executeSetupPilot({ task: "register on mainnet", allowedContext: "" }).exactCommandOrPrompt).toContain(
       "After approval only"
     );
+  });
+});
+
+describe("external proof status", () => {
+  it("recognizes ClawUp env skeleton without treating partial x402 or ERC-8004 proof as final", () => {
+    const proof = getExternalProofStatus({
+      CLAWUP_AGENT_NAME: "ClawCompass_bot",
+      TELEGRAM_BOT_USERNAME: "goat_4_ai_bot",
+      GOATX402_MERCHANT_ID: "ClawCompass",
+      AGENT_WALLET_ADDRESS: "0x0000000000000000000000000000000000000001",
+      ERC8004_REGISTRATION_TX: "0xabc"
+    });
+
+    expect(proof.requiredProof.clawUp.status).toBe("ready");
+    expect(proof.requiredProof.telegram.status).toBe("ready");
+    expect(proof.requiredProof.x402.status).toBe("partial");
+    expect(proof.requiredProof.erc8004.status).toBe("partial");
+    expect(proof.status).toBe("blocked_external_actions_required");
   });
 });

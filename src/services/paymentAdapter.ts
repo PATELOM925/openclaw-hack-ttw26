@@ -15,6 +15,7 @@ export type PaymentEnvironment = Partial<{
   GOATX402_API_KEY: string;
   GOATX402_API_SECRET: string;
   GOATX402_MERCHANT_ID: string;
+  GOAT_RECEIVING_WALLET: string;
 }>;
 
 export type PaymentSettlementProof = {
@@ -154,7 +155,7 @@ function createGoatX402Adapter(env: PaymentEnvironment): PaymentAdapter {
 }
 
 function hasGoatX402Credentials(env: PaymentEnvironment): boolean {
-  return Boolean(env.GOATX402_API_URL && env.GOATX402_API_KEY && env.GOATX402_API_SECRET);
+  return Boolean(env.GOATX402_API_URL && env.GOATX402_API_KEY && env.GOATX402_API_SECRET && env.GOATX402_MERCHANT_ID);
 }
 
 function usdToSixDecimalAtomic(amount: string): string {

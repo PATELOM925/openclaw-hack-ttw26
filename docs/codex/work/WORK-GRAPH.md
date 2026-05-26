@@ -66,6 +66,7 @@ flowchart TD
   E230 --> T234["TASK-234 Buyer and seller UI"]
   G200 --> E240 --> T241["TASK-241 Command parity"]
   G200 --> E250 --> T251["TASK-251 External proof capture"]
+  E250 --> T780["TASK-780 ClawUp env wiring"]
   G200 --> E260 --> T261["TASK-261 Validation and browser QA"]
   E260 --> T770["TASK-770 Merge om and development"]
 ```
@@ -130,6 +131,7 @@ flowchart TD
 | TASK-241 | task | done | `/api/command` | `/help`, `/ask`, `/use`, `/security`, `/transactions`, `/reputation`, `/cancel`, and `/retry` remain usable. | Command adapter tests. | Use in ClawUp/Telegram. |
 | EPIC-250 | epic | blocked | ClawUp, Telegram, wallet, x402, ERC-8004 | Public proof is captured after explicit user-approved external setup. | Dashboard, payment, tx, and 8004scan evidence. | Requires user action, credentials, wallet, and funds. |
 | TASK-251 | task | blocked | public proof docs/API | Capture ClawUp agent ID, Telegram username, wallet address, x402 settlement, ERC-8004 tx hash, and 8004scan URL only. | `/api/proof` plus public evidence review. | Requires external setup approval. |
+| TASK-780 | task | done | `.env`, `.env.example`, setup docs, proof/status API | ClawUp ENV skeleton from the supplied DOCX is wired into local runtime without committing secrets. | DOCX parsed with redacted summary, untracked `.env` populated if values exist, docs/examples updated, validation passes. | Fill missing real x402 API URL and ERC-8004 agent ID after external proof is confirmed. |
 | EPIC-260 | epic | done | tests, browser, scans, git | Local implementation is verified. | Full validation suite and git status. | Commit/push closeout. |
 | TASK-261 | task | done | validation commands | Backend, frontend, security, docs, and browser-visible paths validate. | `npm run validate`, `npm run build:web`, audit, scans, browser QA. | Repeat after external setup. |
 | TASK-770 | task | done | root ClawCompass app, web app, command handler, work graph | `om` is merged onto `origin/development` as the integration base, with SetupPilot available through root API, command, payment, dashboard, tests, and docs. | API tests, TypeScript build, web build, JSON validation, audit, route smoke checks, and secret scan. | Push `origin/om` and use root app for demo work. |
@@ -171,3 +173,10 @@ Validated `om` plus `origin/development` integration on 2026-05-26:
 - `npm audit --audit-level=moderate` reported 0 vulnerabilities.
 - JSON parse passed for work graph, registration metadata, and capability seed data.
 - Route and browser smoke verified onboarding analysis, `setuppilot` top recommendation, x402 payment-required quote, mock-local settlement, SetupPilot execution, buyer flow, seller submission, delivered transaction, and 390px mobile layout with no horizontal overflow.
+
+Validated ClawUp ENV skeleton on 2026-05-27:
+- Parsed `/Users/om-college/Downloads/ClawUp ENV.docx` with redacted output only.
+- Wrote runtime values to ignored `.env` with file mode `600`; tracked files contain only placeholders and public-safe field names.
+- `npm run validate` passed with 30 tests.
+- `npm run build:web` passed.
+- Runtime proof smoke on port 3311 reported ClawUp `ready`, Telegram `ready`, x402 `partial`, ERC-8004 `partial`, and SetupPilot still ranked first for onboarding.

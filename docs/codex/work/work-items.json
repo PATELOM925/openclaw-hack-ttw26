@@ -1659,7 +1659,8 @@
       "severity": "",
       "parent_id": "GOAL-200",
       "children": [
-        "TASK-251"
+        "TASK-251",
+        "TASK-780"
       ],
       "links": [
         {
@@ -1874,6 +1875,35 @@
       "blocker_reason": "",
       "next_action": "Use root app for demo work; external proof still requires explicit approval.",
       "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-780",
+      "title": "Wire ClawUp ENV skeleton safely",
+      "kind": "task",
+      "category": "configuration",
+      "status": "done",
+      "resolution": "completed",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-250",
+      "children": [],
+      "links": [],
+      "tags": [
+        "clawup",
+        "env",
+        "secrets",
+        "setup"
+      ],
+      "component": "runtime-config",
+      "owner_surface": ".env, .env.example, setup docs, proof/status API",
+      "context": "The supplied ClawUp ENV DOCX may contain runtime values for the ClawUp/Telegram/GOAT/x402 skeleton. Secrets must not be committed or printed.",
+      "acceptance": "Local runtime config is populated only in untracked .env if values exist, tracked examples/docs contain only safe placeholders and public evidence fields, and the app validates.",
+      "verification": "Parse DOCX with redacted summary, validate env shape, run tests/build, and run secret scan excluding local .env.",
+      "evidence": "Validated on 2026-05-27: DOCX parsed with redacted output only; ignored .env populated with file mode 600; npm run validate passed with 30 tests; npm run build:web passed; port 3311 runtime proof smoke reported ClawUp ready, Telegram ready, x402 partial, ERC-8004 partial, and SetupPilot first for onboarding.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Fill missing real x402 API URL and ERC-8004 agent ID after external proof is confirmed.",
+      "updated_at": "2026-05-27"
     }
   ]
 }

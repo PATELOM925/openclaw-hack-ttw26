@@ -45,6 +45,8 @@ On 2026-05-26, `om` was integrated onto the root `origin/development` app:
 - Route and browser smoke proved onboarding analysis, `setuppilot` top recommendation, x402 payment-required quote, mock-local settlement, SetupPilot execution, buyer flow, seller submission, and delivered transaction.
 - The old nested `clawcompass/apps/api` scaffold was removed; use the root app for backend, web, command, and payment-proof work.
 
+On 2026-05-27, `/Users/om-college/Downloads/ClawUp ENV.docx` was parsed into ignored local `.env` only. The setup provides ClawUp agent name, Telegram bot username/token, wallet/runtime fields, merchant credentials, and public status fields without committing secret values. Runtime proof status now reports ClawUp and Telegram as ready, while x402 and ERC-8004 remain partial until the real x402 API URL/payment proof and ERC-8004 agent ID are confirmed.
+
 On 2026-05-26, ClawCompass local validation passed:
 - `npm run validate` passed with 19 tests.
 - `npm audit --audit-level=moderate` reported 0 vulnerabilities.

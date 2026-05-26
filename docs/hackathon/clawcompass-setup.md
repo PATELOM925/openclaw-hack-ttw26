@@ -24,6 +24,22 @@ curl http://localhost:3000/api/marketplace
 ## Runtime Configuration
 Use `.env.example` as the shape for local runtime variables. Keep the real `.env` untracked.
 
+The supplied `ClawUp ENV.docx` has been parsed into local `.env` only. That file is ignored by git and may contain wallet, x402, and Telegram secrets. Do not copy those values into tracked docs, commits, screenshots, or chat logs.
+
+The local ClawUp skeleton now supports these public/status fields:
+
+- `CLAWUP_AGENT_NAME`
+- `CLAWUP_WEB_UI_URL`
+- `OPENCLAW_GATEWAY_URL`
+- `OPENCLAW_GATEWAY_WS`
+- `TELEGRAM_BOT_USERNAME`
+- `AGENT_WALLET_ADDRESS`
+- `ERC8004_REGISTRATION_TX`
+- `GOATX402_MERCHANT_ID`
+- `GOAT_RECEIVING_WALLET`
+
+The merchant portal password from the DOCX is intentionally not stored in `.env` because the app does not need it at runtime.
+
 Tracked docs may contain only public evidence:
 
 - ClawUp public agent name or ID
