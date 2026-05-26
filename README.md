@@ -87,12 +87,16 @@ npm audit --audit-level=moderate
 ```
 
 Real ClawUp, wallet, x402 merchant, and ERC-8004 actions remain external gated steps. Put real credentials only in untracked `.env`, never in repo docs.
+Sanitized public details extracted from the ClawUp environment document are tracked in
+[`docs/hackathon/clawcompass/EXTERNAL-PROOF-INTAKE.md`](docs/hackathon/clawcompass/EXTERNAL-PROOF-INTAKE.md).
 
 ## Brief And Plan
 
 - Source-of-truth brief: `/Users/shreyapatel/Projects/zzz project docs/GOAT Hack/CODEX_IMPLEMENTATION_BRIEF_CLAWCOMPASS.md`
 - Saved implementation plan: [`docs/hackathon/clawcompass/CODEX_IMPLEMENTATION_PLAN_CLAWCOMPASS.md`](docs/hackathon/clawcompass/CODEX_IMPLEMENTATION_PLAN_CLAWCOMPASS.md)
 - Source snapshot: [`docs/hackathon/clawcompass/SOURCE-OF-TRUTH.md`](docs/hackathon/clawcompass/SOURCE-OF-TRUTH.md)
+- External proof intake: [`docs/hackathon/clawcompass/EXTERNAL-PROOF-INTAKE.md`](docs/hackathon/clawcompass/EXTERNAL-PROOF-INTAKE.md)
+- Judge demo deck: [`docs/presentations/clawcompass_judge_full_demo_stage.pptx`](docs/presentations/clawcompass_judge_full_demo_stage.pptx)
 
 ## Action Items
 - [ ] Review OpenClaw's required frameworks and documentation
@@ -116,6 +120,6 @@ Real ClawUp, wallet, x402 merchant, and ERC-8004 actions remain external gated s
 - [ ] Demo
 
 ## Next Steps
-1. Create the ClawUp agent and Telegram pairing after explicit user action
-2. Configure wallet, x402 merchant, and ERC-8004 registration after explicit user action
-3. Rehearse and submit the 2-minute demo with public proof visible
+1. Verify the ClawUp agent and Telegram pairing after explicit user action
+2. Rotate or securely load exposed wallet/x402/Telegram credentials outside tracked files
+3. Confirm wallet funds, run real x402, register ERC-8004, then rehearse and submit with public proof visible

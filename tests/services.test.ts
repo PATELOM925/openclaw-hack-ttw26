@@ -13,6 +13,7 @@ import {
 import { createPaymentAdapter } from "../src/services/paymentAdapter.js";
 import { executeCapability, executeSetupPilot } from "../src/services/executor.js";
 import { createReputationLogger } from "../src/services/reputationLogger.js";
+import { getExternalProofStatus } from "../src/services/proofStatus.js";
 
 describe("task analysis", () => {
   it("classifies homepage pitch work as copywriting with low risk and parsed budget", () => {
@@ -293,5 +294,40 @@ describe("payment, execution, and reputation", () => {
     expect(executeSetupPilot({ task: "register on mainnet", allowedContext: "" }).exactCommandOrPrompt).toContain(
       "After approval only"
     );
+  });
+});
+
+describe("external proof status", () => {
+  it("does not treat public identifiers as final submission proof", () => {
+    const proof = getExternalProofStatus({
+      CLAWUP_AGENT_ID: "clawcompass-broker",
+      TELEGRAM_BOT_USERNAME: "goat_4_ai_bot",
+      GOATX402_MERCHANT_ID: "ClawCompass",
+      ERC8004_AGENT_ID: "123",
+      ERC8004_SCAN_URL: "https://8004scan.io/agents?chain=2345"
+    });
+
+    expect(proof.status).toBe("blocked_external_actions_required");
+    expect(proof.requiredProof.clawUp.status).toBe("ready");
+    expect(proof.requiredProof.telegram.status).toBe("blocked");
+    expect(proof.requiredProof.x402.status).toBe("blocked");
+    expect(proof.requiredProof.erc8004.status).toBe("blocked");
+  });
+
+  it("marks external proof ready only when verification evidence is present", () => {
+    const proof = getExternalProofStatus({
+      CLAWUP_AGENT_ID: "clawcompass-broker",
+      TELEGRAM_BOT_USERNAME: "goat_4_ai_bot",
+      TELEGRAM_PAIRING_VERIFIED: "true",
+      GOATX402_MERCHANT_ID: "ClawCompass",
+      GOATX402_PAYMENT_PROOF_ID: "pay_123",
+      GOATX402_SETTLEMENT_TX: "0xabc123",
+      ERC8004_AGENT_ID: "123",
+      ERC8004_REGISTRATION_TX: "0xdef456",
+      ERC8004_SCAN_URL: "https://8004scan.io/agents/123?chain=2345"
+    });
+
+    expect(proof.status).toBe("ready_for_submission_evidence");
+    expect(Object.values(proof.requiredProof).every((item) => item.status === "ready")).toBe(true);
   });
 });

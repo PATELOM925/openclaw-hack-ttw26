@@ -19,6 +19,7 @@ This workspace is now building ClawCompass for the GOAT/OpenClaw Toronto hackath
 - Brief SHA-256: `224ca580d65e7bb3ddc5096ff5747487fd201c56151f8ca53a043149ceef01c0`
 - Saved local implementation plan: `docs/hackathon/clawcompass/CODEX_IMPLEMENTATION_PLAN_CLAWCOMPASS.md`
 - Saved source snapshot: `docs/hackathon/clawcompass/SOURCE-OF-TRUTH.md`
+- Sanitized external proof intake: `docs/hackathon/clawcompass/EXTERNAL-PROOF-INTAKE.md`
 - Event path: choose a real problem, build a ClawUp agent, register it on GOAT Mainnet through ERC-8004, and prepare a 2-minute live demo.
 - Main prize hard gates: ClawUp-built agent, ERC-8004 mainnet registration, listing on `8004scan`.
 - Judging emphasis: market and earning potential, usability and self-disclosure, x402 integrity when used, human-in-the-loop guardrails, and post-hackathon continuation.
@@ -34,7 +35,9 @@ This workspace is now building ClawCompass for the GOAT/OpenClaw Toronto hackath
 - GOAT Hackathon repo: https://github.com/GOATNetwork/GOAT-Hackathon-2026
 
 ## Current Blockers
-- No ClawUp agent, Telegram bot, wallet, gas tokens, stable tokens, merchant account, or ERC-8004 registration has been created from this workspace.
+- `ClawUp ENV.docx` contains public setup identifiers plus sensitive secrets; raw values must not be copied into repo files.
+- Public details found: candidate agent `ClawCompass_bot`, Telegram username `goat_4_ai_bot`, public wallet `0x1a2B3c4D5e6F7890a1B2c3D4e5F6a7B8c9D0e1F2`, merchant candidate `ClawCompass`, GOAT RPC, and canonical ERC-8004 registry.
+- Still blocked: ClawUp running agent ID, verified Telegram pairing, wallet gas/stable balances, rotated or securely loaded x402 credentials, real x402 settlement proof, ERC-8004 agent ID, registration transaction, and 8004scan listing.
 - Git is initialized and connected to the project GitHub remote.
 
 ## Last Validation
@@ -66,5 +69,10 @@ On 2026-05-26, buyer/seller validation passed:
 - `npm run build:web` passed.
 - Browser QA completed `/buy` create intent, mock settle, execute bought tool, and `/sell` provider submission with no console errors.
 
+On 2026-05-26, external proof intake from `ClawUp ENV.docx` was sanitized:
+- Public identifiers were recorded in `docs/hackathon/clawcompass/EXTERNAL-PROOF-INTAKE.md`.
+- Source secrets were not written to repo docs or `.env`; `.env` is currently absent and ignored.
+- `/api/proof` now requires verification evidence instead of treating public IDs alone as final proof.
+
 ## Next Action
-Next external actions, only after explicit user approval: create the ClawUp agent, pair Telegram, create or connect wallet, fund gas/stables, configure x402 Merchant Portal, register ERC-8004 identity, and record public proof.
+Next external actions, only after explicit user approval: rotate or securely load exposed secrets, verify ClawUp agent and Telegram pairing, confirm wallet/funds, run real x402 payment, register ERC-8004 identity, and record public proof.
