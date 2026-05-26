@@ -34,6 +34,9 @@ Tracked docs may contain only public evidence:
 - 8004scan URL
 - x402 merchant ID only if the team considers it public
 - Public receiving wallet address
+- Verified Telegram pairing flag
+- Real x402 payment proof ID or settlement transaction
+- ERC-8004 registration transaction
 
 Never commit private keys, wallet mnemonics, Telegram bot tokens, x402 API keys, x402 API secrets, passwords, or merchant credentials.
 

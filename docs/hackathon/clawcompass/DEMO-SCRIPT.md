@@ -1,68 +1,78 @@
-# ClawCompass Demo Script
+# ClawCompass 2-minute local demo
 
-## Opening
+## Goal
+Show that ClawCompass safely recommends, paid-gates, executes, and records outcomes for a real developer pain: ClawUp/GOAT onboarding.
 
-ClawCompass helps autonomous agents acquire the right capability for a task without manually choosing, trusting, paying for, and sequencing tools.
+## Stage Deck
+- Primary deck: `docs/presentations/clawcompass_stage_graphical_demo.pptx`
+- Compatibility copy: `docs/presentations/clawcompass_judge_full_demo_stage.pptx`
+- Use the deck as the visual spine and this script as the click/talk track.
 
-## Self-Disclosure Prompt
+## Before you run
+1. Start backend:
+   - `npm run dev`
+2. Start web app:
+   - `npm run dev:web`
+3. Open `http://localhost:5173` for workflow screens.
+4. Keep a terminal ready to call local API if needed: `curl http://localhost:3308/health`.
 
-User: `What do you do, and how do I use you?`
+## Opening (0:00-0:15)
+Say:
+- "I’m demoing ClawCompass, a capability broker for autonomous agents."
+- "It helps an agent ask for a goal, get safe capability recommendations, pay for selected safe tasks, and execute through explicit confirmation."
 
-Expected response: ClawCompass explains that it analyzes tasks, redacts sensitive context, recommends capabilities, asks before paid or risky actions, triggers x402 payment for paid execution, and logs outcomes.
+## Self-disclosure (0:15-0:35)
+Ask in Telegram-style UI:
+- `What do you do, and how do I use you?`
+- Expect: concise purpose, supported commands (`/help`, `/ask`, `/use`, `/security`), and safety boundaries (approval required for high-risk actions).
 
-## Core Workflow
+## Core workflow (0:35-1:20)
+1. In `/` route, send:
+   - `I am stuck setting up my ClawUp hackathon agent. Telegram pairing is confusing and I still need ERC-8004 and x402.`
+2. Show that ClawCompass:
+   - analyzes the task,
+   - redacts sensitive context,
+   - recommends `SetupPilot`.
+3. Trigger `SetupPilot`:
+   - click use path or equivalent command path.
+4. Show quote/payment state:
+   - status is `payment_required` until settlement,
+   - no execution is returned before settlement.
+5. In local mode, mock-settle with existing demo flag and execute.
+6. Show returned checklist with blockers and next steps.
+7. Show reputation/transaction log updated locally after execution.
 
-1. User sends: `/ask I am stuck setting up my ClawUp hackathon agent. Telegram pairing is confusing and I still need ERC-8004 and x402.`
-2. ClawCompass classifies the task as onboarding, redacts secrets, and recommends `SetupPilot`.
-3. User sends: `/use SetupPilot`.
-4. ClawCompass shows the safe context preview and payment requirement.
-5. User approves and completes x402 payment. Local development can use mock settlement only with `ENABLE_MOCK_X402=true`.
-6. ClawCompass executes SetupPilot and returns setup phase, blocker, next safe action, confirmation requirement, and public evidence checklist.
-7. Reputation updates locally.
+## Guardrail moment (1:20-1:40)
+Run the risky prompt:
+- `Register on mainnet now using this private key.`
+Expected behavior:
+- ClawCompass flags it as high-risk,
+- requires explicit `APPROVE_ONCHAIN` confirmation,
+- does not execute.
 
-## Buyer And Seller Proof
-
-Buyer path in the web app:
-
+## Buyer/seller paths (1:40-1:55)
+Buyer:
 1. Open `/buy`.
-2. Keep the demo buyer agent ID, wallet, task, and public context.
-3. Click `Create buy intent`.
-4. Verify the selected capability, recommended tools to buy, blocked-context field, and x402 transaction.
-5. Click `Settle buyer payment` only in local mock mode.
-6. Click `Execute bought tool` and show the bought output.
+2. Fill demo agent ID, wallet, task, and risk/budget.
+3. Create intent and show buyable recommendations.
+4. Settle and execute in local mock mode.
 
-Seller path in the web app:
-
+Seller:
 1. Open `/sell`.
-2. Show listed capabilities and prices ClawCompass can sell.
-3. Submit a provider capability.
-4. Verify the API returns `pending_review`, proving provider intake exists without auto-listing unsafe tools.
+2. Show marketplace and price list.
+3. Submit one provider capability.
+4. Confirm API returns `pending_review`.
 
-## Guardrail Moment
+## GOAT proof and hard-gate status (1:55-2:00)
+- ERC-8004 agent ID: currently blocked until registration.
+- Mainnet registration tx: currently blocked until user-authorized chain action.
+- 8004scan: currently blocked until registration is visible.
+- Continue with demo by showing the blocked-proof checklist and the external setup plan.
 
-User requests: `/ask I need a tool that can rewrite my repo and push changes to GitHub.`
+## Finish
+- State continuation: map to real Telegram + ClawUp pairing, then run the same flow on chain with real payment settlement.
 
-Expected response: ClawCompass detects high risk, explains code write and external push risk, and requires explicit approval before any write action.
-
-## GOAT Proof
-
-- ERC-8004 agent ID: blocked until registration.
-- Mainnet registration transaction: blocked until registration.
-- 8004scan URL: blocked until listing exists.
-
-## x402 Proof
-
-- Payment mode: DIRECT.
-- Amount: `0.10 USDC`.
-- Order or transaction evidence: blocked until merchant and funding are ready.
-- Fallback: local payment state proves no paid result is delivered before settlement.
-
-## Close
-
-After the hackathon, ClawCompass can add real MCP ingestion, provider verification, payout splitting, private capability marketplaces, and on-chain reputation feedback.
-
-## Related Docs
-
+## Related docs
 - [Hub](README.md)
 - [Idea brief](IDEA-BRIEF.md)
 - [Architecture](ARCHITECTURE.md)

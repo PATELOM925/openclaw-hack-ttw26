@@ -51,6 +51,7 @@ Seller demo path:
 - Explicit buyer and seller surfaces are implemented in the API and web app.
 - High-risk, write, wallet, external-message, unverified, above-cap, and secret-sensitive flows remain approval-gated.
 - ClawUp agent, wallet, merchant, funding, and mainnet registration: blocked until explicit user action.
+- Sanitized external proof intake exists, but final proof still needs verified ClawUp pairing, safe credentials, real x402 settlement, and ERC-8004 listing.
 - On-chain reputation: not claimed until implemented and verified.
 
 ## Web App
@@ -78,6 +79,7 @@ Routes:
 - [Build plan](BUILD-PLAN.md)
 - [Brief-driven implementation plan](CODEX_IMPLEMENTATION_PLAN_CLAWCOMPASS.md)
 - [Source of truth snapshot](SOURCE-OF-TRUTH.md)
+- [External proof intake](EXTERNAL-PROOF-INTAKE.md)
 - [Demo script](DEMO-SCRIPT.md)
 - [Work graph](../../codex/work/WORK-GRAPH.md)
 - [Build runbook](../BUILD-RUNBOOK.md)

@@ -20,43 +20,63 @@ export function getExternalProofStatus(env: Partial<NodeJS.ProcessEnv> = process
     }
   );
 
-  const telegram = evaluateProofState(
-    [Boolean(env.TELEGRAM_BOT_USERNAME)],
+  const telegramHasUsername = Boolean(env.TELEGRAM_BOT_USERNAME);
+  const telegramVerified = env.TELEGRAM_PAIRING_VERIFIED === "true";
+  const telegram = evaluateSimpleProofState(
+    [
+      telegramHasUsername,
+      telegramVerified
+    ],
     {
-      statusKey: "telegram",
-      requiredFields: ["TELEGRAM_BOT_USERNAME"],
-      blockers: {
-        blocked: "Pair Telegram through BotFather and ClawUp.",
-        partial: "Telegram username captured; confirm bot is paired."
-      }
+      presentMsg: "Telegram pairing is verified.",
+      blockedMsg: "Pair Telegram through BotFather and ClawUp.",
+      partialMsg: "Telegram username captured; confirm bot is paired.",
+      requiredFields: ["TELEGRAM_BOT_USERNAME", "TELEGRAM_PAIRING_VERIFIED"]
     }
   );
 
-  const x402 = evaluateProofState(
+  const x402HasProof = Boolean(
+    env.GOATX402_MERCHANT_ID &&
+      (env.GOATX402_PAYMENT_PROOF_ID || env.GOATX402_SETTLEMENT_TX) &&
+      env.GOAT_RECEIVING_WALLET
+  );
+  const x402HasAny = Boolean(
+    env.GOATX402_API_URL ||
+      env.GOATX402_API_KEY ||
+      env.GOATX402_API_SECRET ||
+      env.GOATX402_MERCHANT_ID ||
+      env.GOATX402_MERCHANT_NAME ||
+      env.GOATX402_ACCOUNT_EMAIL ||
+      env.GOATX402_PAYMENT_PROOF_ID ||
+      env.GOATX402_SETTLEMENT_TX ||
+      env.GOAT_RECEIVING_WALLET
+  );
+  const x402 = evaluateSimpleProofState(
     [
-      Boolean(env.GOATX402_API_URL),
-      Boolean(env.GOATX402_API_KEY),
-      Boolean(env.GOATX402_API_SECRET),
       Boolean(env.GOATX402_MERCHANT_ID),
       Boolean(env.GOATX402_MERCHANT_NAME),
       Boolean(env.GOATX402_ACCOUNT_EMAIL),
-      Boolean(env.GOAT_RECEIVING_WALLET)
+      Boolean(env.GOATX402_API_URL),
+      Boolean(env.GOATX402_API_KEY),
+      Boolean(env.GOATX402_API_SECRET),
+      Boolean(env.GOAT_RECEIVING_WALLET),
+      x402HasProof
     ],
     {
-      statusKey: "x402",
+      presentMsg: "x402 payment proof captured for submission.",
+      blockedMsg: "Record real x402 payment proof and required merchant details after approval.",
+      partialMsg: "x402 setup is partial. Add payment proof and final approved merchant details before demo.",
       requiredFields: [
-        "GOATX402_API_URL",
-        "GOATX402_API_KEY",
-        "GOATX402_API_SECRET",
         "GOATX402_MERCHANT_ID",
         "GOATX402_MERCHANT_NAME",
         "GOATX402_ACCOUNT_EMAIL",
-        "GOAT_RECEIVING_WALLET"
+        "GOATX402_API_URL",
+        "GOATX402_API_KEY",
+        "GOATX402_API_SECRET",
+        "GOAT_RECEIVING_WALLET",
+        "GOATX402_PAYMENT_PROOF_ID or GOATX402_SETTLEMENT_TX"
       ],
-      blockers: {
-        blocked: "Configure x402 merchant credentials in untracked environment.",
-        partial: "x402 proof is partial; complete API url, credentials, and receiving wallet."
-      }
+      forceStatus: x402HasProof ? "ready" : (x402HasAny ? "partial" : "blocked")
     }
   );
 
@@ -93,6 +113,8 @@ export function getExternalProofStatus(env: Partial<NodeJS.ProcessEnv> = process
       merchantId: env.GOATX402_MERCHANT_ID || "",
       apiUrl: env.GOATX402_API_URL || "",
       payerWallet: env.GOAT_RECEIVING_WALLET || "",
+      paymentProofId: env.GOATX402_PAYMENT_PROOF_ID || "",
+      settlementTx: env.GOATX402_SETTLEMENT_TX || "",
       blocker: x402.blocker
     },
     erc8004: {
@@ -145,5 +167,62 @@ function evaluateProofState(
       missing: config.requiredFields.filter((field, index) => !presence[index])
     };
   }
-  return { status: "ready", missing: [] };
+  return {
+    status: "ready",
+    missing: []
+  };
+}
+
+function evaluateSimpleProofState(
+  presence: boolean[],
+  config: {
+    requiredFields: string[];
+    presentMsg: string;
+    blockedMsg: string;
+    partialMsg: string;
+    forceStatus?: ProofState;
+  }
+): ProofItem {
+  if (config.forceStatus) {
+    if (config.forceStatus === "ready") {
+      return { status: "ready", missing: [] };
+    }
+
+    if (config.forceStatus === "blocked") {
+      return {
+        status: "blocked",
+        blocker: config.blockedMsg,
+        missing: config.requiredFields.filter((field, idx) => !presence[idx] && field !== "GOATX402_PAYMENT_PROOF_ID or GOATX402_SETTLEMENT_TX")
+      };
+    }
+
+    return {
+      status: "partial",
+      blocker: config.partialMsg,
+      missing: config.requiredFields.filter((field, idx) => !presence[idx] && field !== "GOATX402_PAYMENT_PROOF_ID or GOATX402_SETTLEMENT_TX")
+    };
+  }
+
+  const presentCount = presence.filter(Boolean).length;
+  if (presentCount === 0) {
+    return {
+      status: "blocked",
+      blocker: config.blockedMsg,
+      missing: [...config.requiredFields]
+    };
+  }
+
+  if (presentCount < presence.length) {
+    return {
+      status: "partial",
+      blocker: config.partialMsg,
+      missing: config.requiredFields.filter((field, index) => !presence[index] && field !== "GOATX402_PAYMENT_PROOF_ID or GOATX402_SETTLEMENT_TX")
+    };
+  }
+
+  return {
+    status: "ready",
+    blocker: config.presentMsg,
+    missing: []
+  };
 }
