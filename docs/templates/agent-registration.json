@@ -1,0 +1,26 @@
+{
+  "name": "<agent-name>",
+  "description": "<short public description>",
+  "type": "agent",
+  "version": "1.0.0",
+  "network": {
+    "name": "GOAT Mainnet",
+    "chainId": 2345
+  },
+  "erc8004": {
+    "agentId": "<agent-id-after-registration>",
+    "dashboardUrl": "https://8004scan.io/agents?chain=2345"
+  },
+  "capabilities": [
+    "<capability-one>",
+    "<capability-two>"
+  ],
+  "x402": {
+    "enabled": false,
+    "mode": "<DIRECT-or-DELEGATE-if-used>",
+    "merchantId": "<public-merchant-id-if-used>"
+  },
+  "contact": {
+    "team": "<team-name-or-public-contact>"
+  }
+}

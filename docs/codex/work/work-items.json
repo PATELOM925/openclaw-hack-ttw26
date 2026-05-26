@@ -1,0 +1,410 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-05-26",
+  "nodes": [
+    {
+      "id": "GOAL-000",
+      "title": "Prepare idea-agnostic hackathon base",
+      "kind": "goal",
+      "category": "documentation",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "",
+      "children": [
+        "EPIC-100",
+        "EPIC-200",
+        "EPIC-300",
+        "EPIC-400",
+        "EPIC-500",
+        "EPIC-600"
+      ],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "https://luma.com/2bntw4vd"
+        }
+      ],
+      "tags": [
+        "hackathon",
+        "idea-agnostic",
+        "planning"
+      ],
+      "component": "project-scaffold",
+      "owner_surface": "docs, skills, memory",
+      "context": "Create durable docs and local skills before the hackathon idea is selected.",
+      "acceptance": "Future agents can select an idea and continue from the graph without rediscovering event rules.",
+      "verification": "Run JSON, placeholder, secret, size, and skill-structure checks.",
+      "evidence": "Validated on 2026-05-26: JSON parsed, no unresolved marker matches, no secret-pattern matches, all local skills valid, and authored Markdown files are under 300 lines.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Select or draft the idea using docs/hackathon/IDEA-INTAKE.md.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "EPIC-100",
+      "title": "Capture event constraints and judging gates",
+      "kind": "epic",
+      "category": "documentation",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "GOAL-000",
+      "children": [
+        "TASK-110"
+      ],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "https://docs.google.com/document/d/1-E8kl9WOuTpLzkhvsN-fYSHo1oXr_UgbjnbwVm3hP8E"
+        }
+      ],
+      "tags": [
+        "judging",
+        "submission"
+      ],
+      "component": "hackathon-context",
+      "owner_surface": "docs/hackathon/CONTEXT.md",
+      "context": "Main prize gates and scoring criteria shape the build.",
+      "acceptance": "Hard requirements, scorecard, source links, schedule, and support contacts are recorded.",
+      "verification": "Manual source review and Markdown scan.",
+      "evidence": "Validated on 2026-05-26: JSON parsed, no unresolved marker matches, no secret-pattern matches, all local skills valid, and authored Markdown files are under 300 lines.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Use context during idea scoring and demo planning.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-110",
+      "title": "Write event context doc",
+      "kind": "task",
+      "category": "documentation",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "EPIC-100",
+      "children": [],
+      "links": [],
+      "tags": [
+        "context"
+      ],
+      "component": "hackathon-context",
+      "owner_surface": "docs/hackathon/CONTEXT.md",
+      "context": "Consolidate event details into one readable file.",
+      "acceptance": "Doc includes schedule, links, requirements, support, and judging criteria.",
+      "verification": "Open and inspect the doc.",
+      "evidence": "Validated on 2026-05-26: JSON parsed, no unresolved marker matches, no secret-pattern matches, all local skills valid, and authored Markdown files are under 300 lines.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Update if event guidance changes.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "EPIC-200",
+      "title": "Prepare idea intake and selection workflow",
+      "kind": "epic",
+      "category": "research",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "GOAL-000",
+      "children": [
+        "TASK-210"
+      ],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "https://docs.google.com/document/d/1dCMSMunsiDpEwuaOwF5oZFK0Btgf_ZXuPcgsxWPobAY"
+        }
+      ],
+      "tags": [
+        "idea",
+        "market",
+        "feasibility"
+      ],
+      "component": "idea-intake",
+      "owner_surface": "docs/hackathon/IDEA-INTAKE.md",
+      "context": "The idea should come from real user friction and a feasible execution gap.",
+      "acceptance": "Workflow captures problem, market, gap, unique insight, data access, and GOAT fit.",
+      "verification": "Manual review against scorecard.",
+      "evidence": "Validated on 2026-05-26: JSON parsed, no unresolved marker matches, no secret-pattern matches, all local skills valid, and authored Markdown files are under 300 lines.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Fill the idea brief with candidate ideas.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-210",
+      "title": "Create idea brief template",
+      "kind": "task",
+      "category": "documentation",
+      "status": "done",
+      "resolution": "",
+      "priority": "medium",
+      "severity": "",
+      "parent_id": "EPIC-200",
+      "children": [],
+      "links": [],
+      "tags": [
+        "template"
+      ],
+      "component": "idea-intake",
+      "owner_surface": "docs/templates/idea-brief.md",
+      "context": "A reusable brief prevents vague ideas from becoming app work.",
+      "acceptance": "Template prompts all key decision fields.",
+      "verification": "Open template and compare to IDEA-INTAKE.md.",
+      "evidence": "Validated on 2026-05-26: JSON parsed, no unresolved marker matches, no secret-pattern matches, all local skills valid, and authored Markdown files are under 300 lines.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Use once candidate ideas exist.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "EPIC-300",
+      "title": "Prepare ClawUp and GOAT build runbooks",
+      "kind": "epic",
+      "category": "documentation",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "GOAL-000",
+      "children": [
+        "TASK-310"
+      ],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "https://docs.clawup.org/src/quick-start"
+        }
+      ],
+      "tags": [
+        "clawup",
+        "telegram",
+        "goat"
+      ],
+      "component": "build-runbook",
+      "owner_surface": "docs/hackathon/BUILD-RUNBOOK.md",
+      "context": "The agent must be created through ClawUp and paired to Telegram.",
+      "acceptance": "Runbook separates account actions from local preparation.",
+      "verification": "Manual review and secret scan.",
+      "evidence": "Validated on 2026-05-26: JSON parsed, no unresolved marker matches, no secret-pattern matches, all local skills valid, and authored Markdown files are under 300 lines.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Use after idea selection.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-310",
+      "title": "Create ClawUp local skill",
+      "kind": "task",
+      "category": "documentation",
+      "status": "done",
+      "resolution": "",
+      "priority": "medium",
+      "severity": "",
+      "parent_id": "EPIC-300",
+      "children": [],
+      "links": [],
+      "tags": [
+        "skill"
+      ],
+      "component": "local-skills",
+      "owner_surface": "skills/clawup-agent-build/SKILL.md",
+      "context": "Future agents should use the ClawUp path rather than generic app scaffolding.",
+      "acceptance": "Skill has valid frontmatter and focused workflow.",
+      "verification": "Run local skill validator if available.",
+      "evidence": "Validated on 2026-05-26: JSON parsed, no unresolved marker matches, no secret-pattern matches, all local skills valid, and authored Markdown files are under 300 lines.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Use when creating the ClawUp agent.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "EPIC-400",
+      "title": "Prepare ERC-8004 mainnet registration path",
+      "kind": "epic",
+      "category": "security",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "GOAL-000",
+      "children": [
+        "TASK-410"
+      ],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "https://8004scan.io/agents?chain=2345"
+        }
+      ],
+      "tags": [
+        "erc8004",
+        "mainnet",
+        "identity"
+      ],
+      "component": "registration",
+      "owner_surface": "skills/erc8004-mainnet-registration/SKILL.md",
+      "context": "Main prize eligibility requires mainnet registration evidence.",
+      "acceptance": "Guidance explains prerequisites, metadata, confirmation, and verification without storing secrets.",
+      "verification": "Secret scan and skill validation.",
+      "evidence": "Validated on 2026-05-26: JSON parsed, no unresolved marker matches, no secret-pattern matches, all local skills valid, and authored Markdown files are under 300 lines.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Register only after explicit user approval.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-410",
+      "title": "Create public metadata template",
+      "kind": "task",
+      "category": "documentation",
+      "status": "done",
+      "resolution": "",
+      "priority": "medium",
+      "severity": "",
+      "parent_id": "EPIC-400",
+      "children": [],
+      "links": [],
+      "tags": [
+        "template",
+        "metadata"
+      ],
+      "component": "registration",
+      "owner_surface": "docs/templates/agent-registration.json",
+      "context": "Agent URI metadata must be public-safe.",
+      "acceptance": "JSON template contains only non-secret fields.",
+      "verification": "Run python3 -m json.tool on the template.",
+      "evidence": "Validated on 2026-05-26: JSON parsed, no unresolved marker matches, no secret-pattern matches, all local skills valid, and authored Markdown files are under 300 lines.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Fill after agent exists.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "EPIC-500",
+      "title": "Prepare x402 readiness path",
+      "kind": "epic",
+      "category": "api-development",
+      "status": "done",
+      "resolution": "",
+      "priority": "medium",
+      "severity": "",
+      "parent_id": "GOAL-000",
+      "children": [
+        "TASK-510"
+      ],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "https://x402-merchant.goat.network/"
+        }
+      ],
+      "tags": [
+        "x402",
+        "payments"
+      ],
+      "component": "payments",
+      "owner_surface": "skills/x402-payment-readiness/SKILL.md",
+      "context": "x402 should be included only when the idea genuinely needs payments.",
+      "acceptance": "Decision criteria and demo evidence requirements are documented.",
+      "verification": "Manual review against scorecard x402 category.",
+      "evidence": "Validated on 2026-05-26: JSON parsed, no unresolved marker matches, no secret-pattern matches, all local skills valid, and authored Markdown files are under 300 lines.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Decide payment scope after idea selection.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-510",
+      "title": "Implement x402 flow after idea selection",
+      "kind": "task",
+      "category": "api-development",
+      "status": "backlog",
+      "resolution": "",
+      "priority": "medium",
+      "severity": "",
+      "parent_id": "EPIC-500",
+      "children": [],
+      "links": [],
+      "tags": [
+        "idea-specific"
+      ],
+      "component": "payments",
+      "owner_surface": "future app code",
+      "context": "Payment implementation depends on the selected product workflow.",
+      "acceptance": "Agent can trigger, verify, and explain payment state or errors.",
+      "verification": "Live or controlled payment demo evidence after app exists.",
+      "evidence": "",
+      "completion_percent": 0,
+      "blocker_reason": "Idea not selected.",
+      "next_action": "Keep in backlog until the idea requires x402.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "EPIC-600",
+      "title": "Prepare demo and submission readiness",
+      "kind": "epic",
+      "category": "release",
+      "status": "done",
+      "resolution": "",
+      "priority": "high",
+      "severity": "",
+      "parent_id": "GOAL-000",
+      "children": [
+        "TASK-610"
+      ],
+      "links": [
+        {
+          "rel": "derived_from",
+          "href": "https://bit.ly/openclaw-hackathon-submission"
+        }
+      ],
+      "tags": [
+        "demo",
+        "submission"
+      ],
+      "component": "demo",
+      "owner_surface": "docs/hackathon/DEMO-SUBMISSION.md",
+      "context": "All projects demo to a judge for 2 minutes; finalists also demo on stage.",
+      "acceptance": "Demo script and checklist cover judge tests and hard gates.",
+      "verification": "Manual review against scorecard.",
+      "evidence": "Validated on 2026-05-26: JSON parsed, no unresolved marker matches, no secret-pattern matches, all local skills valid, and authored Markdown files are under 300 lines.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Fill script after build.",
+      "updated_at": "2026-05-26"
+    },
+    {
+      "id": "TASK-610",
+      "title": "Create demo and submission templates",
+      "kind": "task",
+      "category": "documentation",
+      "status": "done",
+      "resolution": "",
+      "priority": "medium",
+      "severity": "",
+      "parent_id": "EPIC-600",
+      "children": [],
+      "links": [],
+      "tags": [
+        "template"
+      ],
+      "component": "demo",
+      "owner_surface": "docs/templates/demo-script.md, docs/templates/submission-checklist.md",
+      "context": "The final team needs a short live demo path and final submission checklist.",
+      "acceptance": "Templates cover 2-minute live demo and final form readiness.",
+      "verification": "Open templates and compare to DEMO-SUBMISSION.md.",
+      "evidence": "Validated on 2026-05-26: JSON parsed, no unresolved marker matches, no secret-pattern matches, all local skills valid, and authored Markdown files are under 300 lines.",
+      "completion_percent": 100,
+      "blocker_reason": "",
+      "next_action": "Fill when agent exists.",
+      "updated_at": "2026-05-26"
+    }
+  ]
+}
