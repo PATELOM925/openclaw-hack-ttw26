@@ -1,0 +1,153 @@
+import { describe, expect, it } from "vitest";
+import { analyzeTask } from "../src/services/taskAnalyzer.js";
+import { sanitizeContext } from "../src/services/contextSanitizer.js";
+import { listCapabilities } from "../src/services/marketplace.js";
+import { rankCapabilities } from "../src/services/capabilityRanker.js";
+import { buildCapabilitySequence } from "../src/services/capabilitySequencer.js";
+import { evaluateGuardrails, getSecurityPolicy } from "../src/services/guardrails.js";
+import {
+  createExecutionQuote,
+  createPaymentRequiredResponse,
+  markPaymentSettled
+} from "../src/services/paymentGate.js";
+import { executeCapability } from "../src/services/executor.js";
+import { createReputationLogger } from "../src/services/reputationLogger.js";
+
+describe("task analysis", () => {
+  it("classifies homepage pitch work as copywriting with low risk and parsed budget", () => {
+    const analysis = analyzeTask({
+      task: "Improve my homepage pitch for a hackathon project. Budget: 0.10 USDC.",
+      budgetUsd: 0.1
+    });
+
+    expect(analysis.taskType).toBe("copywriting");
+    expect(analysis.requiredCapabilities).toContain("landing_page_copy");
+    expect(analysis.budgetUsd).toBe(0.1);
+    expect(analysis.riskTolerance).toBe("low");
+  });
+
+  it("classifies repo rewrite and push work as high-risk repo_write", () => {
+    const analysis = analyzeTask({
+      task: "Rewrite my repo and push changes to GitHub",
+      maxRisk: "high"
+    });
+
+    expect(analysis.taskType).toBe("repo_write");
+    expect(analysis.requiredCapabilities).toContain("repo_write");
+    expect(analysis.riskTolerance).toBe("high");
+  });
+});
+
+describe("context sanitization", () => {
+  it("redacts secret-like values and reports blocked context classes", () => {
+    const context = [
+      "Project summary: capability broker",
+      "OPENAI_API_KEY=FAKE_OPENAI_KEY_VALUE_123456",
+      "DATABASE_URL=postgres://user:pass@example.com:5432/app",
+      "Contact me at builder@example.com"
+    ].join("\n");
+
+    const sanitized = sanitizeContext("Improve homepage", context);
+
+    expect(sanitized.allowedContext).toContain("Project summary");
+    expect(sanitized.allowedContext).not.toContain("FAKE_OPENAI_KEY");
+    expect(sanitized.allowedContext).not.toContain("postgres://");
+    expect(sanitized.allowedContext).not.toContain("builder@example.com");
+    expect(sanitized.blockedContext).toEqual(
+      expect.arrayContaining(["api_key", "database_url", "email"])
+    );
+    expect(sanitized.approvalRequired).toBe(true);
+  });
+});
+
+describe("capability ranking and sequencing", () => {
+  it("ranks PitchHawk first for landing page copy", () => {
+    const analysis = analyzeTask({
+      task: "Improve my homepage pitch using my project summary",
+      budgetUsd: 0.1
+    });
+    const sanitized = sanitizeContext(analysis.originalTask, "Public project summary");
+
+    const ranked = rankCapabilities(analysis, sanitized, listCapabilities());
+
+    expect(ranked[0].capability.name).toBe("PitchHawk");
+    expect(ranked[0].reasons.join(" ")).toContain("landing_page_copy");
+    expect(ranked.slice(0, 3)).toHaveLength(3);
+  });
+
+  it("builds a research to draft to safety sequence for pitch tasks", () => {
+    const analysis = analyzeTask({ task: "Improve homepage pitch and add safe agent rules" });
+    const sequence = buildCapabilitySequence(analysis, listCapabilities());
+
+    expect(sequence.map((step) => step.capabilityId)).toEqual([
+      "researchfox",
+      "pitchhawk",
+      "hookguard"
+    ]);
+  });
+});
+
+describe("guardrails", () => {
+  it("requires approval for paid capabilities and high-risk write permissions", () => {
+    const githubHelper = listCapabilities().find((capability) => capability.id === "githubhelper");
+    const policy = getSecurityPolicy();
+
+    expect(githubHelper).toBeDefined();
+    const decision = evaluateGuardrails({
+      capability: githubHelper!,
+      policy,
+      requestedAmountUsd: githubHelper!.priceUsd
+    });
+
+    expect(decision.allowed).toBe(false);
+    expect(decision.approvalRequired).toBe(true);
+    expect(decision.reasons).toEqual(
+      expect.arrayContaining(["paid_capability", "write_action", "high_risk"])
+    );
+  });
+});
+
+describe("payment, execution, and reputation", () => {
+  it("blocks paid execution until payment is settled, then executes PitchHawk and logs reputation", () => {
+    const capability = listCapabilities().find((item) => item.id === "pitchhawk");
+    expect(capability).toBeDefined();
+
+    const quote = createExecutionQuote({
+      capability: capability!,
+      requesterAgentId: "agent-demo",
+      requesterWallet: "0x0000000000000000000000000000000000000001"
+    });
+
+    expect(quote.status).toBe("awaiting_approval");
+
+    const paymentRequired = createPaymentRequiredResponse(quote, capability!);
+    expect(paymentRequired.httpStatus).toBe(402);
+    expect(paymentRequired.canExecute).toBe(false);
+
+    const settled = markPaymentSettled(quote, {
+      paymentId: "demo-payment",
+      txHash: "0xabc123"
+    });
+    const output = executeCapability(capability!, {
+      task: "Improve homepage",
+      allowedContext: "ClawCompass routes capabilities",
+      desiredTone: "direct"
+    });
+
+    const logger = createReputationLogger();
+    const event = logger.record({
+      capabilityId: capability!.id,
+      brokerAgentId: "clawcompass",
+      transactionId: settled.id,
+      outcome: "success",
+      contextSafetyPassed: true,
+      paymentVerified: true,
+      executionVerified: true
+    });
+
+    expect(settled.status).toBe("payment_settled");
+    expect(output.headline).toContain("Stop guessing");
+    expect(event.outcome).toBe("success");
+    expect(logger.getProfile("pitchhawk").successfulExecutions).toBe(1);
+  });
+});

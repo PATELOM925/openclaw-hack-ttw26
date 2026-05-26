@@ -1,12 +1,13 @@
 # Project Memory
 
 ## Summary
-This workspace is an idea-agnostic preparation base for the GOAT/OpenClaw Toronto hackathon on May 26, 2026. The user chose docs plus local skills, no starter app, and no git initialization.
+This workspace is now building ClawCompass for the GOAT/OpenClaw Toronto hackathon on May 26, 2026. ClawCompass is a paid capability broker for autonomous agents.
 
 ## Durable Facts
 - Workspace: `/Users/shreyapatel/Projects/GOAT Hack`
 - GitHub remote: https://github.com/PATELOM925/openclaw-hack-ttw26
-- Current project state: documentation and local guidance only.
+- Current project state: selected ClawCompass idea with implementation in progress.
+- Selected idea: ClawCompass, a capability acquisition layer that analyzes agent tasks, redacts context, recommends capabilities, gates paid execution with x402, and logs reputation.
 - Event path: choose a real problem, build a ClawUp agent, register it on GOAT Mainnet through ERC-8004, and prepare a 2-minute live demo.
 - Main prize hard gates: ClawUp-built agent, ERC-8004 mainnet registration, listing on `8004scan`.
 - Judging emphasis: market and earning potential, usability and self-disclosure, x402 integrity when used, human-in-the-loop guardrails, and post-hackathon continuation.
@@ -22,17 +23,16 @@ This workspace is an idea-agnostic preparation base for the GOAT/OpenClaw Toront
 - GOAT Hackathon repo: https://github.com/GOATNetwork/GOAT-Hackathon-2026
 
 ## Current Blockers
-- Hackathon idea is not selected.
 - No ClawUp agent, Telegram bot, wallet, gas tokens, stable tokens, merchant account, or ERC-8004 registration has been created from this workspace.
 - Git is initialized and connected to the project GitHub remote.
 
 ## Last Validation
-On 2026-05-26, the scaffold validated cleanly:
-- Work graph JSON and registration metadata JSON parsed.
-- No unresolved marker strings were found.
-- No secret-like patterns were found.
-- All authored Markdown files were under 300 lines.
-- All four local project skills passed the skill validator.
+On 2026-05-26, ClawCompass local validation passed:
+- `npm run validate` passed with 14 tests.
+- `npm audit --audit-level=moderate` reported 0 vulnerabilities.
+- Work graph, registration metadata, and capability seed JSON parsed.
+- Secret scan, excluding the sanitizer regex definition, returned no matches.
+- Local route check proved `/api/help`, `/api/ask`, redaction, unpaid 402 block, demo settlement, PitchHawk execution, `/api/security`, and `/api/reputation/pitchhawk`.
 
 ## Next Action
-Choose or draft an idea using `docs/hackathon/IDEA-INTAKE.md`, then update `docs/codex/work/WORK-GRAPH.md` and `docs/codex/work/work-items.json` with idea-specific build tasks.
+Next external actions, only after explicit user approval: create the ClawUp agent, pair Telegram, create or connect wallet, fund gas/stables, configure x402 Merchant Portal, register ERC-8004 identity, and record public proof.
