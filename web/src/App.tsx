@@ -413,8 +413,29 @@ function SecurityScreen() {
 function ProofScreen() {
   const [proof, setProof] = useState<Record<string, unknown>>();
   useEffect(() => { routes.proof().then((data) => setProof(data)); }, []);
-  const entries = proof ? Object.entries((proof.requiredProof as Record<string, { status: string; blocker?: string }>) || {}) : [];
-  return <DataScreen icon={<WalletCards />} title="External Proof" refresh={() => routes.proof().then((data) => setProof(data))}>{entries.map(([key, value]) => <div className="proof" key={key}><strong>{key}</strong><span className={value.status}>{value.status}</span><p>{value.blocker || "Public proof recorded."}</p></div>)}</DataScreen>;
+  const proofData = proof as { summary?: { ready: number; partial: number; blocked: number } };
+  const entries = proof ? Object.entries((proof.requiredProof as Record<string, { status: string; blocker?: string; missing?: string[] }>) || {}) : [];
+  return (
+    <DataScreen icon={<WalletCards />} title="External Proof" refresh={() => routes.proof().then((data) => setProof(data))}>
+      {proofData?.summary && (
+        <div className="grid">
+          <Metric label="Ready" value={proofData.summary.ready.toString()} />
+          <Metric label="Partial" value={proofData.summary.partial.toString()} />
+          <Metric label="Blocked" value={proofData.summary.blocked.toString()} />
+        </div>
+      )}
+      {entries.map(([key, value]) => (
+        <div className="proof" key={key}>
+          <strong>{key}</strong>
+          <span className={value.status}>{value.status}</span>
+          <div>
+            <p>{value.blocker || "Public proof recorded."}</p>
+            {value.missing?.length ? <p className="muted">Missing: {value.missing.join(", ")}</p> : null}
+          </div>
+        </div>
+      ))}
+    </DataScreen>
+  );
 }
 
 function DataScreen({ icon, title, refresh, children }: { icon: JSX.Element; title: string; refresh: () => void; children: React.ReactNode }) {

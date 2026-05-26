@@ -77,5 +77,9 @@ Required runtime values for real x402:
 - `GOATX402_API_SECRET`
 - `GOATX402_MERCHANT_ID`
 - `GOAT_RECEIVING_WALLET`
+- `GOATX402_MERCHANT_NAME`
+- `GOATX402_ACCOUNT_EMAIL`
 
 The API enforces the rule: no verified x402 payment, no paid execution.
+
+The `/api/proof` endpoint now returns `ready`, `partial`, and `blocked` for each proof lane, so you can verify exactly what is still missing before final demo.
