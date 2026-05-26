@@ -359,6 +359,14 @@ describe("ClawCompass API", () => {
       .expect(200);
 
     expect(cancel.body.text).toContain("Cancelled");
+
+    const proof = await request(app)
+      .post("/api/command")
+      .send({ sessionId: "demo-session", text: "/proof" })
+      .expect(200);
+
+    expect(proof.body.text).toContain("Ready:");
+    expect(proof.body.data.requiredProof.clawUp).toBeDefined();
   });
 
   it("exposes security policy and records cancel flow", async () => {

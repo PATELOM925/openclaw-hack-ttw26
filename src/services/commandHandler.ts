@@ -9,6 +9,7 @@ import { createExecutionQuote, createTransactionStore } from "./paymentGate.js";
 import type { PaymentAdapter } from "./paymentAdapter.js";
 import { getHelpResponse } from "./helpText.js";
 import { createReputationLogger } from "./reputationLogger.js";
+import { getExternalProofStatus } from "./proofStatus.js";
 
 type TransactionStore = ReturnType<typeof createTransactionStore>;
 type ReputationLogger = ReturnType<typeof createReputationLogger>;
@@ -48,6 +49,7 @@ export function createCommandHandler(input: {
       if (text.startsWith("/use")) return useCapability(text, commandInput, session, input.transactions, input.paymentAdapter);
       if (text.startsWith("/tool")) return showTool(text);
       if (text.startsWith("/marketplace")) return showMarketplace();
+      if (text.startsWith("/proof")) return showProof();
       if (text.startsWith("/security")) return { text: getSecurityText() };
       if (text.startsWith("/transactions")) return showTransactions(input.transactions);
       if (text.startsWith("/reputation")) return showReputation(text, input.reputation);
@@ -210,6 +212,18 @@ function showMarketplace(): { text: string; data: unknown } {
       .map((item) => `${item.name} - ${item.priceUsd === 0 ? "free" : `${item.priceUsd.toFixed(2)} ${item.priceToken}`}`)
       .join("\n"),
     data: capabilities
+  };
+}
+
+function showProof(): { text: string; data: unknown } {
+  const proof = getExternalProofStatus(process.env);
+  const proofLines = Object.entries(proof.requiredProof)
+    .map(([lane, details]) => `${lane}: ${details.status} - ${details.blocker ?? "ready"}`)
+    .join("\n");
+  const summary = `Ready: ${proof.summary.ready} | Partial: ${proof.summary.partial} | Blocked: ${proof.summary.blocked}`;
+  return {
+    text: [summary, "", proofLines].join("\n"),
+    data: proof
   };
 }
 

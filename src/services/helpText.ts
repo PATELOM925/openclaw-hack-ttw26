@@ -36,6 +36,7 @@ export function getHelpResponse() {
       "/use [name]",
       "/security",
       "/transactions",
+      "/proof",
       "/reputation [name]",
       "/register_tool",
       "/cancel [transaction_id]",

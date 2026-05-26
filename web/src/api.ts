@@ -90,7 +90,15 @@ export const routes = {
   writeReputation: (id: string) => apiPost<{ onChainWritten: boolean; writeStatus: string; agentId?: string }>(`/api/reputation/${id}/write-onchain`),
   security: () => apiGet<{ policy: Record<string, unknown>; text: string }>("/api/security"),
   command: (text: string) => apiPost<{ text: string; data?: unknown }>("/api/command", { text, sessionId: "web-demo" }),
-  proof: () => apiGet<{ status: string; requiredProof: Record<string, { status: string; blocker?: string; [key: string]: unknown }> }>("/api/proof"),
+  proof: () =>
+    apiGet<{
+      status: string;
+      requiredProof: Record<
+        string,
+        { status: string; blocker?: string; missing?: string[]; [key: string]: unknown }
+      >;
+      summary?: { ready: number; partial: number; blocked: number };
+    }>("/api/proof"),
   registerTool: (body: unknown) => apiPost<{ status: string; submission: unknown }>("/api/register-tool", body)
 };
 

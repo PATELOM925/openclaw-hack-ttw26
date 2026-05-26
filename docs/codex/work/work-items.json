@@ -984,10 +984,10 @@
       "context": "Real payment verification requires merchant credentials and stable funds.",
       "acceptance": "Real x402 payment proof replaces demo settlement.",
       "verification": "GOAT x402 order or transaction evidence.",
-      "evidence": "goatx402-sdk-server is installed and GoatX402Adapter can create real payment requirements when credentials and payer wallet exist; real settlement not attempted.",
-      "completion_percent": 55,
-      "blocker_reason": "Missing explicit user approval, merchant credentials, and funds.",
-      "next_action": "Set up merchant only after user approves external action.",
+      "evidence": "goatx402-sdk-server is installed and now requires API URL, API key, API secret, merchant ID, and payer wallet before attempting real order creation.",
+      "completion_percent": 65,
+      "blocker_reason": "Missing GOATX402_API_URL, funded payer wallet, and explicit user approval.",
+      "next_action": "Set up x402 merchant only after user approves external action.",
       "updated_at": "2026-05-26"
     },
     {
@@ -1708,9 +1708,9 @@
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
       "acceptance": "Capture ClawUp agent ID, Telegram username, wallet address, x402 settlement, ERC-8004 tx hash, and 8004scan URL only.",
       "verification": "/api/proof plus public evidence review.",
-      "evidence": "Validated on 2026-05-26 after merging origin/om: npm run validate passed with 31 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified SetupPilot broker execution, buyer purchase flow, seller marketplace/provider flow, and mobile viewport 390px with no horizontal document overflow.",
-      "completion_percent": 35,
-      "blocker_reason": "External account, wallet, payment, or mainnet action requires explicit user approval and credentials/funds.",
+      "evidence": "/api/proof now reports ready/partial/blocked with exact missing proof fields before submission.",
+      "completion_percent": 55,
+      "blocker_reason": "External account, wallet, x402 settlement, and ERC-8004 proof still need user approval and credentials/funds.",
       "next_action": "Requires external setup approval.",
       "updated_at": "2026-05-26"
     },

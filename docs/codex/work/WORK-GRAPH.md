@@ -101,11 +101,11 @@ flowchart TD
 | TASK-134 | task | done | app services | Ranker returns top 3 and sequence. | Unit/API tests. | Replace heuristic scoring later. |
 | EPIC-140 | epic | blocked | app code, x402 external | Paid tools are blocked until verified payment. | Payment state tests and route checks. | Real merchant setup required. |
 | TASK-141 | task | done | app services | Transaction states cover quote, approval, settlement, delivery, cancel, retry. | Unit/API tests. | Connect real x402 later. |
-| TASK-142 | task | blocked | x402 merchant, payment adapter | Real x402 route verifies payment. | Real payment evidence. | Requires merchant/funds. |
+| TASK-142 | task | blocked | x402 merchant, payment adapter | Real x402 route verifies payment. | Real payment evidence with full env proof (API URL, key, secret, merchant ID, payer wallet). | Requires merchant/funds/explicit approval and full env fields. |
 | TASK-143 | task | done | app executor | PitchHawk executes after verified payment. | API test. | Use in demo route check. |
 | EPIC-150 | epic | blocked | GOAT mainnet, app reputation | ERC-8004 identity is live; local reputation logs work. | 8004scan plus API tests. | Local logging first; on-chain blocked. |
 | TASK-151 | task | blocked | wallet, funding | Public address and balances recorded without secrets. | Balance check. | Requires explicit user action. |
-| TASK-152 | task | blocked | GOAT mainnet, 8004scan | ClawCompass appears on 8004scan. | Mainnet tx and URL. | Requires wallet/gas/approval. |
+| TASK-152 | task | blocked | GOAT mainnet, 8004scan | ClawCompass appears on 8004scan. | Mainnet tx, id, and URI. | Requires wallet/gas/approval and explicit on-chain action. |
 | TASK-153 | task | done | app reputation | Reputation event links transaction and outcome. | `/api/reputation/PitchHawk`. | Wire on-chain later. |
 | EPIC-160 | epic | done | app guardrails | High-risk, paid, write, wallet, external actions require approval. | Unit/API tests. | Show in demo. |
 | TASK-161 | task | done | app guardrails | Approval matrix works. | Unit tests. | Show risky prompt. |
@@ -129,7 +129,7 @@ flowchart TD
 | EPIC-240 | epic | done | command handler, ClawUp text | Command outputs match web/backend behavior. | API command tests. | Wire into ClawUp after external setup. |
 | TASK-241 | task | done | `/api/command` | `/help`, `/ask`, `/use`, `/security`, `/transactions`, `/reputation`, `/cancel`, and `/retry` remain usable. | Command adapter tests. | Use in ClawUp/Telegram. |
 | EPIC-250 | epic | blocked | ClawUp, Telegram, wallet, x402, ERC-8004 | Public proof is captured after explicit user-approved external setup. | Dashboard, payment, tx, and 8004scan evidence. | Requires user action, credentials, wallet, and funds. |
-| TASK-251 | task | blocked | public proof docs/API | Capture ClawUp agent ID, Telegram username, wallet address, x402 settlement, ERC-8004 tx hash, and 8004scan URL only. | `/api/proof` plus public evidence review. | Requires external setup approval. |
+| TASK-251 | task | blocked | public proof docs/API | Capture ClawUp agent ID, Telegram username, wallet address, x402 settlement, ERC-8004 tx hash, and 8004scan URL only. | `/api/proof` plus public evidence review. | Requires external setup approval plus exact missing proof fields from `/api/proof`. |
 | EPIC-260 | epic | done | tests, browser, scans, git | Local implementation is verified. | Full validation suite and git status. | Commit/push closeout. |
 | TASK-261 | task | done | validation commands | Backend, frontend, security, docs, and browser-visible paths validate. | `npm run validate`, `npm run build:web`, audit, scans, browser QA. | Repeat after external setup. |
 | TASK-770 | task | done | root ClawCompass app, web app, command handler, work graph | `om` is merged onto `origin/development` as the integration base, with SetupPilot available through root API, command, payment, dashboard, tests, and docs. | API tests, TypeScript build, web build, JSON validation, audit, route smoke checks, and secret scan. | Push `origin/om` and use root app for demo work. |

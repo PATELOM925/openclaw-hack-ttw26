@@ -183,6 +183,27 @@ describe("guardrails", () => {
 });
 
 describe("payment, execution, and reputation", () => {
+  it("requires complete live x402 proof fields before enabling live order creation", async () => {
+    const capability = listCapabilities().find((item) => item.id === "pitchhawk");
+    expect(capability).toBeDefined();
+    const quote = createExecutionQuote({ capability: capability! });
+    const partialLiveAdapter = createPaymentAdapter({
+      GOATX402_API_URL: "https://example.x402.test",
+      GOATX402_API_KEY: "key",
+      GOATX402_API_SECRET: "secret",
+      GOATX402_MERCHANT_ID: "merchant-id",
+      GOAT_RECEIVING_WALLET: "0x0000000000000000000000000000000000000001",
+      // Intentionally omit GOATX402_MERCHANT_NAME and GOATX402_ACCOUNT_EMAIL
+      ENABLE_MOCK_X402: "false"
+    });
+
+    const partialRequirement = await partialLiveAdapter.createPaymentRequirement(quote, capability!);
+    expect(partialRequirement.transaction.status).toBe("payment_required");
+    expect(partialRequirement.message).toContain("Configure real x402 credentials");
+    expect(partialRequirement.paymentRequiredHeader).toContain("\"protocol\":\"x402\"");
+    expect(partialRequirement.transaction.paymentRequiredHeader).toContain("\"protocol\":\"x402\"");
+  });
+
   it("enables local mock settlement only through the mock x402 adapter", async () => {
     const capability = listCapabilities().find((item) => item.id === "pitchhawk");
     expect(capability).toBeDefined();
