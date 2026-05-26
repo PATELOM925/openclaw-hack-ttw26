@@ -68,7 +68,7 @@ export function App() {
 
 function BrokerScreen() {
   const [task, setTask] = useState("I am stuck setting up my ClawUp hackathon agent. Telegram pairing is confusing and I still need ERC-8004 and x402.");
-  const [context, setContext] = useState("Public status: ClawUp agent draft exists, Telegram pairing is not confirmed, no wallet or x402 proof yet.");
+  const [context, setContext] = useState("");
   const [attachedContext, setAttachedContext] = useState<AttachedContextFile[]>([]);
   const [contextError, setContextError] = useState("");
   const [ask, setAsk] = useState<AskResponse>();
@@ -161,13 +161,6 @@ function BrokerScreen() {
               accept=".txt,.md,.markdown,.json,.yaml,.yml,.csv,.toml,.log,.ini,.env,text/plain,application/json"
               onChange={onUploadContext}
             />
-            <button
-              type="button"
-              disabled={!attachedContext.length}
-              onClick={() => setAttachedContext([])}
-            >
-              Clear uploaded context
-            </button>
           </div>
           {attachedContext.length ? <p className="muted">Using {attachedContext.length} uploaded file(s): {attachedContext.map((item) => item.name).join(", ")}</p> : null}
           {contextError && <p className="notice">{contextError}</p>}

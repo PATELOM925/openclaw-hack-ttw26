@@ -7,7 +7,7 @@ export function BuyerScreen() {
   const [agentId, setAgentId] = useState("buyer-agent-001");
   const [wallet, setWallet] = useState("0x0000000000000000000000000000000000000001");
   const [task, setTask] = useState("Validate competitors and improve homepage positioning. Budget: 0.10 USDC.");
-  const [context, setContext] = useState("Public product summary for autonomous agent builders.");
+  const [context, setContext] = useState("");
   const [attachedContext, setAttachedContext] = useState<AttachedContextFile[]>([]);
   const [contextError, setContextError] = useState("");
   const [intent, setIntent] = useState<BuyerIntent>();
@@ -97,13 +97,6 @@ export function BuyerScreen() {
               accept=".txt,.md,.markdown,.json,.yaml,.yml,.csv,.toml,.log,.ini,.env,text/plain,application/json"
               onChange={onUploadContext}
             />
-            <button
-              type="button"
-              disabled={!attachedContext.length}
-              onClick={() => setAttachedContext([])}
-            >
-              Clear uploaded context
-            </button>
           </div>
           {attachedContext.length ? <p className="muted">Using {attachedContext.length} uploaded file(s): {attachedContext.map((item) => item.name).join(", ")}</p> : null}
           {contextError && <p className="notice">{contextError}</p>}
