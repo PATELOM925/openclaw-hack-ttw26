@@ -9,9 +9,9 @@ This workspace is now building ClawCompass for the GOAT/OpenClaw Toronto hackath
 - Current project state: selected ClawCompass idea with implementation in progress.
 - Selected idea: ClawCompass, a capability acquisition layer that analyzes agent tasks, redacts context, recommends capabilities, buys safe paid tools through x402, sells marketplace capabilities, and logs reputation.
 - Primary demo capability: ClawUp SetupPilot, a paid onboarding diagnosis for ClawUp, Telegram pairing, ERC-8004, x402, wallet readiness, and submission proof.
-- Primary stage deck: `docs/presentations/clawcompass_stage_graphical_demo.pptx`, mirrored to `docs/presentations/clawcompass_judge_full_demo_stage.pptx`.
+- Primary stage deck: `docs/presentations/clawcompass_final_judge_demo.pptx`.
 - Full product target: local API plus full Vite React web app, with ClawUp/Telegram remaining the required hackathon channel.
-- Local web app routes: `/`, `/buy`, `/sell`, `/transactions`, `/reputation`, `/security`, and `/proof`.
+- Local web app routes: `/` homepage, `/broker`, `/buy`, `/sell`, `/transactions`, `/reputation`, `/security`, and `/proof`.
 - Buyer surface: `POST /api/buy` and `/buy` let another agent submit task/context/budget/risk, receive buyable recommendations, create a payment-bound purchase intent, settle locally in demo mode, and execute.
 - Seller surface: `GET /api/marketplace`, `POST /api/use/:id`, `POST /api/register-tool`, and `/sell` expose listed paid capabilities and provider submissions.
 - Backend now exposes proof, payment status, and pending ERC-8004 write-state APIs for the web app.

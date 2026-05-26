@@ -396,14 +396,14 @@
         "template"
       ],
       "component": "demo",
-      "owner_surface": "docs/templates/demo-script.md, docs/templates/submission-checklist.md, docs/hackathon/clawcompass/DEMO-SCRIPT.md, docs/presentations/",
+      "owner_surface": "docs/templates/demo-script.md, docs/templates/submission-checklist.md, docs/hackathon/clawcompass/DEMO-SCRIPT.md, docs/presentations/clawcompass_final_judge_demo.pptx",
       "context": "The final team needs a short live demo path and final submission checklist.",
       "acceptance": "Templates cover 2-minute live demo and final form readiness.",
       "verification": "Open templates and compare to DEMO-SUBMISSION.md; run a 2-minute local dry-run with `/` + `/buy` + `/sell` screens.",
-      "evidence": "Validated on 2026-05-26: ClawCompass demo script and graphical judge deck were completed with concrete steps for local execution, guardrails, buyer/seller flow, and proof blockers.",
+      "evidence": "Validated on 2026-05-26: ClawCompass demo script and single 15-slide polished stage-ready judge deck were completed with live-step cues, speaker notes, fixed problem, solution, tools used, mandatory gates, judging criteria, guardrails, buyer/seller flow, and proof blockers.",
       "completion_percent": 100,
       "blocker_reason": "",
-      "next_action": "Use docs/presentations/clawcompass_stage_graphical_demo.pptx for final judge-style rehearsal; swap proof placeholders with live ClawUp/chain outputs when external setup completes.",
+      "next_action": "Use docs/presentations/clawcompass_final_judge_demo.pptx for final judge-style rehearsal; swap proof placeholders with live ClawUp/chain outputs when external setup completes.",
       "updated_at": "2026-05-26"
     },
     {
@@ -1542,12 +1542,12 @@
       "component": "clawcompass",
       "owner_surface": "web/src/App.tsx",
       "context": "GOAL-200 implements the approved ClawCompass completion graph with full web app and external proof safety gates.",
-      "acceptance": "User can analyze, inspect, quote, status-check, settle mock, execute, retry, cancel, and inspect reputation.",
-      "verification": "Web build and API-backed controls.",
-      "evidence": "Validated on 2026-05-26 after merging origin/om: npm run validate passed with 31 tests; npm run build:web passed; npm audit found 0 vulnerabilities; JSON parse passed; secret scan returned no non-public/non-demo matches; browser QA verified SetupPilot broker execution, buyer purchase flow, seller marketplace/provider flow, and mobile viewport 390px with no horizontal document overflow.",
+      "acceptance": "Homepage presents the judge-critical problem, demo flow, toolchain, scorecard coverage, mandatory gates, proof status, and links into the broker workflow. User can still analyze, inspect, quote, status-check, settle mock, execute, retry, cancel, and inspect reputation from /broker.",
+      "verification": "npm run build:web plus local Vite HTTP smoke check.",
+      "evidence": "Validated on 2026-05-26: homepage added at /, broker workflow moved to /broker, npm run build:web passed, and Vite served / at http://127.0.0.1:5175/ with HTTP 200. Previous validation also covered broker execution, buyer flow, seller flow, security, proof, and mobile overflow.",
       "completion_percent": 100,
       "blocker_reason": "",
-      "next_action": "Verify in browser.",
+      "next_action": "Use / as the stage overview and /broker for live workflow execution.",
       "updated_at": "2026-05-26"
     },
     {
