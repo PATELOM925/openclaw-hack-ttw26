@@ -19,6 +19,7 @@ Commands:
 /use [name] - pay for and execute a capability
 /security - show guardrails
 /transactions - show payment history
+/proof - show external readiness state
 /reputation [name] - show trust history
 /register_tool - submit a new capability`;
 
