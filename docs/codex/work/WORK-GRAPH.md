@@ -67,6 +67,7 @@ flowchart TD
   G200 --> E240 --> T241["TASK-241 Command parity"]
   G200 --> E250 --> T251["TASK-251 External proof capture"]
   G200 --> E260 --> T261["TASK-261 Validation and browser QA"]
+  E260 --> T770["TASK-770 Merge om and development"]
 ```
 
 ## Node Register
@@ -131,12 +132,14 @@ flowchart TD
 | TASK-251 | task | blocked | public proof docs/API | Capture ClawUp agent ID, Telegram username, wallet address, x402 settlement, ERC-8004 tx hash, and 8004scan URL only. | `/api/proof` plus public evidence review. | Requires external setup approval. |
 | EPIC-260 | epic | done | tests, browser, scans, git | Local implementation is verified. | Full validation suite and git status. | Commit/push closeout. |
 | TASK-261 | task | done | validation commands | Backend, frontend, security, docs, and browser-visible paths validate. | `npm run validate`, `npm run build:web`, audit, scans, browser QA. | Repeat after external setup. |
+| TASK-770 | task | done | root ClawCompass app, web app, command handler, work graph | `om` is merged onto `origin/development` as the integration base, with SetupPilot available through root API, command, payment, dashboard, tests, and docs. | API tests, TypeScript build, web build, JSON validation, audit, route smoke checks, and secret scan. | Push `origin/om` and use root app for demo work. |
 
 ## Status Notes
 - Required preparation nodes are `done`.
 - ClawCompass local backend, docs, route checks, and validation are `done`.
 - GOAL-200 local backend and web implementation is `done`, including explicit buyer and seller surfaces; GOAL-200 remains `blocked` only by external proof actions.
 - External ClawUp, Telegram, wallet, merchant, funding, and ERC-8004 nodes remain `blocked` until explicit user action.
+- `om` now uses the root `origin/development` app as the integration base; the older nested API scaffold was removed.
 
 ## Validation Evidence
 Validated on 2026-05-26:
@@ -161,3 +164,10 @@ Validated GOAL-200 local build on 2026-05-26:
 - JSON parse passed for work graph, capability seed, and registration metadata.
 - Secret scan, excluding sanitizer regex definitions and known public/demo addresses, returned no matches.
 - Browser QA verified desktop broker flow, buyer purchase flow, seller marketplace/provider flow, support screens, blocked proof states, and a mobile viewport with `innerWidth=390` and `scrollWidth=390`.
+
+Validated `om` plus `origin/development` integration on 2026-05-26:
+- `npm run validate` passed with 31 tests.
+- `npm run build:web` passed.
+- `npm audit --audit-level=moderate` reported 0 vulnerabilities.
+- JSON parse passed for work graph, registration metadata, and capability seed data.
+- Route and browser smoke verified onboarding analysis, `setuppilot` top recommendation, x402 payment-required quote, mock-local settlement, SetupPilot execution, buyer flow, seller submission, delivered transaction, and 390px mobile layout with no horizontal overflow.

@@ -42,7 +42,7 @@ ERC-8004 provides agent identity and future reputation portability. x402 fits pe
 
 ## Two-Minute Demo
 
-Ask ClawCompass to improve homepage positioning with a `0.10 USDC` budget. It recommends PitchHawk, previews redacted context, requires x402 payment, executes after verified payment, logs reputation, then blocks a risky repo-write request pending explicit approval.
+Ask ClawCompass for help with the real ClawUp onboarding blocker: Telegram pairing is confusing and ERC-8004/x402 proof remains unfinished. It recommends SetupPilot, previews redacted context, requires x402 payment, executes after verified payment, returns the next safe setup action and public evidence checklist, logs reputation, then blocks a risky private-key/mainnet request pending explicit approval.
 
 ## Risks
 

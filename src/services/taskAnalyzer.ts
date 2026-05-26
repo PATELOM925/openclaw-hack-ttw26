@@ -6,6 +6,27 @@ const defaultModel = "claude-sonnet-4-6";
 
 const taskRules: Array<{ type: TaskType; tokens: string[]; capabilities: string[] }> = [
   { type: "repo_write", tokens: ["rewrite", "push", "commit", "pull request"], capabilities: ["repo_write"] },
+  {
+    type: "onboarding",
+    tokens: [
+      "clawup",
+      "openclaw",
+      "telegram pairing",
+      "pairing",
+      "botfather",
+      "erc-8004",
+      "erc8004",
+      "8004scan",
+      "x402",
+      "merchant portal",
+      "mainnet registration",
+      "gas tokens",
+      "stables",
+      "submission readiness",
+      "setup"
+    ],
+    capabilities: ["clawup_setup", "telegram_pairing", "erc8004", "x402", "submission_readiness"]
+  },
   { type: "copywriting", tokens: ["homepage", "pitch", "copy", "landing"], capabilities: ["landing_page_copy"] },
   { type: "research", tokens: ["research", "market", "competitor"], capabilities: ["market_validation"] },
   { type: "code_review", tokens: ["review code", "readme", "bug"], capabilities: ["code_review"] },
@@ -73,6 +94,7 @@ export async function analyzeTaskWithLLM(
                 "data_extraction",
                 "summarization",
                 "agent_safety",
+                "onboarding",
                 "unknown"
               ],
               requiredCapabilities: "string[]",
@@ -131,6 +153,7 @@ function recommendSequence(task: string, taskType: TaskType, requiredCapabilitie
   if (wantsCopy || taskType === "copywriting") sequence.push("pitchhawk");
   if (taskType === "code_review") sequence.push("codewolf");
   if (taskType === "repo_write") sequence.push("codewolf", "githubhelper");
+  if (taskType === "onboarding") sequence.push("setuppilot", "hookguard");
   if (taskType === "summarization" || taskType === "data_extraction") sequence.push("freesummarizer");
   if (wantsSafety || taskType === "agent_safety" || taskType === "repo_write") sequence.push("hookguard");
   if (!sequence.length) sequence.push("freesummarizer");

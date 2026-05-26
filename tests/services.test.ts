@@ -11,7 +11,7 @@ import {
   markPaymentSettled
 } from "../src/services/paymentGate.js";
 import { createPaymentAdapter } from "../src/services/paymentAdapter.js";
-import { executeCapability } from "../src/services/executor.js";
+import { executeCapability, executeSetupPilot } from "../src/services/executor.js";
 import { createReputationLogger } from "../src/services/reputationLogger.js";
 
 describe("task analysis", () => {
@@ -49,6 +49,18 @@ describe("task analysis", () => {
     expect(analysis.fallbackReason).toBe("missing_anthropic_api_key");
     expect(analysis.recommendedSequence).toEqual(["researchfox", "pitchhawk"]);
     expect(analysis.confidence).toBeGreaterThanOrEqual(0.6);
+  });
+
+  it("classifies ClawUp setup work as onboarding", () => {
+    const analysis = analyzeTask({
+      task: "I am stuck setting up my ClawUp hackathon agent. Telegram pairing is confusing and I still need ERC-8004 and x402."
+    });
+
+    expect(analysis.taskType).toBe("onboarding");
+    expect(analysis.requiredCapabilities).toEqual(
+      expect.arrayContaining(["clawup_setup", "telegram_pairing", "erc8004", "x402"])
+    );
+    expect(analysis.recommendedSequence).toEqual(["setuppilot", "hookguard"]);
   });
 });
 
@@ -95,6 +107,18 @@ describe("capability ranking and sequencing", () => {
     expect(ranked[0].capability.name).toBe("PitchHawk");
     expect(ranked[0].reasons.join(" ")).toContain("landing_page_copy");
     expect(ranked.slice(0, 3)).toHaveLength(3);
+  });
+
+  it("ranks SetupPilot first for ClawUp and GOAT onboarding", () => {
+    const analysis = analyzeTask({
+      task: "I am stuck setting up my ClawUp hackathon agent. Telegram pairing is confusing and I still need ERC-8004 and x402.",
+      budgetUsd: 0.1
+    });
+    const sanitized = sanitizeContext(analysis.originalTask, "Public status only");
+
+    const ranked = rankCapabilities(analysis, sanitized, listCapabilities());
+
+    expect(ranked[0].capability.id).toBe("setuppilot");
   });
 
   it("filters paid capabilities above budget when a viable free alternative exists", () => {
@@ -250,5 +274,24 @@ describe("payment, execution, and reputation", () => {
     expect(event.onChainWritten).toBe(false);
     expect(event.writeStatus).toBe("pending_external_proof");
     expect(logger.getProfile("pitchhawk").successfulExecutions).toBe(1);
+  });
+
+  it("returns a structured SetupPilot onboarding diagnosis after settlement", () => {
+    const capability = listCapabilities().find((item) => item.id === "setuppilot");
+    expect(capability).toBeDefined();
+
+    const output = executeCapability(capability!, {
+      task: "Telegram pairing is confusing and I still need ERC-8004 and x402.",
+      allowedContext: "Claw is running but Telegram does not respond."
+    });
+
+    expect(output).toMatchObject({
+      phase: "x402_setup",
+      requiresHumanConfirmation: true
+    });
+    expect("publicEvidenceToCapture" in output && output.publicEvidenceToCapture).toContain("Payment ID");
+    expect(executeSetupPilot({ task: "register on mainnet", allowedContext: "" }).exactCommandOrPrompt).toContain(
+      "After approval only"
+    );
   });
 });

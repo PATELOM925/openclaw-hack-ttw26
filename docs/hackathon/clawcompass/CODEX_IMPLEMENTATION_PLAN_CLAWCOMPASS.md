@@ -38,10 +38,10 @@ These remain blocked until explicit user approval and required credentials/funds
 
 - `/help` self-discloses what ClawCompass does and lists commands.
 - `/ask` analyzes task/context, redacts secrets, and returns ranked recommendations.
-- `/use PitchHawk` creates a paid execution quote and asks for approval.
+- `/use SetupPilot` creates a paid execution quote and asks for approval.
 - `APPROVE` or `/api/approve/:transactionId` creates an x402 payment requirement.
 - Paid execution cannot run unless payment is verified or local mock mode has explicitly settled it.
-- PitchHawk returns structured output after verified payment.
+- SetupPilot returns structured onboarding output after verified payment.
 - Transactions and local reputation update after execution.
 - Risky repo-write requests halt and require explicit approval.
 - README/setup docs make external ClawUp, x402, wallet, and ERC-8004 blockers explicit.

@@ -1,5 +1,26 @@
 [
   {
+    "id": "setuppilot",
+    "name": "ClawUp SetupPilot",
+    "type": "skill",
+    "description": "Diagnoses ClawUp, Telegram, GOAT mainnet, ERC-8004, x402, wallet, and submission onboarding state, then returns the next safe setup action without exposing secrets.",
+    "providerName": "ClawCompass Demo Provider",
+    "providerWallet": "0x0000000000000000000000000000000000000000",
+    "supportedTasks": ["onboarding", "clawup_setup", "telegram_pairing", "erc8004", "x402", "submission_readiness"],
+    "inputRequirements": ["setup_goal", "current_status", "visible_error", "public_evidence_only"],
+    "outputFormat": "setup phase, detected blocker, safe next action, exact command or prompt, required confirmation, public evidence checklist",
+    "priceUsd": 0.1,
+    "priceToken": "USDC",
+    "pricingModel": "per_call",
+    "trustScore": 94,
+    "successRate": 0.95,
+    "usageCount": 3,
+    "riskLevel": "low",
+    "permissions": ["read_context"],
+    "verified": true,
+    "lastCheckedAt": "2026-05-26T00:00:00.000Z"
+  },
+  {
     "id": "pitchhawk",
     "name": "PitchHawk",
     "type": "skill",

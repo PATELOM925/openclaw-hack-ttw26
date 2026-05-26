@@ -1,6 +1,6 @@
 export const helpText = `I am ClawCompass.
 
-I help AI agents choose, pay for, and safely use capabilities from a managed marketplace of skills, MCPs, hooks, plugins, rules, and sub-agents.
+I help AI agents choose, pay for, and safely use capabilities from a managed marketplace of skills, MCPs, hooks, plugins, rules, and sub-agents. My main demo capability is SetupPilot for ClawUp, Telegram, GOAT, ERC-8004, x402, and submission onboarding.
 
 Give me a task and I will:
 1. Analyze the task and required capabilities

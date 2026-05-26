@@ -66,11 +66,11 @@ export function App() {
 }
 
 function BrokerScreen() {
-  const [task, setTask] = useState("Improve my homepage pitch and validate market positioning.");
-  const [context, setContext] = useState("Project summary: ClawCompass helps agents buy safe capabilities.");
+  const [task, setTask] = useState("I am stuck setting up my ClawUp hackathon agent. Telegram pairing is confusing and I still need ERC-8004 and x402.");
+  const [context, setContext] = useState("Public status: ClawUp agent draft exists, Telegram pairing is not confirmed, no wallet or x402 proof yet.");
   const [ask, setAsk] = useState<AskResponse>();
   const [transaction, setTransaction] = useState<Transaction>();
-  const [selected, setSelected] = useState("pitchhawk");
+  const [selected, setSelected] = useState("setuppilot");
   const [output, setOutput] = useState<Record<string, unknown>>();
   const [message, setMessage] = useState("");
 
@@ -173,7 +173,7 @@ function TransactionsScreen() {
 }
 
 function ReputationScreen() {
-  const [name, setName] = useState("pitchhawk");
+  const [name, setName] = useState("setuppilot");
   const [profile, setProfile] = useState<unknown>();
   const [write, setWrite] = useState("");
   const load = () => routes.reputation(name).then((data) => setProfile(data.profile));

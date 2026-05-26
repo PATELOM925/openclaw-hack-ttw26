@@ -7,6 +7,7 @@ const sequences: Record<string, string[]> = {
   code_review: ["codewolf", "hookguard"],
   repo_write: ["codewolf", "githubhelper", "hookguard"],
   agent_safety: ["hookguard"],
+  onboarding: ["setuppilot", "hookguard"],
   summarization: ["freesummarizer"],
   data_extraction: ["freesummarizer"],
   unknown: ["freesummarizer"]

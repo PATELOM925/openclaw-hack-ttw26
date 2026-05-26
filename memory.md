@@ -8,11 +8,13 @@ This workspace is now building ClawCompass for the GOAT/OpenClaw Toronto hackath
 - GitHub remote: https://github.com/PATELOM925/openclaw-hack-ttw26
 - Current project state: selected ClawCompass idea with implementation in progress.
 - Selected idea: ClawCompass, a capability acquisition layer that analyzes agent tasks, redacts context, recommends capabilities, buys safe paid tools through x402, sells marketplace capabilities, and logs reputation.
+- Primary demo capability: ClawUp SetupPilot, a paid onboarding diagnosis for ClawUp, Telegram pairing, ERC-8004, x402, wallet readiness, and submission proof.
 - Full product target: local API plus full Vite React web app, with ClawUp/Telegram remaining the required hackathon channel.
 - Local web app routes: `/`, `/buy`, `/sell`, `/transactions`, `/reputation`, `/security`, and `/proof`.
 - Buyer surface: `POST /api/buy` and `/buy` let another agent submit task/context/budget/risk, receive buyable recommendations, create a payment-bound purchase intent, settle locally in demo mode, and execute.
 - Seller surface: `GET /api/marketplace`, `POST /api/use/:id`, `POST /api/register-tool`, and `/sell` expose listed paid capabilities and provider submissions.
 - Backend now exposes proof, payment status, and pending ERC-8004 write-state APIs for the web app.
+- The `om` branch is integrated onto the root `origin/development` app rather than the removed nested `clawcompass/apps/api` scaffold.
 - Source-of-truth implementation brief: `/Users/shreyapatel/Projects/zzz project docs/GOAT Hack/CODEX_IMPLEMENTATION_BRIEF_CLAWCOMPASS.md`
 - Brief SHA-256: `224ca580d65e7bb3ddc5096ff5747487fd201c56151f8ca53a043149ceef01c0`
 - Saved local implementation plan: `docs/hackathon/clawcompass/CODEX_IMPLEMENTATION_PLAN_CLAWCOMPASS.md`
@@ -36,6 +38,13 @@ This workspace is now building ClawCompass for the GOAT/OpenClaw Toronto hackath
 - Git is initialized and connected to the project GitHub remote.
 
 ## Last Validation
+On 2026-05-26, `om` was integrated onto the root `origin/development` app:
+- `npm run validate` passed with 31 tests after merging `origin/om` with the buyer/seller branch.
+- `npm run build:web` passed.
+- `npm audit --audit-level=moderate` reported 0 vulnerabilities.
+- Route and browser smoke proved onboarding analysis, `setuppilot` top recommendation, x402 payment-required quote, mock-local settlement, SetupPilot execution, buyer flow, seller submission, and delivered transaction.
+- The old nested `clawcompass/apps/api` scaffold was removed; use the root app for backend, web, command, and payment-proof work.
+
 On 2026-05-26, ClawCompass local validation passed:
 - `npm run validate` passed with 19 tests.
 - `npm audit --audit-level=moderate` reported 0 vulnerabilities.
@@ -50,6 +59,7 @@ On 2026-05-26, the GOAL-200 implementation added:
 - Pending external-proof fields for ERC-8004 reputation writes.
 - Vite React web app for broker workflow, capabilities, transactions, reputation, security, and proof status.
 - Explicit buyer and seller surfaces: `/buy` for agent purchases and `/sell` for marketplace/provider flows.
+- SetupPilot onboarding classification, ranking, payment-gated execution, command usage, and web defaults were merged into the root app on 2026-05-26.
 
 On 2026-05-26, buyer/seller validation passed:
 - `npm run validate` passed with 26 tests.

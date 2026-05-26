@@ -16,7 +16,7 @@ A requesting agent describes its task, goal, constraints, budget, and safe conte
 -> approval only for risky or above-cap actions
 -> require x402 payment
 -> verify payment
--> execute PitchHawk
+-> execute SetupPilot
 -> return result
 -> log reputation
 -> block risky write action without approval
@@ -46,6 +46,7 @@ Seller demo path:
 
 - Idea brief: accepted.
 - Local backend and full web app: implemented for local validation.
+- SetupPilot is the primary paid demo capability for ClawUp, Telegram, ERC-8004, x402, wallet, and submission onboarding.
 - Low-risk paid capabilities create x402 payment requirements autonomously within the `0.10 USDC` cap.
 - Explicit buyer and seller surfaces are implemented in the API and web app.
 - High-risk, write, wallet, external-message, unverified, above-cap, and secret-sensitive flows remain approval-gated.

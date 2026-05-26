@@ -45,7 +45,7 @@ Seller/provider
 - `paymentAdapter`: wraps `goatx402-sdk-server` for real x402 order creation and exposes local mock settlement only when enabled.
 - `buyerFlow`: shapes buyer-agent profiles, budget/risk-filtered buyable recommendations, and purchase instructions.
 - `commandHandler`: formats ClawUp/Telegram commands into chat-friendly responses.
-- `executor`: executes `PitchHawk` and free low-risk tools with sanitized input.
+- `executor`: executes `SetupPilot`, `PitchHawk`, and free low-risk tools with sanitized input.
 - `reputationLogger`: records local outcome events.
 - `web/`: Vite React dashboard for broker workflow, capabilities, transactions, reputation, security, and proof status.
 

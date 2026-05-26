@@ -19,6 +19,7 @@ export type TaskType =
   | "data_extraction"
   | "summarization"
   | "agent_safety"
+  | "onboarding"
   | "unknown";
 
 export type TaskAnalysis = {

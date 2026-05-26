@@ -18,6 +18,8 @@ Selected idea: **ClawCompass**, a paid capability broker for autonomous agents.
 
 ClawCompass lets a requesting agent describe its task and safe context, then analyzes which skill, MCP, hook, plugin, rule, or sub-agent is needed. It recommends and sequences the right capability, redacts sensitive context, buys low-risk capabilities through x402 on behalf of the requester, sells listed capabilities as the marketplace broker, executes after verified payment, and records reputation.
 
+The primary demo capability is **ClawUp SetupPilot**, focused on the lived onboarding pain around ClawUp, Telegram pairing, ERC-8004, x402, wallet readiness, and submission proof.
+
 ## Planning Scaffold
 - Project instructions: [`AGENTS.md`](AGENTS.md)
 - Durable context: [`memory.md`](memory.md)
@@ -26,6 +28,7 @@ ClawCompass lets a requesting agent describe its task and safe context, then ana
 - Build runbook: [`docs/hackathon/BUILD-RUNBOOK.md`](docs/hackathon/BUILD-RUNBOOK.md)
 - Demo and submission guide: [`docs/hackathon/DEMO-SUBMISSION.md`](docs/hackathon/DEMO-SUBMISSION.md)
 - ClawCompass hub: [`docs/hackathon/clawcompass/README.md`](docs/hackathon/clawcompass/README.md)
+- Custom ClawUp skill specs: [`docs/clawup-skills/`](docs/clawup-skills/)
 
 ## Local Backend
 
@@ -41,15 +44,18 @@ The API listens on `http://localhost:3000` by default. Useful demo endpoints:
 - `POST /api/ask`
 - `GET /api/marketplace`
 - `GET /api/tool/pitchhawk`
+- `GET /api/tool/setuppilot`
 - `POST /api/buy`
 - `POST /api/use/pitchhawk`
+- `POST /api/use/setuppilot`
 - `POST /api/approve/:transactionId`
 - `POST /api/execute/pitchhawk`
+- `POST /api/execute/setuppilot`
 - `POST /api/register-tool`
 - `POST /api/command`
 - `GET /api/security`
 - `GET /api/transactions`
-- `GET /api/reputation/pitchhawk`
+- `GET /api/reputation/setuppilot`
 - `GET /api/proof`
 - `GET /api/payment/:transactionId/status`
 - `POST /api/reputation/:id/write-onchain`

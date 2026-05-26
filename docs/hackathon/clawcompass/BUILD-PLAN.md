@@ -5,7 +5,7 @@
 - Accept idea and update work graph.
 - Seed the capability marketplace.
 - Build task analysis, context redaction, ranking, sequencing, guardrails, transaction state, and reputation logging.
-- Implement the `PitchHawk` paid capability path.
+- Implement the `SetupPilot` primary paid capability path and keep `PitchHawk` as a secondary demo path.
 - Expose API routes for demo commands.
 - Add tests for unit, API, payment, redaction, and guardrail behavior.
 - Prepare ClawUp command wording and demo script.

@@ -32,8 +32,9 @@ describe("ClawCompass API", () => {
     const response = await request(app).get("/api/marketplace").expect(200);
 
     expect(response.body.capabilities.map((item: { name: string }) => item.name)).toEqual(
-      expect.arrayContaining(["PitchHawk", "ResearchFox", "GitHubHelper"])
+      expect.arrayContaining(["ClawUp SetupPilot", "PitchHawk", "ResearchFox", "GitHubHelper"])
     );
+    expect(response.body.capabilities).toHaveLength(7);
   });
 
   it("returns task analysis, redaction, recommendations, and sequence", async () => {
@@ -56,6 +57,25 @@ describe("ClawCompass API", () => {
     expect(response.body.recommendations[0].capability.name).toBe("PitchHawk");
     expect(response.body.sequence.map((step: { capabilityId: string }) => step.capabilityId)).toContain(
       "pitchhawk"
+    );
+  });
+
+  it("recommends SetupPilot for ClawUp onboarding prompts", async () => {
+    const app = createApp();
+
+    const response = await request(app)
+      .post("/api/ask")
+      .send({
+        task: "I am stuck setting up my ClawUp hackathon agent. Telegram pairing is confusing and I still need ERC-8004 and x402.",
+        context: "Public status only. Telegram bot token is not shared.",
+        budgetUsd: 0.1
+      })
+      .expect(200);
+
+    expect(response.body.analysis.taskType).toBe("onboarding");
+    expect(response.body.recommendations[0].capability.id).toBe("setuppilot");
+    expect(response.body.sequence.map((step: { capabilityId: string }) => step.capabilityId)).toContain(
+      "setuppilot"
     );
   });
 
@@ -211,6 +231,47 @@ describe("ClawCompass API", () => {
     expect(reputation.body.profile.events[0].writeStatus).toBe("pending_external_proof");
   });
 
+  it("executes SetupPilot after local mock payment settlement and updates reputation", async () => {
+    const app = createApp({ enableMockX402: true });
+
+    const quote = await request(app)
+      .post("/api/use/setuppilot")
+      .send({
+        requesterAgentId: "agent-demo",
+        task: "I am stuck setting up ClawUp, Telegram, ERC-8004, and x402.",
+        context: "Public status only."
+      })
+      .expect(202);
+
+    await request(app)
+      .post(`/api/demo-settle/${quote.body.transaction.id}`)
+      .send({
+        paymentId: "demo-payment",
+        txHash: "0xabc123",
+        capabilityId: "setuppilot",
+        amount: "0.10",
+        token: "USDC",
+        chainId: 2345
+      })
+      .expect(200);
+
+    const executed = await request(app)
+      .post("/api/execute/setuppilot")
+      .send({
+        transactionId: quote.body.transaction.id,
+        task: "Telegram pairing is confusing and I still need ERC-8004 and x402.",
+        allowedContext: "Claw is running but Telegram does not respond."
+      })
+      .expect(200);
+
+    expect(executed.body.result.phase).toBe("x402_setup");
+    expect(executed.body.result.safeNextAction).toContain("Keep credentials in runtime secrets only");
+    expect(executed.body.transaction.status).toBe("delivered");
+
+    const reputation = await request(app).get("/api/reputation/setuppilot").expect(200);
+    expect(reputation.body.profile.successfulExecutions).toBe(1);
+  });
+
   it("returns a clean failure for unsupported paid capability execution", async () => {
     const app = createApp({ enableMockX402: true });
 
@@ -276,12 +337,12 @@ describe("ClawCompass API", () => {
       .post("/api/command")
       .send({
         sessionId: "demo-session",
-        text: "/use PitchHawk",
-        context: "Project summary: ClawCompass"
+        text: "/use SetupPilot",
+        context: "Public setup status: Telegram pairing is not complete."
       })
       .expect(200);
 
-    expect(use.body.text).toContain("PitchHawk costs 0.10 USDC");
+    expect(use.body.text).toContain("ClawUp SetupPilot costs 0.10 USDC");
     expect(use.body.text).toContain("Payment required.");
     expect(use.body.text).toContain("Rail: x402");
 

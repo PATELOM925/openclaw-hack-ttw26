@@ -12,12 +12,12 @@ Expected response: ClawCompass explains that it analyzes tasks, redacts sensitiv
 
 ## Core Workflow
 
-1. User sends: `/ask I am building a hackathon project. Improve my homepage pitch using this project summary. Budget: 0.10 USDC. Do not expose secrets.`
-2. ClawCompass classifies the task as copywriting, redacts secrets, and recommends `PitchHawk`.
-3. User sends: `/use PitchHawk`.
-4. ClawCompass shows the context preview and payment requirement.
+1. User sends: `/ask I am stuck setting up my ClawUp hackathon agent. Telegram pairing is confusing and I still need ERC-8004 and x402.`
+2. ClawCompass classifies the task as onboarding, redacts secrets, and recommends `SetupPilot`.
+3. User sends: `/use SetupPilot`.
+4. ClawCompass shows the safe context preview and payment requirement.
 5. User approves and completes x402 payment. Local development can use mock settlement only with `ENABLE_MOCK_X402=true`.
-6. ClawCompass executes PitchHawk and returns headline, subheadline, CTA, bullets, and confidence.
+6. ClawCompass executes SetupPilot and returns setup phase, blocker, next safe action, confirmation requirement, and public evidence checklist.
 7. Reputation updates locally.
 
 ## Buyer And Seller Proof
