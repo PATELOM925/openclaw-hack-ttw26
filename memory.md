@@ -9,9 +9,10 @@ This workspace is now building ClawCompass for the GOAT/OpenClaw Toronto hackath
 - Current project state: selected ClawCompass idea with implementation in progress.
 - Selected idea: ClawCompass, a capability acquisition layer that analyzes agent tasks, redacts context, recommends capabilities, buys safe paid tools through x402, sells marketplace capabilities, and logs reputation.
 - Primary demo capability: ClawUp SetupPilot, a paid onboarding diagnosis for ClawUp, Telegram pairing, ERC-8004, x402, wallet readiness, and submission proof.
-- Primary stage deck: `docs/presentations/clawcompass_stage_graphical_demo.pptx`, mirrored to `docs/presentations/clawcompass_judge_full_demo_stage.pptx`.
+- Primary stage deck: `docs/presentations/clawcompass_final_judge_demo.pptx`.
 - Full product target: local API plus full Vite React web app, with ClawUp/Telegram remaining the required hackathon channel.
-- Local web app routes: `/`, `/buy`, `/sell`, `/transactions`, `/reputation`, `/security`, and `/proof`.
+- Local web app routes: `/` homepage, `/broker`, `/buy`, `/sell`, `/transactions`, `/reputation`, `/security`, and `/proof`.
+- Optional local Telegram bridge now routes Telegram messages into the command handler when `TELEGRAM_BOT_ENABLED=true` and a runtime `TELEGRAM_BOT_TOKEN` are provided; it is not final ClawUp pairing proof.
 - Buyer surface: `POST /api/buy` and `/buy` let another agent submit task/context/budget/risk, receive buyable recommendations, create a payment-bound purchase intent, settle locally in demo mode, and execute.
 - Seller surface: `GET /api/marketplace`, `POST /api/use/:id`, `POST /api/register-tool`, and `/sell` expose listed paid capabilities and provider submissions.
 - Backend now exposes proof, payment status, and pending ERC-8004 write-state APIs for the web app.
@@ -39,6 +40,7 @@ This workspace is now building ClawCompass for the GOAT/OpenClaw Toronto hackath
 - `ClawUp ENV.docx` contains public setup identifiers plus sensitive secrets; raw values must not be copied into repo files.
 - Public details found: candidate agent `ClawCompass_bot`, Telegram username `goat_4_ai_bot`, public wallet `0x1a2B3c4D5e6F7890a1B2c3D4e5F6a7B8c9D0e1F2`, merchant candidate `ClawCompass`, GOAT RPC, and canonical ERC-8004 registry.
 - Still blocked: ClawUp running agent ID, verified Telegram pairing, wallet gas/stable balances, rotated or securely loaded x402 credentials, real x402 settlement proof, ERC-8004 agent ID, registration transaction, and 8004scan listing.
+- Credentials re-posted in chat on 2026-05-26 were not saved to project files. Treat the wallet private key, merchant password, x402 API secret, and any bot token from that source as exposed until rotated.
 - Git is initialized and connected to the project GitHub remote.
 
 ## Last Validation
@@ -85,6 +87,12 @@ On 2026-05-26, transaction QA passed on a local mock-payment stack:
 - A frontend unpaid-execute rejection was fixed so the web UI now shows the payment-required message without an unhandled page error.
 - Demo recording: `docs/demo-recordings/clawcompass-transactions-qa-2026-05-26.webm`.
 - QA report: `docs/demo-recordings/TRANSACTION-QA-2026-05-26.md`.
+
+On 2026-05-26, Telegram bridge/current app validation passed:
+- Added optional Telegram polling bridge behind `TELEGRAM_BOT_ENABLED=true`; default is disabled.
+- `npm run validate` passed with 37 tests; `npm run build:web` passed; `npm audit --audit-level=moderate` found 0 vulnerabilities.
+- Browser QA on API `3310` and web `5176` proved SetupPilot analysis, x402 quote, unpaid block, mock settlement, delivered execution, proof blockers, and 390px mobile layout.
+- Read-only GOAT RPC check confirmed chain ID `2345`, public wallet balance `0.00001` native gas token, canonical ERC-8004 registry code, and unverified code at the user-supplied contract address.
 
 ## Next Action
 Next external actions, only after explicit user approval: rotate or securely load exposed secrets, verify ClawUp agent and Telegram pairing, confirm wallet/funds, run real x402 payment, register ERC-8004 identity, and record public proof.

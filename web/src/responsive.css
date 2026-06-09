@@ -27,9 +27,39 @@
   }
 
   .panel,
+  .home,
   .surface,
   pre {
     max-width: calc(100vw - 36px);
+  }
+
+  .homeHero,
+  .homeBand,
+  .homeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .homeHero {
+    min-height: 0;
+    padding: 24px;
+  }
+
+  .homeHero h1 {
+    font-size: 40px;
+    line-height: 1.03;
+  }
+
+  .heroSignal {
+    min-height: 300px;
+  }
+
+  .homeStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .flowRail,
+  .demoTimeline {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .pageHeader {
@@ -53,5 +83,62 @@
   .transaction,
   .proof {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .homeHero h1 {
+    font-size: 34px;
+  }
+
+  .heroActions button,
+  .homeStats,
+  .flowRail,
+  .demoTimeline {
+    grid-template-columns: 1fr;
+  }
+
+  .heroActions button {
+    width: 100%;
+  }
+
+  .heroSignal {
+    min-height: 250px;
+  }
+
+  .orbitCore {
+    width: 112px;
+    height: 112px;
+  }
+
+  .orbitNode {
+    width: 86px;
+    height: 70px;
+  }
+
+  .orbitNode.task { top: 18px; left: 16px; }
+  .orbitNode.pay { top: 20px; right: 16px; }
+  .orbitNode.safe { bottom: 20px; left: 16px; }
+  .orbitNode.proof { right: 16px; bottom: 18px; }
+
+  .homeBand,
+  .homeBlock {
+    padding: 18px;
+  }
+
+  .scoreRow {
+    grid-template-columns: 1fr;
+  }
+
+  .scoreRow p {
+    grid-column: 1;
+  }
+
+  .gateRow,
+  .proofItem,
+  .toolPill {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
   }
 }

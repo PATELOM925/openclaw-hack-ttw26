@@ -65,6 +65,7 @@ flowchart TD
   E230 --> T233["TASK-233 Proof and admin UI"]
   E230 --> T234["TASK-234 Buyer and seller UI"]
   G200 --> E240 --> T241["TASK-241 Command parity"]
+  E240 --> T242["TASK-242 Telegram bridge"]
   G200 --> E250 --> T251["TASK-251 External proof capture"]
   G200 --> E260 --> T261["TASK-261 Validation and browser QA"]
   E260 --> T262["TASK-262 Blocker audit"]
@@ -86,7 +87,7 @@ flowchart TD
 | EPIC-500 | epic | done | `skills/x402-payment-readiness/SKILL.md` | x402 is routed only when the idea transacts or monetizes. | Review DIRECT/DELEGATE decision criteria. | Decide payment scope after idea selection. |
 | TASK-510 | task | done | app code | x402 flow is implemented and demoable if selected. | Live payment or controlled test evidence. | Real merchant settlement remains blocked. |
 | EPIC-600 | epic | done | `docs/hackathon/DEMO-SUBMISSION.md` | 2-minute demo and final checklist are available. | Manual read-through against scorecard. | Rehearse after build. |
-| TASK-610 | task | done | `docs/templates/demo-script.md`, `docs/hackathon/clawcompass/DEMO-SCRIPT.md`, `docs/presentations/` | Demo script and graphical judge deck fit the judging flow and include a concrete 2-minute local demo sequence. | Time-boxed dry run after agent exists; script/deck include guardrail and proof-path evidence checks. | Use `clawcompass_stage_graphical_demo.pptx` for the final stage demo rehearsal. |
+| TASK-610 | task | done | `docs/templates/demo-script.md`, `docs/hackathon/clawcompass/DEMO-SCRIPT.md`, `docs/presentations/clawcompass_final_judge_demo.pptx` | Demo script and single stage-ready judge deck fit the live demo flow, explain the fixed problem, show tools used, and include mandatory/judging coverage. | Time-boxed dry run after agent exists; final deck includes live-step cues, speaker notes, guardrail, x402, mandatory proof slots, and judging criteria evidence checks. | Use `clawcompass_final_judge_demo.pptx` for the final stage demo rehearsal. |
 | GOAL-100 | goal | review | `docs/hackathon/clawcompass/`, app code | ClawCompass loop works locally and external proof blockers are explicit. | Tests, route checks, secret scan, demo rehearsal. | External ClawUp/x402/ERC-8004 actions require user approval. |
 | EPIC-110 | epic | done | `docs/hackathon/clawcompass/`, graph | Idea brief and docs hub exist. | Markdown/JSON validation. | Keep docs linked as implementation changes. |
 | TASK-111 | task | done | `docs/hackathon/clawcompass/IDEA-BRIEF.md` | ClawCompass accepted as selected idea. | Rubric review against idea intake. | Use for build. |
@@ -128,11 +129,12 @@ flowchart TD
 | TASK-225 | task | done | `/api/buy`, buyer flow service | Another agent can submit task/context/budget/risk and receive buyable recommendations plus a payment-bound purchase intent. | API tests cover buyer intent and low-risk budget filtering. | Use `/buy` in browser demo. |
 | EPIC-230 | epic | done | `web/` | Browser app exposes every local workflow and proof blocker. | `npm run build:web` and browser QA. | Use during demo rehearsal. |
 | TASK-231 | task | done | Vite React shell | Web app routes and API client exist. | Production web build. | Use browser QA. |
-| TASK-232 | task | done | broker/capability/transaction/reputation UI | User can analyze, inspect, quote, status-check, settle mock, execute, retry, cancel, and inspect reputation. | Web build and API-backed controls. | Verify in browser. |
+| TASK-232 | task | done | homepage, broker/capability/transaction/reputation UI | Homepage presents the judge-critical problem, demo flow, toolchain, scorecard coverage, mandatory gates, proof status, and links into the broker workflow. User can still analyze, quote, settle mock, execute, retry, cancel, and inspect reputation from `/broker`. | `npm run build:web`; Vite served `/` at `http://127.0.0.1:5175/` with HTTP 200. | Use `/` as the stage overview and `/broker` for live workflow execution. |
 | TASK-233 | task | done | security/proof UI | User can see guardrails, blocked-risk demo, and external proof checklist. | Web build and browser QA. | Capture screenshot evidence if needed. |
 | TASK-234 | task | done | `/buy`, `/sell`, API client | Web app shows both buyer-agent purchase flow and seller marketplace/provider intake flow. | Web build and browser QA on buyer and seller routes. | Re-run after real x402 credentials are added. |
-| EPIC-240 | epic | done | command handler, ClawUp text | Command outputs match web/backend behavior. | API command tests. | Wire into ClawUp after external setup. |
+| EPIC-240 | epic | done | command handler, ClawUp text, Telegram bridge | Command outputs match web/backend behavior and optional Telegram polling can route messages when explicitly enabled. | API command tests and Telegram bridge tests. | Wire into ClawUp after external setup; use Telegram bridge only with rotated runtime token. |
 | TASK-241 | task | done | `/api/command` | `/help`, `/ask`, `/use`, `/security`, `/transactions`, `/reputation`, `/cancel`, and `/retry` remain usable. | Command adapter tests. | Use in ClawUp/Telegram. |
+| TASK-242 | task | done | `src/services/telegramBridge.ts`, `src/index.ts` | Telegram text updates route through the command handler and replies return to the chat; bridge stays disabled unless `TELEGRAM_BOT_ENABLED=true` and a runtime token exist. | `npx vitest run tests/telegramBridge.test.ts` and full validation. | Use only with a rotated token in untracked runtime environment. |
 | EPIC-250 | epic | blocked | ClawUp, Telegram, wallet, x402, ERC-8004 | Public proof is captured after explicit user-approved external setup. | Dashboard, payment, tx, and 8004scan evidence. | Requires user action, credentials, wallet, and funds. |
 | TASK-251 | task | blocked | public proof docs/API | Capture ClawUp agent ID, Telegram username, wallet address, x402 settlement, ERC-8004 tx hash, and 8004scan URL only. | `/api/proof` plus public evidence review. | Requires external setup approval plus exact missing proof fields from `/api/proof`. |
 | EPIC-260 | epic | done | tests, browser, scans, git | Local implementation is verified. | Full validation suite and git status. | Commit/push closeout. |
@@ -192,3 +194,13 @@ Validated transaction QA on 2026-05-26:
 Blocker audit evidence on 2026-05-26:
 - Source review confirmed mock settlement is selected only with `ENABLE_MOCK_X402=true`; real x402 mode rejects mock settlement.
 - Product-path validation evidence is captured under TASK-261.
+
+Validated Telegram bridge and current local app on 2026-05-26:
+- `npx vitest run tests/telegramBridge.test.ts` passed with 2 tests after red-green implementation.
+- `npm run validate` passed with 37 tests across 3 files.
+- `npm run build:web` passed.
+- `npm audit --audit-level=moderate` found 0 vulnerabilities.
+- JSON parse passed for work graph, registration metadata, and capability seed data.
+- Secret-pattern scan found only the README placeholder command, no saved credential values.
+- API `http://127.0.0.1:3310` and web `http://127.0.0.1:5176` browser QA verified SetupPilot analysis, x402 payment-required quote, unpaid execution block, local mock settlement, delivered execution, proof page blockers, and mobile proof layout at `390px` with no horizontal overflow.
+- Read-only GOAT RPC check confirmed chain ID `2345`, public wallet balance `0.00001` native gas token, canonical registry code at `0x8004A169FB4a3325136EB29fA0ceB6D2e539a432`, and unverified code at `0xE1AD845D93853fff44990aE0DcecD8575293681e`.

@@ -7,6 +7,7 @@ Date: 2026-05-26
 - Local source document: `/Users/shreyapatel/Projects/zzz project docs/GOAT Hack/ClawUp ENV.docx`
 - Source status: secret-bearing reference material. Do not copy raw values into repo files.
 - Sanitization: only public identifiers and non-secret setup facts are recorded here.
+- 2026-05-26 chat update: credential classes were re-provided, but raw values were not saved. Treat those credentials as exposed until rotated or reissued.
 
 ## Public Details Found
 
@@ -22,6 +23,7 @@ Date: 2026-05-26
 ## Conflicts Or Unverified Facts
 
 - The source also lists `0xE1AD845D93853fff44990aE0DcecD8575293681e` as a contract or registry-like address. Treat its role as unverified; do not replace the canonical ERC-8004 registry with it without source confirmation.
+- 8004scan and GOAT docs list GOAT Mainnet chain `2345` with Identity Registry `0x8004A169FB4a3325136EB29fA0ceB6D2e539a432`; use that as the ERC-8004 target unless verified source material proves otherwise.
 - No verified ClawUp agent ID, pairing-approved screenshot/status, ERC-8004 agent ID, mainnet registration transaction, specific 8004scan URL, stablecoin balance, or real x402 settlement proof has been verified locally.
 
 ## Secret Material Present In Source
@@ -41,6 +43,14 @@ These values must not be committed, echoed in docs, or sent through chat. Rotate
 - Wallet: partially unblocked by public address, still blocked because the private key appears in the source and balances are unverified.
 - x402: partially unblocked by merchant name and credential existence, still blocked until credentials are rotated/reissued, stored outside tracked files, funded, and a real payment proof is captured.
 - ERC-8004: partially prepared by public metadata and canonical registry facts, still blocked until explicit on-chain approval, registration transaction, agent ID, and 8004scan listing exist.
+
+## Read-Only GOAT RPC Check
+
+- Date: 2026-05-26.
+- RPC `eth_chainId` returned `0x929` (`2345`).
+- Public wallet balance returned `10000000000000` wei (`0.00001` native gas token).
+- Canonical Identity Registry `0x8004A169FB4a3325136EB29fA0ceB6D2e539a432` has contract code.
+- User-supplied `0xE1AD845D93853fff44990aE0DcecD8575293681e` also has contract code, but its ERC-8004 role remains unverified.
 
 ## Next Safe Actions
 

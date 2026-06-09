@@ -49,6 +49,7 @@ Seller demo path:
 - SetupPilot is the primary paid demo capability for ClawUp, Telegram, ERC-8004, x402, wallet, and submission onboarding.
 - Low-risk paid capabilities create x402 payment requirements autonomously within the `0.10 USDC` cap.
 - Explicit buyer and seller surfaces are implemented in the API and web app.
+- Optional Telegram runtime bridge is available behind `TELEGRAM_BOT_ENABLED=true`; it reuses the command handler and stays disabled by default.
 - High-risk, write, wallet, external-message, unverified, above-cap, and secret-sensitive flows remain approval-gated.
 - ClawUp agent, wallet, merchant, funding, and mainnet registration: blocked until explicit user action.
 - Sanitized external proof intake exists, but final proof still needs verified ClawUp pairing, safe credentials, real x402 settlement, and ERC-8004 listing.

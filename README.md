@@ -90,6 +90,16 @@ Real ClawUp, wallet, x402 merchant, and ERC-8004 actions remain external gated s
 Sanitized public details extracted from the ClawUp environment document are tracked in
 [`docs/hackathon/clawcompass/EXTERNAL-PROOF-INTAKE.md`](docs/hackathon/clawcompass/EXTERNAL-PROOF-INTAKE.md).
 
+## Telegram Runtime
+
+The official submission channel is still ClawUp-paired Telegram. The local server also includes an optional Telegram bridge that routes messages into the same `/api/command` handler:
+
+```bash
+TELEGRAM_BOT_ENABLED=true TELEGRAM_BOT_TOKEN=<rotated-token> npm run dev
+```
+
+Use only a rotated runtime token from an untracked environment. The bridge is disabled by default and should not be used as proof of ClawUp pairing.
+
 ## Brief And Plan
 
 - Source-of-truth brief: `/Users/shreyapatel/Projects/zzz project docs/GOAT Hack/CODEX_IMPLEMENTATION_BRIEF_CLAWCOMPASS.md`
